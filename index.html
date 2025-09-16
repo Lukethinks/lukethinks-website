@@ -39,7 +39,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 100%;
             margin: 0 auto;
             padding: 0 24px;
         }
@@ -157,7 +157,8 @@
         .hero-content {
             position: relative;
             z-index: 2;
-            max-width: 900px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .hero-badge {
@@ -355,6 +356,7 @@
             color: var(--light-text);
             font-size: 0.9rem;
             font-weight: 600;
+            cursor: pointer;
         }
 
         .scroll-arrow {
@@ -380,6 +382,10 @@
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
             border-radius: 40px 40px 0 0;
             margin-top: 2rem;
+        }
+
+        .latest-section .container {
+            max-width: 1400px;
         }
 
         .section-header {
@@ -673,23 +679,20 @@
                     </a>
                 </div>
 
-                <div class="hero-actions">
-                    <a href="#latest" class="action-btn">Latest Discoveries</a>
-                    <a href="/random" class="action-btn secondary">Surprise Me</a>
-                </div>
+
             </div>
 
             <div class="scroll-indicator">
-                <span>Explore Recent Work</span>
+                <span>Latest Analysis</span>
                 <div class="scroll-arrow">↓</div>
             </div>
         </section>
 
         <section class="latest-section" id="latest">
             <div class="section-header">
-                <h2 class="section-title">Latest Discoveries</h2>
+                <h2 class="section-title">Latest Analysis</h2>
                 <p class="section-subtitle">
-                    Recent explorations, experiments, and analytical deep-dives that caught my attention
+                    Recent financial models, business case studies, and data-driven insights from my learning lab
                 </p>
             </div>
 
@@ -703,11 +706,7 @@
                     <p class="post-excerpt">
                         I built an interactive visualization to understand how Federal Reserve board composition affects monetary policy. The hawk/dove balance is more complex than I initially thought.
                     </p>
-                    <div class="post-tags">
-                        <span class="tag">visualization</span>
-                        <span class="tag">fed-policy</span>
-                        <span class="tag">economics</span>
-                    </div>
+
                 </article>
 
                 <article class="featured-post">
@@ -719,11 +718,7 @@
                     <p class="post-excerpt">
                         Working through bite-sized business cases to develop analytical frameworks. Here are three cases that taught me the most about structured thinking.
                     </p>
-                    <div class="post-tags">
-                        <span class="tag">apm-journey</span>
-                        <span class="tag">frameworks</span>
-                        <span class="tag">business-cases</span>
-                    </div>
+
                 </article>
 
                 <article class="featured-post">
@@ -735,11 +730,7 @@
                     <p class="post-excerpt">
                         After years of experimenting, I've found a sustainable approach to supplements. Data-driven analysis of what works and why collagen became a game-changer.
                     </p>
-                    <div class="post-tags">
-                        <span class="tag">health</span>
-                        <span class="tag">supplements</span>
-                        <span class="tag">data-analysis</span>
-                    </div>
+
                 </article>
 
                 <article class="featured-post">
@@ -751,11 +742,7 @@
                     <p class="post-excerpt">
                         Despite having a Dutch family and living here for six years, I still struggle with fluency. What I'm discovering about language anxiety and AI practice.
                     </p>
-                    <div class="post-tags">
-                        <span class="tag">dutch-learning</span>
-                        <span class="tag">language</span>
-                        <span class="tag">netherlands</span>
-                    </div>
+
                 </article>
             </div>
         </section>
