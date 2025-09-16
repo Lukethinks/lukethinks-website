@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Federal Reserve Board Composition</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.2em;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        
+        .info-panel {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .legend {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .legend h3 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 1.3em;
+        }
+        
+        .legend-item {
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: #f8f9fa;
+        }
+        
+        .legend-term {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .member-list {
+            margin-top: 20px;
+        }
+        
+        .member-card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 4px solid #3498db;
+            transition: transform 0.2s ease;
+        }
+        
+        .member-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        
+        .member-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+        
+        .member-role {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin: 2px 0;
+        }
+        
+        .member-details {
+            font-size: 0.85em;
+            color: #34495e;
+            margin-top: 5px;
+        }
+        
+        .republican { border-left-color: #e74c3c; }
+        .democrat { border-left-color: #3498db; }
+        
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .toggle-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .toggle-btn.active {
+            background: #27ae60;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+            
+            .chart-wrapper {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Federal Reserve Board of Governors</h1>
+            <p>Political Affiliation & Monetary Policy Stance (2025)</p>
+        </div>
+        
+        <div class="content">
+            <div class="chart-container">
+                <div class="chart-wrapper">
+                    <canvas id="fedChart"></canvas>
+                </div>
+                
+                <div class="controls">
+                    <button class="toggle-btn active" onclick="showPartyChart()">Political Party</button>
+                    <button class="toggle-btn" onclick="showHawkDoveChart()">Hawk/Dove</button>
+                    <button class="toggle-btn" onclick="showRateChart()">Rate Forecast</button>
+                </div>
+            </div>
+            
+            <div class="info-panel">
+                <div class="legend">
+                    <h3>Legend & Definitions</h3>
+                    <div class="legend-item">
+                        <div class="legend-term">Hawk:</div>
+                        Fed officials who prefer higher interest rates to combat inflation, prioritizing price stability over employment growth.
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-term">Dove:</div>
+                        Fed officials who prefer lower interest rates to stimulate economic growth and employment, more tolerant of inflation.
+                    </div>
+                </div>
+                
+                <div class="rate-forecast" id="rateForecastInfo" style="display: none;">
+                    <h3 style="color: #2c3e50; margin-bottom: 15px;">Interest Rate Forecasts</h3>
+                    
+                    <div class="forecast-card" style="background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 4px solid #3498db;">
+                        <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px;">Market Consensus Forecast</div>
+                        <div style="font-size: 0.9em; color: #34495e;">
+                            Based on Fed dot plot, futures markets, and major bank forecasts (Morningstar, J.P. Morgan, Goldman Sachs)
+                        </div>
+                    </div>
+                    
+                    <div class="forecast-card" style="background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 4px solid #e67e22;">
+                        <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px;">Powell Resignation Scenario</div>
+                        <div style="font-size: 0.9em; color: #34495e;">
+                            Projected path if Trump replaces Powell as Chair in May 2026 with a more dovish appointee
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                        <div style="font-weight: bold; color: #2c3e50; margin-bottom: 10px;">Key Assumptions:</div>
+                        <div style="font-size: 0.85em; color: #34495e; line-height: 1.5;">
+                            • Current rate: 4.25-4.50%<br>
+                            • September 2025: Expected 0.25% cut<br>
+                            • Fed dot plot targets mid-3% by 2026<br>
+                            • Long-term neutral rate: ~2.5-3.0%<br>
+                            • Powell's chair term ends: May 2026
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="member-list" id="memberInfo">
+                    <h3 style="color: #2c3e50; margin-bottom: 15px;">Current Board Members</h3>
+                    
+                    <div class="member-card republican">
+                        <div class="member-name">Jerome Powell</div>
+                        <div class="member-role">Chair</div>
+                        <div class="member-details">Republican • Moderate Hawk • Term ends: 2028 (Chair: 2026)</div>
+                    </div>
+                    
+                    <div class="member-card democrat">
+                        <div class="member-name">Philip Jefferson</div>
+                        <div class="member-role">Vice Chair</div>
+                        <div class="member-details">Democrat • Moderate Dove • Term ends: 2036</div>
+                    </div>
+                    
+                    <div class="member-card republican">
+                        <div class="member-name">Michelle Bowman</div>
+                        <div class="member-role">Vice Chair for Supervision</div>
+                        <div class="member-details">Republican • Dove • Term ends: 2034</div>
+                    </div>
+                    
+                    <div class="member-card democrat">
+                        <div class="member-name">Michael Barr</div>
+                        <div class="member-role">Governor</div>
+                        <div class="member-details">Democrat • Moderate Dove • Term ends: 2032</div>
+                    </div>
+                    
+                    <div class="member-card democrat">
+                        <div class="member-name">Lisa Cook</div>
+                        <div class="member-role">Governor (Legal dispute)</div>
+                        <div class="member-details">Democrat • Moderate Dove • Term ends: 2038</div>
+                    </div>
+                    
+                    <div class="member-card republican">
+                        <div class="member-name">Christopher Waller</div>
+                        <div class="member-role">Governor</div>
+                        <div class="member-details">Republican • Dove • Term ends: 2030</div>
+                    </div>
+                    
+                    <div class="member-card" style="border-left-color: #95a5a6;">
+                        <div class="member-name">Stephen Miran (Nominated)</div>
+                        <div class="member-role">Governor (Pending Confirmation)</div>
+                        <div class="member-details">Republican • Dove • Would serve remaining term until 2026</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentChart = null;
+        
+        const partyData = {
+            labels: ['Republican', 'Democrat'],
+            datasets: [{
+                data: [3, 3], // Powell, Bowman, Waller vs Jefferson, Barr, Cook (Miran pending)
+                backgroundColor: [
+                    '#e74c3c', // Republican red
+                    '#3498db'  // Democrat blue
+                ],
+                borderWidth: 3,
+                borderColor: '#ffffff'
+            }]
+        };
+        
+        const hawkDoveData = {
+            labels: ['Hawks', 'Doves', 'Moderate Hawks', 'Moderate Doves'],
+            datasets: [{
+                data: [0, 2, 1, 3], // No pure hawks, Bowman & Waller are doves, Powell moderate hawk, Jefferson, Barr, Cook moderate doves
+                backgroundColor: [
+                    '#c0392b', // Hawks - dark red
+                    '#27ae60', // Doves - green  
+                    '#f39c12', // Moderate Hawks - orange
+                    '#2ecc71'  // Moderate Doves - light green
+                ],
+                borderWidth: 3,
+                borderColor: '#ffffff'
+            }]
+        };
+        
+        const rateForecastData = {
+            labels: ['Sep 2025', 'Dec 2025', 'Mar 2026', 'Jun 2026', 'Sep 2026', 'Dec 2026', 'Mar 2027', 'Jun 2027', 'Sep 2027', 'Dec 2027', 'Mar 2028', 'Jun 2028'],
+            datasets: [
+                {
+                    label: 'Market Consensus',
+                    data: [4.00, 3.75, 3.50, 3.25, 3.00, 3.00, 2.75, 2.50, 2.50, 2.25, 2.25, 2.25],
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                },
+                {
+                    label: 'Powell Resignation Scenario',
+                    data: [4.00, 3.75, 3.50, 3.00, 2.75, 2.50, 2.25, 2.00, 1.75, 1.75, 1.75, 2.00],
+                    borderColor: '#e67e22',
+                    backgroundColor: 'rgba(230, 126, 34, 0.1)',
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    borderDash: [5, 5]
+                }
+            ]
+        };
+        
+        const pieChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label;
+                            const value = context.parsed;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value} members (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            animation: {
+                animateScale: true,
+                duration: 1000
+            }
+        };
+        
+        const lineChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: 1.5,
+                    max: 4.5,
+                    title: {
+                        display: true,
+                        text: 'Federal Funds Rate (%)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value.toFixed(2) + '%';
+                        }
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Time Period'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.parsed.y.toFixed(2)}%`;
+                        }
+                    }
+                }
+            },
+            animation: {
+                duration: 1000
+            }
+        };
+        
+        function initChart() {
+            const ctx = document.getElementById('fedChart').getContext('2d');
+            currentChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: partyData,
+                options: pieChartOptions
+            });
+        }
+        
+        function showPartyChart() {
+            updateButtonState('party');
+            showMemberInfo();
+            currentChart.destroy();
+            const ctx = document.getElementById('fedChart').getContext('2d');
+            currentChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: partyData,
+                options: pieChartOptions
+            });
+        }
+        
+        function showHawkDoveChart() {
+            updateButtonState('hawkdove');
+            showMemberInfo();
+            currentChart.destroy();
+            const ctx = document.getElementById('fedChart').getContext('2d');
+            currentChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: hawkDoveData,
+                options: pieChartOptions
+            });
+        }
+        
+        function showRateChart() {
+            updateButtonState('rate');
+            showRateForecastInfo();
+            currentChart.destroy();
+            const ctx = document.getElementById('fedChart').getContext('2d');
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: rateForecastData,
+                options: lineChartOptions
+            });
+        }
+        
+        function updateButtonState(active) {
+            const buttons = document.querySelectorAll('.toggle-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (active === 'party') {
+                buttons[0].classList.add('active');
+            } else if (active === 'hawkdove') {
+                buttons[1].classList.add('active');
+            } else if (active === 'rate') {
+                buttons[2].classList.add('active');
+            }
+        }
+        
+        function showMemberInfo() {
+            document.getElementById('memberInfo').style.display = 'block';
+            document.getElementById('rateForecastInfo').style.display = 'none';
+        }
+        
+        function showRateForecastInfo() {
+            document.getElementById('memberInfo').style.display = 'none';
+            document.getElementById('rateForecastInfo').style.display = 'block';
+        }
+        
+        // Initialize the chart when the page loads
+        window.addEventListener('load', initChart);
+    </script>
+</body>
+</html>
