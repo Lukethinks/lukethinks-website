@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luke Thinks - Personal Learning Lab</title>
+    <meta name="description" content="Where I figure things out, experiment with ideas, and share discoveries">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,28 +14,46 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-brown: #92400e;
+            --secondary-brown: #c05621;
+            --accent-amber: #ea580c;
+            --light-amber: #fbbf24;
+            --cream: #fef7f0;
+            --light-cream: #f7fafc;
+            --dark-text: #0f172a;
+            --medium-text: #1e293b;
+            --light-text: #64748b;
+            --very-light-text: #94a3b8;
+            --border-light: rgba(226, 232, 240, 0.5);
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            color: #0f172a;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--medium-text);
+            background: linear-gradient(135deg, var(--cream) 0%, var(--light-cream) 100%);
             min-height: 100vh;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
+        /* Header Styles */
         header {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
             padding: 1.5rem 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+            transition: all 0.3s ease;
         }
 
         .header-content {
@@ -41,158 +62,418 @@
             align-items: center;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1e293b;
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
             text-decoration: none;
+        }
+
+        .logo-main {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            line-height: 1;
+        }
+
+        .logo-sub {
+            font-size: 0.8rem;
+            color: var(--accent-amber);
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         nav ul {
             list-style: none;
             display: flex;
-            gap: 2rem;
+            gap: 0.5rem;
         }
 
         nav a {
-            color: #64748b;
+            color: var(--light-text);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.95rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             position: relative;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
         }
 
         nav a:hover, nav a.active {
-            color: #0f172a;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+            transform: translateY(-1px);
         }
 
-        nav a.active::after {
+        /* Hero Section - Full Viewport */
+        .hero {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
             content: '';
             position: absolute;
-            bottom: -8px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #3b82f6;
-            border-radius: 1px;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(146, 64, 14, 0.05) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
         }
 
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-            background: white;
-            margin: 2rem 0;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(146, 64, 14, 0.1);
+            color: var(--primary-brown);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(146, 64, 14, 0.2);
         }
 
         .hero h1 {
-            font-size: 2.8rem;
+            font-size: 4rem;
             font-weight: 800;
-            margin-bottom: 1rem;
-            color: #0f172a;
-            letter-spacing: -0.02em;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            color: #475569;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .main-content {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .post-card {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(226, 232, 240, 0.5);
-        }
-
-        .post-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-
-        .post-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #0f172a;
-            text-decoration: none;
-            line-height: 1.4;
-            flex: 1;
-            margin-right: 1rem;
-        }
-
-        .post-title:hover {
-            color: #3b82f6;
-        }
-
-        .post-date {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        .post-excerpt {
-            color: #475569;
             margin-bottom: 1.5rem;
-            line-height: 1.6;
+            color: var(--dark-text);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
         }
 
-        .interactive-showcase {
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-            border: 2px dashed #cbd5e1;
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            margin: 1rem 0;
-            transition: all 0.2s ease;
+        .hero-highlight {
+            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: 1.3rem;
+            color: var(--light-text);
+            margin-bottom: 3rem;
+            line-height: 1.5;
+        }
+
+        /* Navigation Cards */
+        .nav-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .nav-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
             cursor: pointer;
         }
 
-        .interactive-showcase:hover {
-            border-color: #3b82f6;
-            border-style: solid;
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(146, 64, 14, 0.1), transparent);
+            transition: left 0.5s ease;
         }
 
-        .interactive-showcase .icon {
-            font-size: 2rem;
+        .nav-card:hover::before {
+            left: 100%;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(146, 64, 14, 0.15);
+            border-color: var(--accent-amber);
+        }
+
+        .nav-card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-card:hover .nav-card-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .nav-card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark-text);
             margin-bottom: 0.5rem;
         }
 
-        .interactive-showcase .title {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.25rem;
+        .nav-card-subtitle {
+            color: var(--light-text);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
         }
 
-        .interactive-showcase .subtitle {
+        .nav-card-stats {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-card-stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-amber);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--very-light-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* Quick Actions */
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 160px;
+            text-align: center;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(146, 64, 14, 0.4);
+        }
+
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-brown);
+            border: 2px solid var(--primary-brown);
+        }
+
+        .action-btn.secondary:hover {
+            background: var(--primary-brown);
+            color: white;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--light-text);
             font-size: 0.9rem;
-            color: #64748b;
+            font-weight: 600;
+        }
+
+        .scroll-arrow {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--accent-amber);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Latest Content Section */
+        .latest-section {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
+            border-radius: 40px 40px 0 0;
+            margin-top: 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Featured Posts Grid */
+        .featured-posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .featured-post {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-post::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-amber), var(--light-amber), var(--secondary-brown));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .featured-post:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px var(--shadow-medium);
+        }
+
+        .featured-post:hover::before {
+            opacity: 1;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .post-category {
+            background: rgba(146, 64, 14, 0.1);
+            color: var(--primary-brown);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .post-date {
+            font-size: 0.9rem;
+            color: var(--very-light-text);
+            font-weight: 600;
+        }
+
+        .post-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .post-excerpt {
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
         }
 
         .post-tags {
@@ -202,114 +483,21 @@
         }
 
         .tag {
-            background: #f1f5f9;
-            color: #475569;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
+            background: rgba(146, 64, 14, 0.05);
+            color: var(--primary-brown);
+            padding: 0.3rem 0.75rem;
+            border-radius: 15px;
             font-size: 0.8rem;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .tag:hover {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .sidebar {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .sidebar-card {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(226, 232, 240, 0.5);
-        }
-
-        .sidebar-title {
-            font-size: 1.2rem;
             font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            border: 1px solid rgba(146, 64, 14, 0.2);
         }
 
-        .learning-item {
-            padding: 1rem 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .learning-item:last-child {
-            border-bottom: none;
-        }
-
-        .learning-title {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.5rem;
-        }
-
-        .learning-description {
-            color: #64748b;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .profile-card {
-            text-align: center;
-        }
-
-        .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin: 0 auto 1.5rem;
-            background: linear-gradient(135deg, #3b82f6, #1e40af);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2.5rem;
-            font-weight: 700;
-            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
-        }
-
-        .profile-name {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 0.5rem;
-        }
-
-        .profile-bio {
-            color: #64748b;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-        }
-
-        .profile-link {
-            color: #3b82f6;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .profile-link:hover {
-            text-decoration: underline;
-        }
-
+        /* Footer */
         footer {
-            background: white;
-            border-top: 1px solid rgba(226, 232, 240, 0.5);
-            padding: 2rem 0;
-            margin-top: 4rem;
-            border-radius: 16px 16px 0 0;
+            background: var(--dark-text);
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
         }
 
         .footer-content {
@@ -320,35 +508,34 @@
             gap: 1rem;
         }
 
-        .footer-content p {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .social-links {
+        .footer-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 2rem;
         }
 
-        .social-links a {
-            color: #64748b;
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: color 0.2s ease;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
 
-        .social-links a:hover {
-            color: #3b82f6;
+        .footer-links a:hover {
+            color: var(--light-amber);
         }
 
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .content-grid {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-cards {
                 grid-template-columns: 1fr;
             }
             
-            .hero h1 {
-                font-size: 2.2rem;
+            .featured-posts {
+                grid-template-columns: 1fr;
             }
             
             .header-content {
@@ -357,132 +544,267 @@
             }
             
             nav ul {
-                gap: 1.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
             }
 
-            .post-header {
+            .hero-actions {
                 flex-direction: column;
-                gap: 0.5rem;
+                align-items: center;
             }
 
-            .post-title {
-                margin-right: 0;
+            .action-btn {
+                width: 100%;
+                max-width: 280px;
             }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Loading animations */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
+        <header class="fade-in">
             <div class="header-content">
-                <a href="#" class="logo">Luke Thinks</a>
+                <div class="logo-section">
+                    <div class="logo-icon">L</div>
+                    <a href="/" class="logo-text">
+                        <span class="logo-main">Luke Thinks</span>
+                        <span class="logo-sub">LEARNING LAB</span>
+                    </a>
+                </div>
                 <nav>
                     <ul>
-                        <li><a href="#" class="active">Writing</a></li>
-                        <li><a href="#">Learning</a></li>
-                        <li><a href="#">Tools</a></li>
-                        <li><a href="#">About</a></li>
+                        <li><a href="/" class="active">Home</a></li>
+                        <li><a href="#research">Research</a></li>
+                        <li><a href="#experiments">Experiments</a></li>
+                        <li><a href="#learning">Learning</a></li>
+                        <li><a href="/about.html">About</a></li>
                     </ul>
                 </nav>
             </div>
         </header>
 
-        <div class="hero">
-            <h1>Personal Learning Lab</h1>
-            <p>Where I figure things out, experiment with ideas, and share discoveries</p>
-        </div>
+        <section class="hero">
+            <div class="hero-content slide-up">
+                <div class="hero-badge">
+                    📊 Finance Professional • Personal Learning Lab
+                </div>
+                
+                <h1>
+                    Where I <span class="hero-highlight">figure things out</span>,<br>
+                    experiment with ideas,<br>
+                    and share discoveries
+                </h1>
+                
+                <p class="hero-tagline">
+                    Finance & FP&A analytical thinking meets hands-on exploration. I break down complex problems, 
+                    test hypotheses, and share the learning journey through data-driven insights.
+                </p>
 
-        <div class="content-grid">
-            <main class="main-content">
-                <article class="post-card">
-                    <div class="post-header">
-                        <a href="#" class="post-title">Understanding Fed Policy Through Interactive Data</a>
+                <div class="nav-cards">
+                    <a href="#research" class="nav-card">
+                        <span class="nav-card-icon">📊</span>
+                        <div class="nav-card-title">Financial Analysis & Research</div>
+                        <div class="nav-card-subtitle">FP&A insights, economic modeling, business cases, and interactive dashboards</div>
+                        <div class="nav-card-stats">
+                            <div class="nav-card-stat">
+                                <span class="stat-number">8</span>
+                                <span class="stat-label">Models</span>
+                            </div>
+                            <div class="nav-card-stat">
+                                <span class="stat-number">3</span>
+                                <span class="stat-label">Interactive</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#experiments" class="nav-card">
+                        <span class="nav-card-icon">🧪</span>
+                        <div class="nav-card-title">Personal Experiments</div>
+                        <div class="nav-card-subtitle">Health tracking, learning methods, and productivity optimizations</div>
+                        <div class="nav-card-stats">
+                            <div class="nav-card-stat">
+                                <span class="stat-number">12</span>
+                                <span class="stat-label">Tests</span>
+                            </div>
+                            <div class="nav-card-stat">
+                                <span class="stat-number">5</span>
+                                <span class="stat-label">Ongoing</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#learning" class="nav-card">
+                        <span class="nav-card-icon">🎯</span>
+                        <div class="nav-card-title">Learning Projects</div>
+                        <div class="nav-card-subtitle">APM prep, Dutch fluency, and skill development journeys</div>
+                        <div class="nav-card-stats">
+                            <div class="nav-card-stat">
+                                <span class="stat-number">3</span>
+                                <span class="stat-label">Active</span>
+                            </div>
+                            <div class="nav-card-stat">
+                                <span class="stat-number">65%</span>
+                                <span class="stat-label">Progress</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="hero-actions">
+                    <a href="#latest" class="action-btn">Latest Discoveries</a>
+                    <a href="/random" class="action-btn secondary">Surprise Me</a>
+                </div>
+            </div>
+
+            <div class="scroll-indicator">
+                <span>Explore Recent Work</span>
+                <div class="scroll-arrow">↓</div>
+            </div>
+        </section>
+
+        <section class="latest-section" id="latest">
+            <div class="section-header">
+                <h2 class="section-title">Latest Discoveries</h2>
+                <p class="section-subtitle">
+                    Recent explorations, experiments, and analytical deep-dives that caught my attention
+                </p>
+            </div>
+
+            <div class="featured-posts">
+                <article class="featured-post">
+                    <div class="post-meta">
+                        <span class="post-category">Economics</span>
                         <span class="post-date">Sep 16</span>
                     </div>
+                    <h3 class="post-title">Understanding Fed Policy Through Interactive Data</h3>
                     <p class="post-excerpt">
                         I built an interactive visualization to understand how Federal Reserve board composition affects monetary policy. The hawk/dove balance is more complex than I initially thought.
                     </p>
-                    <div class="interactive-showcase">
-                        <div class="icon">📊</div>
-                        <div class="title">Federal Reserve Analysis</div>
-                        <div class="subtitle">Interactive visualization with real-time data</div>
-                    </div>
                     <div class="post-tags">
-                        <a href="#" class="tag">economics</a>
-                        <a href="#" class="tag">visualization</a>
-                        <a href="#" class="tag">fed-policy</a>
+                        <span class="tag">visualization</span>
+                        <span class="tag">fed-policy</span>
+                        <span class="tag">economics</span>
                     </div>
                 </article>
 
-                <article class="post-card">
-                    <div class="post-header">
-                        <a href="#" class="post-title">Six Years in Netherlands, Still Learning Dutch</a>
-                        <span class="post-date">Sep 10</span>
+                <article class="featured-post">
+                    <div class="post-meta">
+                        <span class="post-category">Business</span>
+                        <span class="post-date">Sep 12</span>
                     </div>
+                    <h3 class="post-title">Short Business Cases: Learning Product Thinking</h3>
                     <p class="post-excerpt">
-                        Despite having a Dutch family and living here for six years, I still struggle with fluency. Here's what I'm discovering about language anxiety and practical learning approaches.
+                        Working through bite-sized business cases to develop analytical frameworks. Here are three cases that taught me the most about structured thinking.
                     </p>
                     <div class="post-tags">
-                        <a href="#" class="tag">dutch-learning</a>
-                        <a href="#" class="tag">language</a>
-                        <a href="#" class="tag">netherlands</a>
+                        <span class="tag">apm-journey</span>
+                        <span class="tag">frameworks</span>
+                        <span class="tag">business-cases</span>
                     </div>
                 </article>
 
-                <article class="post-card">
-                    <div class="post-header">
-                        <a href="#" class="post-title">AI as a Thinking Partner for APM Studies</a>
+                <article class="featured-post">
+                    <div class="post-meta">
+                        <span class="post-category">Health</span>
+                        <span class="post-date">Sep 8</span>
+                    </div>
+                    <h3 class="post-title">My Vitamin Health Journey: What Actually Works</h3>
+                    <p class="post-excerpt">
+                        After years of experimenting, I've found a sustainable approach to supplements. Data-driven analysis of what works and why collagen became a game-changer.
+                    </p>
+                    <div class="post-tags">
+                        <span class="tag">health</span>
+                        <span class="tag">supplements</span>
+                        <span class="tag">data-analysis</span>
+                    </div>
+                </article>
+
+                <article class="featured-post">
+                    <div class="post-meta">
+                        <span class="post-category">Language</span>
                         <span class="post-date">Sep 5</span>
                     </div>
+                    <h3 class="post-title">Six Years in Netherlands, Still Learning Dutch</h3>
                     <p class="post-excerpt">
-                        Experimenting with Claude to structure my Associate Product Manager preparation. It's less about getting answers and more about organizing my analytical thought process.
+                        Despite having a Dutch family and living here for six years, I still struggle with fluency. What I'm discovering about language anxiety and AI practice.
                     </p>
                     <div class="post-tags">
-                        <a href="#" class="tag">apm-journey</a>
-                        <a href="#" class="tag">ai-tools</a>
-                        <a href="#" class="tag">learning</a>
+                        <span class="tag">dutch-learning</span>
+                        <span class="tag">language</span>
+                        <span class="tag">netherlands</span>
                     </div>
                 </article>
-            </main>
-
-            <aside class="sidebar">
-                <div class="sidebar-card">
-                    <h3 class="sidebar-title">🔬 Currently Exploring</h3>
-                    <div class="learning-item">
-                        <div class="learning-title">APM Preparation</div>
-                        <div class="learning-description">Deep dive into product thinking frameworks and structured case study approaches</div>
-                    </div>
-                    <div class="learning-item">
-                        <div class="learning-title">Dutch Fluency Project</div>
-                        <div class="learning-description">Systematic approach to overcoming language anxiety through AI practice</div>
-                    </div>
-                    <div class="learning-item">
-                        <div class="learning-title">Interactive Data Stories</div>
-                        <div class="learning-description">Learning Chart.js and D3 to build engaging visualizations</div>
-                    </div>
-                </div>
-
-                <div class="sidebar-card profile-card">
-                    <div class="avatar">L</div>
-                    <div class="profile-name">Luke van den Top</div>
-                    <div class="profile-bio">
-                        Analytical thinker based in the Netherlands. I enjoy breaking down complex problems and sharing the learning journey.
-                    </div>
-                    <a href="#" class="profile-link">More about me →</a>
-                </div>
-            </aside>
-        </div>
+            </div>
+        </section>
 
         <footer>
             <div class="footer-content">
                 <p>© 2025 Luke van den Top • A space for thinking out loud</p>
-                <div class="social-links">
-                    <a href="#">LinkedIn</a>
-                    <a href="#">Email</a>
-                    <a href="#">RSS</a>
+                <div class="footer-links">
+                    <a href="/about">About</a>
+                    <a href="mailto:hello@lukethinks.nl">Contact</a>
+                    <a href="/rss">RSS</a>
                 </div>
             </div>
         </footer>
     </div>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll indicator functionality
+        document.querySelector('.scroll-indicator').addEventListener('click', () => {
+            document.querySelector('.latest-section').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
