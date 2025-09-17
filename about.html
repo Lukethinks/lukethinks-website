@@ -7,6 +7,7 @@
     <meta name="description" content="Finance professional turned analytical thinker, documenting the learning journey in the Netherlands">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -412,6 +413,26 @@
             position: relative;
         }
 
+        .timeline-item.future {
+            opacity: 0.8;
+        }
+
+        .timeline-item.future .timeline-icon {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+        }
+
+        .timeline-item.personal .timeline-icon {
+            background: linear-gradient(135deg, #f59e0b, var(--light-amber));
+        }
+
+        .timeline-item.career .timeline-icon {
+            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
+        }
+
+        .timeline-item.project .timeline-icon {
+            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+        }
+
         .timeline-item::before {
             content: '';
             position: absolute;
@@ -464,6 +485,102 @@
             color: var(--light-text);
             font-size: 0.9rem;
             line-height: 1.5;
+        }
+
+        .timeline-item.future .timeline-description {
+            font-style: italic;
+            color: var(--very-light-text);
+        }
+
+        .timeline-item.future .timeline-title::after {
+            content: " 🔮";
+            opacity: 0.7;
+        }
+
+        /* Strengths Radar Chart */
+        .radar-chart-container {
+            width: 100%;
+            height: 400px;
+            margin: 1rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .radar-chart-wrapper {
+            position: relative;
+            width: 350px;
+            height: 350px;
+        }
+
+        /* Projects Cards */
+        .projects-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .project-card {
+            background: rgba(146, 64, 14, 0.05);
+            border: 1px solid rgba(146, 64, 14, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-title {
+            font-weight: 700;
+            color: var(--dark-text);
+            font-size: 1rem;
+        }
+
+        .project-category {
+            background: var(--primary-brown);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .project-description {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(146, 64, 14, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-brown), var(--accent-amber));
+            border-radius: 3px;
+            transition: width 1.5s ease-in-out;
+        }
+
+        .progress-text {
+            font-weight: 700;
+            color: var(--accent-amber);
+            font-size: 0.9rem;
+            min-width: 40px;
         }
 
         /* Footer */
@@ -622,15 +739,29 @@
                     </div>
 
                     <div class="sidebar-card">
-                        <h3 class="sidebar-title">💪 Top Strengths</h3>
+                        <h3 class="sidebar-title">💪 CliftonStrengths Radar</h3>
+                        
+                        <div class="radar-chart-container">
+                            <div class="radar-chart-wrapper">
+                                <canvas id="strengthsRadarChart"></canvas>
+                            </div>
+                        </div>
                         
                         <div class="strengths-grid" id="strengths-grid">
-                            <!-- Strengths will be loaded from JSON -->
+                            <!-- Top 6 strengths will be loaded from JSON -->
                         </div>
                         
                         <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--light-text); text-align: center;">
-                            Based on CliftonStrengths assessment
+                            Based on CliftonStrengths 34 assessment (2022)
                         </p>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">🚀 Current Projects</h3>
+                        
+                        <div class="projects-grid" id="projects-grid">
+                            <!-- Projects will be loaded from JSON -->
+                        </div>
                     </div>
                 </aside>
             </div>
@@ -666,28 +797,75 @@
             },
             timeline: [
                 {
+                    year: "2089",
+                    icon: "🎓",
+                    title: "PhD in Dutch Linguistics (Finally)",
+                    description: "After 70 years of dedicated practice, Luke becomes the world's foremost expert on why 'de' vs 'het' makes no logical sense. Writes dissertation entirely in perfect Dutch while locals still occasionally ask him to repeat himself",
+                    type: "future",
+                    isJoke: true
+                },
+                {
                     year: "2025",
                     icon: "🎯",
                     title: "APM Journey Begins",
-                    description: "Started intensive preparation for Associate Product Manager roles, diving deep into business cases and product frameworks"
+                    description: "Started intensive preparation for Associate Product Manager roles, diving deep into business cases and product frameworks",
+                    type: "career"
                 },
                 {
                     year: "2024",
                     icon: "🧠",
                     title: "Learning Lab Launch",
-                    description: "Created this space to document experiments, analyses, and learning discoveries"
+                    description: "Created lukethinks.nl as a space to document experiments, analyses, and learning discoveries",
+                    type: "project"
                 },
                 {
-                    year: "2019-2024",
+                    year: "2023",
+                    icon: "💍",
+                    title: "Married My Best Friend",
+                    description: "Got married to my wonderful Dutch partner - finally making my Netherlands residency official in the best way possible",
+                    type: "personal"
+                },
+                {
+                    year: "2022",
+                    icon: "📈",
+                    title: "Senior FP&A Analyst",
+                    description: "Promoted to senior role, leading financial modeling and analysis for strategic initiatives",
+                    type: "career"
+                },
+                {
+                    year: "2021",
+                    icon: "🏠",
+                    title: "Bought First Home",
+                    description: "Navigated the Dutch housing market (somehow) and became a homeowner in Nijmegen",
+                    type: "personal"
+                },
+                {
+                    year: "2020",
+                    icon: "🔍",
+                    title: "Discovered CliftonStrengths",
+                    description: "Completed the assessment and finally understood why I analyze everything - it's literally my top strength",
+                    type: "personal"
+                },
+                {
+                    year: "2019-2021",
                     icon: "📊",
-                    title: "FP&A Professional",
-                    description: "Built expertise in financial modeling, analysis, and data-driven decision making"
+                    title: "FP&A Analyst",
+                    description: "Built expertise in financial planning, budgeting, and variance analysis while mastering Excel wizardry",
+                    type: "career"
                 },
                 {
                     year: "2019",
                     icon: "🇳🇱",
-                    title: "Netherlands Adventure",
-                    description: "Moved to the Netherlands, began the ongoing quest to speak Dutch fluently"
+                    title: "Netherlands Adventure Begins",
+                    description: "Moved to the Netherlands for love and career opportunities - began the ongoing quest to speak Dutch fluently",
+                    type: "personal"
+                },
+                {
+                    year: "2018",
+                    icon: "🎓",
+                    title: "Finance Career Transition",
+                    description: "Pivoted from previous career into finance, drawn by the analytical challenges and data-driven decision making",
+                    type: "career"
                 }
             ],
             contact: {
@@ -703,7 +881,7 @@
                     {
                         icon: "📧",
                         text: "Email Me",
-                        url: "mailto:hello@lukethinks.nl",
+                        url: "mailto@lukethinks.nl",
                         external: false
                     },
                     {
@@ -732,17 +910,47 @@
                     text: "Preparing for Associate Product Manager transition"
                 },
                 {
+                    icon: "💍",
+                    text: "Married in 2023 to my Dutch partner"
+                },
+                {
                     icon: "☕",
                     text: "Believes coffee + data = productivity"
                 }
             ],
-            strengths: [
-                "Harmony",
-                "Context", 
-                "Analytical",
-                "Individualization",
-                "Arranger",
-                "Responsibility"
+            cliftonStrengths: {
+                description: "My complete CliftonStrengths 34 profile from 2022",
+                topStrengths: ["Harmony", "Context", "Analytical", "Individualization", "Arranger", "Responsibility"],
+                allStrengths: [
+                    {"name": "Harmony", "rank": 1, "domain": "Relationship Building", "score": 85},
+                    {"name": "Context", "rank": 2, "domain": "Strategic Thinking", "score": 82},
+                    {"name": "Analytical", "rank": 3, "domain": "Strategic Thinking", "score": 80},
+                    {"name": "Individualization", "rank": 4, "domain": "Relationship Building", "score": 78},
+                    {"name": "Arranger", "rank": 5, "domain": "Executing", "score": 76},
+                    {"name": "Responsibility", "rank": 6, "domain": "Executing", "score": 74},
+                    {"name": "Focus", "rank": 7, "domain": "Executing", "score": 72},
+                    {"name": "Intellection", "rank": 8, "domain": "Strategic Thinking", "score": 70}
+                ]
+            },
+            currentProjects: [
+                {
+                    title: "APM Preparation",
+                    description: "Deep dive into product thinking frameworks and structured case study approaches",
+                    progress: 65,
+                    category: "Career Development"
+                },
+                {
+                    title: "Dutch Fluency Project",
+                    description: "Systematic approach to overcoming language anxiety through AI practice and structured learning",
+                    progress: 45,
+                    category: "Personal Growth"
+                },
+                {
+                    title: "Interactive Data Stories", 
+                    description: "Learning Chart.js and D3 to build engaging financial and economic visualizations",
+                    progress: 75,
+                    category: "Technical Skills"
+                }
             ]
         };
 
@@ -776,7 +984,7 @@
             // Update timeline
             const timelineContent = document.getElementById('timeline-content');
             timelineContent.innerHTML = data.timeline.map(item => `
-                <div class="timeline-item">
+                <div class="timeline-item ${item.type || ''} ${item.isJoke ? 'future' : ''}">
                     <div class="timeline-icon">${item.icon}</div>
                     <div class="timeline-content">
                         <div class="timeline-year">${item.year}</div>
@@ -807,15 +1015,119 @@
                 </li>
             `).join('');
             
-            // Update strengths
+            // Update top strengths
             const strengthsGrid = document.getElementById('strengths-grid');
-            strengthsGrid.innerHTML = data.strengths.map(strength => 
+            strengthsGrid.innerHTML = (data.cliftonStrengths?.topStrengths || data.strengths).map(strength => 
                 `<div class="strength-item">${strength}</div>`
             ).join('');
+
+            // Create radar chart if CliftonStrengths data exists
+            if (data.cliftonStrengths && data.cliftonStrengths.allStrengths) {
+                createStrengthsRadarChart(data.cliftonStrengths.allStrengths);
+            }
+
+            // Update projects
+            if (data.currentProjects) {
+                const projectsGrid = document.getElementById('projects-grid');
+                projectsGrid.innerHTML = data.currentProjects.map(project => `
+                    <div class="project-card">
+                        <div class="project-header">
+                            <div class="project-title">${project.title}</div>
+                            <div class="project-category">${project.category}</div>
+                        </div>
+                        <div class="project-description">${project.description}</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${project.progress}%"></div>
+                            </div>
+                            <div class="progress-text">${project.progress}%</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Create CliftonStrengths Radar Chart
+        function createStrengthsRadarChart(strengthsData) {
+            const canvas = document.getElementById('strengthsRadarChart');
+            if (!canvas) {
+                console.log('Radar chart canvas not found');
+                return;
+            }
+
+            const ctx = canvas.getContext('2d');
+            
+            // Domain colors
+            const domainColors = {
+                'Strategic Thinking': 'rgba(146, 64, 14, 0.8)',
+                'Relationship Building': 'rgba(234, 88, 12, 0.8)', 
+                'Executing': 'rgba(251, 191, 36, 0.8)',
+                'Influencing': 'rgba(196, 86, 33, 0.8)'
+            };
+
+            // Take top 8 strengths for readability
+            const topStrengths = strengthsData.slice(0, 8);
+            
+            try {
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: topStrengths.map(s => s.name),
+                        datasets: [{
+                            label: 'Strength Score',
+                            data: topStrengths.map(s => s.score),
+                            backgroundColor: 'rgba(146, 64, 14, 0.2)',
+                            borderColor: 'rgba(146, 64, 14, 0.8)',
+                            pointBackgroundColor: topStrengths.map(s => domainColors[s.domain] || 'rgba(146, 64, 14, 0.8)'),
+                            pointBorderColor: 'white',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    display: false
+                                },
+                                grid: {
+                                    color: 'rgba(146, 64, 14, 0.2)'
+                                },
+                                angleLines: {
+                                    color: 'rgba(146, 64, 14, 0.2)'
+                                },
+                                pointLabels: {
+                                    font: {
+                                        size: 11,
+                                        family: 'Inter'
+                                    },
+                                    color: '#64748b'
+                                }
+                            }
+                        }
+                    }
+                });
+                console.log('Radar chart created successfully');
+            } catch (error) {
+                console.error('Error creating radar chart:', error);
+            }
         }
 
         // Load data when page loads
-        document.addEventListener('DOMContentLoaded', loadAboutData);
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, starting data load...');
+            loadAboutData();
+        });
     </script>
 </body>
 </html>
