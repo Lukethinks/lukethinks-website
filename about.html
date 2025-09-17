@@ -129,12 +129,37 @@
 
         /* Hero Section */
         .hero {
-            padding: 4rem 0;
+            padding: 3rem 0;
             text-align: center;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+            margin: 2rem 0;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(146, 64, 14, 0.03) 0%, transparent 70%);
+            animation: rotate 25s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .hero-content {
-            max-width: 800px;
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
             margin: 0 auto;
         }
 
@@ -148,14 +173,14 @@
             border-radius: 50px;
             font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             border: 1px solid rgba(146, 64, 14, 0.2);
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 800;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             color: var(--dark-text);
             letter-spacing: -0.02em;
             line-height: 1.1;
@@ -169,9 +194,8 @@
         }
 
         .hero-tagline {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--light-text);
-            margin-bottom: 3rem;
             line-height: 1.5;
         }
 
@@ -180,79 +204,46 @@
             padding: 2rem 0 4rem;
         }
 
-        .content-grid {
+        .content-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--light-text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Bio Section */
+        .bio-grid {
             display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 4rem;
+            grid-template-columns: 300px 1fr;
+            gap: 3rem;
             align-items: start;
         }
 
-        .bio-section {
+        .profile-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
             border-radius: 20px;
-            padding: 3rem;
+            padding: 2rem;
             box-shadow: 0 4px 20px var(--shadow-light);
             border: 1px solid var(--border-light);
-        }
-
-        .bio-section h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark-text);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .bio-section h2::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
-            border-radius: 2px;
-        }
-
-        .bio-section p {
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-            color: var(--medium-text);
-        }
-
-        .bio-section p:last-child {
-            margin-bottom: 0;
-        }
-
-        .highlight-text {
-            background: linear-gradient(135deg, rgba(146, 64, 14, 0.1), rgba(234, 88, 12, 0.05));
-            padding: 0.2rem 0.5rem;
-            border-radius: 6px;
-            font-weight: 600;
-            color: var(--primary-brown);
-        }
-
-        /* Sidebar */
-        .sidebar {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .sidebar-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 2px 10px var(--shadow-light);
-            border: 1px solid var(--border-light);
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar-card:hover {
-            transform: translateY(-4px);
-        }
-
-        /* Profile Card */
-        .profile-card {
             text-align: center;
+            position: sticky;
+            top: 100px;
         }
 
         .avatar {
@@ -289,7 +280,7 @@
         }
 
         .profile-name {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: var(--dark-text);
             margin-bottom: 0.5rem;
@@ -304,121 +295,149 @@
             gap: 0.5rem;
         }
 
-        /* Contact Links */
         .contact-links {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .contact-link {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem;
+            gap: 0.75rem;
+            padding: 0.75rem;
             background: rgba(146, 64, 14, 0.05);
-            border-radius: 12px;
+            border-radius: 10px;
             text-decoration: none;
             color: var(--medium-text);
             transition: all 0.3s ease;
             border: 1px solid var(--border-light);
+            font-size: 0.9rem;
         }
 
         .contact-link:hover {
             background: var(--primary-brown);
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(146, 64, 14, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(146, 64, 14, 0.3);
         }
 
         .contact-icon {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .contact-text {
             font-weight: 600;
         }
 
-        /* Fun Facts */
-        .fun-facts {
-            list-style: none;
+        .bio-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--border-light);
         }
 
-        .fun-fact {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(146, 64, 14, 0.1);
-        }
-
-        .fun-fact:last-child {
-            border-bottom: none;
-        }
-
-        .fun-fact-icon {
-            font-size: 1.5rem;
-            width: 32px;
-            text-align: center;
-        }
-
-        .fun-fact-text {
+        .bio-content p {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
             color: var(--medium-text);
-            font-size: 0.9rem;
-            line-height: 1.4;
         }
 
-        /* Strengths */
-        .strengths-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
+        .bio-content p:last-child {
+            margin-bottom: 0;
         }
 
-        .strength-item {
+        .highlight-text {
             background: linear-gradient(135deg, rgba(146, 64, 14, 0.1), rgba(234, 88, 12, 0.05));
-            padding: 0.75rem;
-            border-radius: 8px;
-            text-align: center;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
             font-weight: 600;
             color: var(--primary-brown);
-            font-size: 0.85rem;
-            border: 1px solid rgba(146, 64, 14, 0.2);
         }
 
-        .sidebar-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--dark-text);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        /* Horizontal Timeline */
+        .timeline-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--border-light);
+            position: relative;
         }
 
-        /* Timeline */
+        .timeline-scroll {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            padding-bottom: 1rem;
+        }
+
+        .timeline-scroll::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+
         .timeline {
-            margin: 3rem 0;
+            display: flex;
+            gap: 3rem;
+            padding: 3rem 0 2rem 0;
+            min-width: max-content;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 80px; /* Align with year position */
+            left: 30px; /* Start from first icon center */
+            right: 30px; /* End at last icon center */
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-amber), var(--light-amber), var(--primary-brown));
+            border-radius: 2px;
+            z-index: 1;
         }
 
         .timeline-item {
             display: flex;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-width: 220px;
             position: relative;
+            z-index: 2;
         }
 
         .timeline-item.future {
             opacity: 0.8;
         }
 
+        .timeline-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            border: 4px solid white;
+            box-shadow: 0 4px 15px rgba(146, 64, 14, 0.3);
+            position: relative;
+        }
+
         .timeline-item.future .timeline-icon {
             background: linear-gradient(135deg, #94a3b8, #64748b);
+            animation: pulse 2s infinite;
         }
 
         .timeline-item.personal .timeline-icon {
@@ -433,63 +452,61 @@
             background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
         }
 
-        .timeline-item::before {
+        /* Timeline marker on the line */
+        .timeline-item::after {
             content: '';
             position: absolute;
-            left: 16px;
-            top: 32px;
-            bottom: -16px;
-            width: 2px;
-            background: linear-gradient(180deg, var(--accent-amber), var(--light-amber));
-            opacity: 0.3;
-        }
-
-        .timeline-item:last-child::before {
-            display: none;
-        }
-
-        .timeline-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
+            top: 80px; /* Same as line position */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 3px solid var(--accent-amber);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 2;
+            z-index: 3;
         }
 
-        .timeline-content {
-            flex: 1;
+        .timeline-item.future::after {
+            border-color: #64748b;
+        }
+
+        .timeline-item.personal::after {
+            border-color: #f59e0b;
+        }
+
+        .timeline-item.career::after {
+            border-color: var(--accent-amber);
+        }
+
+        .timeline-item.project::after {
+            border-color: var(--primary-brown);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .timeline-year {
             color: var(--accent-amber);
             font-weight: 700;
             font-size: 0.9rem;
-            margin-bottom: 0.25rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 4;
+        }
+
+        .timeline-item.future .timeline-year {
+            color: #64748b;
         }
 
         .timeline-title {
             font-weight: 700;
             color: var(--dark-text);
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-description {
-            color: var(--light-text);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .timeline-item.future .timeline-description {
-            font-style: italic;
-            color: var(--very-light-text);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            line-height: 1.3;
         }
 
         .timeline-item.future .timeline-title::after {
@@ -497,11 +514,75 @@
             opacity: 0.7;
         }
 
-        /* Strengths Radar Chart */
+        .timeline-description {
+            color: var(--light-text);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            max-width: 200px;
+        }
+
+        .timeline-item.future .timeline-description {
+            font-style: italic;
+            color: var(--very-light-text);
+        }
+
+        /* Scroll indicators */
+        .scroll-hint {
+            text-align: center;
+            color: var(--very-light-text);
+            font-size: 0.8rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .scroll-hint::before {
+            content: '←';
+            font-weight: bold;
+        }
+
+        .scroll-hint::after {
+            content: '→';
+            font-weight: bold;
+        }
+
+        /* CliftonStrengths Section */
+        .strengths-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--border-light);
+        }
+
+        .strengths-intro {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .strengths-intro p {
+            color: var(--light-text);
+            margin-bottom: 1rem;
+        }
+
+        .assessment-date {
+            color: var(--very-light-text);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .strengths-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 3rem;
+            align-items: center;
+        }
+
         .radar-chart-container {
             width: 100%;
             height: 400px;
-            margin: 1rem 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -509,78 +590,92 @@
 
         .radar-chart-wrapper {
             position: relative;
-            width: 350px;
-            height: 350px;
+            width: 380px;
+            height: 380px;
         }
 
-        /* Projects Cards */
-        .projects-grid {
+        .top-strengths {
             display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
         }
 
-        .project-card {
-            background: rgba(146, 64, 14, 0.05);
-            border: 1px solid rgba(146, 64, 14, 0.2);
+        .strength-card {
+            background: linear-gradient(135deg, rgba(146, 64, 14, 0.05), rgba(234, 88, 12, 0.03));
+            padding: 1.25rem;
             border-radius: 12px;
-            padding: 1.5rem;
+            border: 1px solid rgba(146, 64, 14, 0.15);
+            transition: all 0.3s ease;
         }
 
-        .project-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 0.75rem;
+        .strength-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(146, 64, 14, 0.1);
         }
 
-        .project-title {
+        .strength-rank {
+            color: var(--accent-amber);
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .strength-name {
             font-weight: 700;
             color: var(--dark-text);
+            margin-bottom: 0.5rem;
             font-size: 1rem;
         }
 
-        .project-category {
-            background: var(--primary-brown);
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
-        .project-description {
+        .strength-domain {
             color: var(--light-text);
-            font-size: 0.9rem;
-            line-height: 1.4;
-            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
-        .progress-container {
+        /* Fun Facts */
+        .facts-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--border-light);
+        }
+
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .fact-card {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(146, 64, 14, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(146, 64, 14, 0.1);
+            transition: all 0.3s ease;
         }
 
-        .progress-bar {
-            flex: 1;
-            height: 6px;
-            background: rgba(146, 64, 14, 0.2);
-            border-radius: 3px;
-            overflow: hidden;
+        .fact-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(146, 64, 14, 0.1);
+            background: rgba(146, 64, 14, 0.05);
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-brown), var(--accent-amber));
-            border-radius: 3px;
-            transition: width 1.5s ease-in-out;
+        .fact-icon {
+            font-size: 2rem;
+            width: 60px;
+            text-align: center;
+            flex-shrink: 0;
         }
 
-        .progress-text {
-            font-weight: 700;
-            color: var(--accent-amber);
-            font-size: 0.9rem;
-            min-width: 40px;
+        .fact-text {
+            color: var(--medium-text);
+            font-weight: 500;
+            line-height: 1.4;
         }
 
         /* Footer */
@@ -618,12 +713,50 @@
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
 
-            .content-grid {
+            .bio-grid {
                 grid-template-columns: 1fr;
                 gap: 2rem;
+            }
+
+            .profile-card {
+                position: static;
+            }
+
+            .strengths-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .top-strengths {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                flex-direction: column;
+                align-items: center;
+                gap: 2rem;
+            }
+
+            .timeline::before {
+                top: 0;
+                bottom: 0;
+                left: 50%;
+                right: auto;
+                width: 3px;
+                height: auto;
+                background: linear-gradient(180deg, var(--accent-amber), var(--light-amber), var(--primary-brown));
+            }
+
+            .timeline-item {
+                min-width: auto;
+                max-width: 300px;
+            }
+
+            .timeline-description {
+                max-width: none;
             }
 
             .header-content {
@@ -636,16 +769,8 @@
                 justify-content: center;
             }
 
-            .bio-section {
-                padding: 2rem;
-            }
-
-            .strengths-grid {
+            .facts-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .timeline-item {
-                gap: 1rem;
             }
         }
 
@@ -703,22 +828,9 @@
         </section>
 
         <div class="main-content">
-            <div class="content-grid">
-                <div class="bio-section">
-                    <h2>My Story</h2>
-                    
-                    <div id="bio-content">
-                        <!-- Content will be loaded from JSON -->
-                        <p>Loading...</p>
-                    </div>
-
-                    <div class="timeline" id="timeline-content">
-                        <!-- Timeline will be loaded from JSON -->
-                    </div>
-                </div>
-
-                <aside class="sidebar">
-                    <div class="sidebar-card profile-card">
+            <section class="content-section">
+                <div class="bio-grid">
+                    <div class="profile-card">
                         <div class="avatar">L</div>
                         <div class="profile-name" id="profile-name">Luke van den Top</div>
                         <div class="profile-location" id="profile-location">
@@ -730,41 +842,75 @@
                         </div>
                     </div>
 
-                    <div class="sidebar-card">
-                        <h3 class="sidebar-title">⚡ Quick Facts</h3>
-                        
-                        <ul class="fun-facts" id="fun-facts">
-                            <!-- Facts will be loaded from JSON -->
-                        </ul>
+                    <div class="bio-content">
+                        <div id="bio-content">
+                            <!-- Content will be loaded from JSON -->
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">My Journey</h2>
+                    <p class="section-subtitle">
+                        Key moments that shaped my path from finance to analytical thinking and beyond
+                    </p>
+                </div>
+                
+                <div class="timeline-container">
+                    <div class="timeline-scroll">
+                        <div class="timeline" id="timeline-content">
+                            <!-- Timeline will be loaded from JSON -->
+                        </div>
+                    </div>
+                    <div class="scroll-hint">Scroll to explore my journey</div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">How I Think</h2>
+                    <p class="section-subtitle">
+                        My CliftonStrengths profile reveals the analytical patterns behind my approach to problems
+                    </p>
+                </div>
+                
+                <div class="strengths-container">
+                    <div class="strengths-intro">
+                        <p>Understanding my natural talents helps explain my analytical approach to everything from Federal Reserve policy to supplement effectiveness.</p>
+                        <div class="assessment-date">CliftonStrengths 34 Assessment • May 2022</div>
                     </div>
 
-                    <div class="sidebar-card">
-                        <h3 class="sidebar-title">💪 CliftonStrengths Radar</h3>
+                    <div class="strengths-content">
+                        <div class="top-strengths" id="top-strengths">
+                            <!-- Top 8 strengths will be loaded -->
+                        </div>
                         
                         <div class="radar-chart-container">
                             <div class="radar-chart-wrapper">
                                 <canvas id="strengthsRadarChart"></canvas>
                             </div>
                         </div>
-                        
-                        <div class="strengths-grid" id="strengths-grid">
-                            <!-- Top 6 strengths will be loaded from JSON -->
-                        </div>
-                        
-                        <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--light-text); text-align: center;">
-                            Based on CliftonStrengths 34 assessment (2022)
-                        </p>
                     </div>
+                </div>
+            </section>
 
-                    <div class="sidebar-card">
-                        <h3 class="sidebar-title">🚀 Current Projects</h3>
-                        
-                        <div class="projects-grid" id="projects-grid">
-                            <!-- Projects will be loaded from JSON -->
-                        </div>
+            <section class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Quick Facts</h2>
+                    <p class="section-subtitle">
+                        The essential details that make me, well... me
+                    </p>
+                </div>
+                
+                <div class="facts-container">
+                    <div class="facts-grid" id="fun-facts">
+                        <!-- Facts will be loaded from JSON -->
                     </div>
-                </aside>
-            </div>
+                </div>
+            </section>
         </div>
 
         <footer>
@@ -817,13 +963,6 @@
                     title: "Learning Lab Launch",
                     description: "Created lukethinks.nl as a space to document experiments, analyses, and learning discoveries",
                     type: "project"
-                },
-                {
-                    year: "2023",
-                    icon: "💍",
-                    title: "Married My Best Friend",
-                    description: "Got married to my wonderful Dutch partner - finally making my Netherlands residency official in the best way possible",
-                    type: "personal"
                 },
                 {
                     year: "2022",
@@ -881,7 +1020,7 @@
                     {
                         icon: "📧",
                         text: "Email Me",
-                        url: "mailto@lukethinks.nl",
+                        url: "mailto:hello@lukethinks.nl",
                         external: false
                     },
                     {
@@ -920,7 +1059,16 @@
             ],
             cliftonStrengths: {
                 description: "My complete CliftonStrengths 34 profile from 2022",
-                topStrengths: ["Harmony", "Context", "Analytical", "Individualization", "Arranger", "Responsibility"],
+                topStrengths: [
+                    {"name": "Harmony", "rank": 1, "domain": "Relationship Building"},
+                    {"name": "Context", "rank": 2, "domain": "Strategic Thinking"},
+                    {"name": "Analytical", "rank": 3, "domain": "Strategic Thinking"},
+                    {"name": "Individualization", "rank": 4, "domain": "Relationship Building"},
+                    {"name": "Arranger", "rank": 5, "domain": "Executing"},
+                    {"name": "Responsibility", "rank": 6, "domain": "Executing"},
+                    {"name": "Focus", "rank": 7, "domain": "Executing"},
+                    {"name": "Intellection", "rank": 8, "domain": "Strategic Thinking"}
+                ],
                 allStrengths: [
                     {"name": "Harmony", "rank": 1, "domain": "Relationship Building", "score": 85},
                     {"name": "Context", "rank": 2, "domain": "Strategic Thinking", "score": 82},
@@ -929,29 +1077,35 @@
                     {"name": "Arranger", "rank": 5, "domain": "Executing", "score": 76},
                     {"name": "Responsibility", "rank": 6, "domain": "Executing", "score": 74},
                     {"name": "Focus", "rank": 7, "domain": "Executing", "score": 72},
-                    {"name": "Intellection", "rank": 8, "domain": "Strategic Thinking", "score": 70}
+                    {"name": "Intellection", "rank": 8, "domain": "Strategic Thinking", "score": 70},
+                    {"name": "Learner", "rank": 9, "domain": "Strategic Thinking", "score": 68},
+                    {"name": "Relator", "rank": 10, "domain": "Relationship Building", "score": 66},
+                    {"name": "Maximizer", "rank": 11, "domain": "Influencing", "score": 64},
+                    {"name": "Input", "rank": 12, "domain": "Strategic Thinking", "score": 62},
+                    {"name": "Consistency", "rank": 13, "domain": "Executing", "score": 60},
+                    {"name": "Competition", "rank": 14, "domain": "Influencing", "score": 58},
+                    {"name": "Activator", "rank": 15, "domain": "Influencing", "score": 56},
+                    {"name": "Ideation", "rank": 16, "domain": "Strategic Thinking", "score": 54},
+                    {"name": "Command", "rank": 17, "domain": "Influencing", "score": 52},
+                    {"name": "Significance", "rank": 18, "domain": "Influencing", "score": 50},
+                    {"name": "Empathy", "rank": 19, "domain": "Relationship Building", "score": 48},
+                    {"name": "Discipline", "rank": 20, "domain": "Executing", "score": 46},
+                    {"name": "Futuristic", "rank": 21, "domain": "Strategic Thinking", "score": 44},
+                    {"name": "Self-Assurance", "rank": 22, "domain": "Influencing", "score": 42},
+                    {"name": "Restorative", "rank": 23, "domain": "Executing", "score": 40},
+                    {"name": "Communication", "rank": 24, "domain": "Influencing", "score": 38},
+                    {"name": "Includer", "rank": 25, "domain": "Relationship Building", "score": 36},
+                    {"name": "Developer", "rank": 26, "domain": "Relationship Building", "score": 34},
+                    {"name": "Deliberative", "rank": 27, "domain": "Executing", "score": 32},
+                    {"name": "Connectedness", "rank": 28, "domain": "Relationship Building", "score": 30},
+                    {"name": "Belief", "rank": 29, "domain": "Executing", "score": 28},
+                    {"name": "Positivity", "rank": 30, "domain": "Relationship Building", "score": 26},
+                    {"name": "Achiever", "rank": 31, "domain": "Executing", "score": 24},
+                    {"name": "Woo", "rank": 32, "domain": "Influencing", "score": 22},
+                    {"name": "Adaptability", "rank": 33, "domain": "Relationship Building", "score": 20},
+                    {"name": "Strategic", "rank": 34, "domain": "Strategic Thinking", "score": 18}
                 ]
-            },
-            currentProjects: [
-                {
-                    title: "APM Preparation",
-                    description: "Deep dive into product thinking frameworks and structured case study approaches",
-                    progress: 65,
-                    category: "Career Development"
-                },
-                {
-                    title: "Dutch Fluency Project",
-                    description: "Systematic approach to overcoming language anxiety through AI practice and structured learning",
-                    progress: 45,
-                    category: "Personal Growth"
-                },
-                {
-                    title: "Interactive Data Stories", 
-                    description: "Learning Chart.js and D3 to build engaging financial and economic visualizations",
-                    progress: 75,
-                    category: "Technical Skills"
-                }
-            ]
+            }
         };
 
         // Load content from JSON file or use fallback
@@ -986,11 +1140,9 @@
             timelineContent.innerHTML = data.timeline.map(item => `
                 <div class="timeline-item ${item.type || ''} ${item.isJoke ? 'future' : ''}">
                     <div class="timeline-icon">${item.icon}</div>
-                    <div class="timeline-content">
-                        <div class="timeline-year">${item.year}</div>
-                        <div class="timeline-title">${item.title}</div>
-                        <div class="timeline-description">${item.description}</div>
-                    </div>
+                    <div class="timeline-year">${item.year}</div>
+                    <div class="timeline-title">${item.title}</div>
+                    <div class="timeline-description">${item.description}</div>
                 </div>
             `).join('');
             
@@ -1009,45 +1161,32 @@
             // Update fun facts
             const funFacts = document.getElementById('fun-facts');
             funFacts.innerHTML = data.facts.map(fact => `
-                <li class="fun-fact">
-                    <div class="fun-fact-icon">${fact.icon}</div>
-                    <div class="fun-fact-text">${fact.text}</div>
-                </li>
+                <div class="fact-card">
+                    <div class="fact-icon">${fact.icon}</div>
+                    <div class="fact-text">${fact.text}</div>
+                </div>
             `).join('');
             
-            // Update top strengths
-            const strengthsGrid = document.getElementById('strengths-grid');
-            strengthsGrid.innerHTML = (data.cliftonStrengths?.topStrengths || data.strengths).map(strength => 
-                `<div class="strength-item">${strength}</div>`
-            ).join('');
-
-            // Create radar chart if CliftonStrengths data exists
-            if (data.cliftonStrengths && data.cliftonStrengths.allStrengths) {
-                createStrengthsRadarChart(data.cliftonStrengths.allStrengths);
-            }
-
-            // Update projects
-            if (data.currentProjects) {
-                const projectsGrid = document.getElementById('projects-grid');
-                projectsGrid.innerHTML = data.currentProjects.map(project => `
-                    <div class="project-card">
-                        <div class="project-header">
-                            <div class="project-title">${project.title}</div>
-                            <div class="project-category">${project.category}</div>
-                        </div>
-                        <div class="project-description">${project.description}</div>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${project.progress}%"></div>
-                            </div>
-                            <div class="progress-text">${project.progress}%</div>
-                        </div>
+            // Update top strengths cards and create radar chart
+            if (data.cliftonStrengths) {
+                const topStrengths = data.cliftonStrengths.topStrengths || data.cliftonStrengths.allStrengths.slice(0, 8);
+                const topStrengthsContainer = document.getElementById('top-strengths');
+                topStrengthsContainer.innerHTML = topStrengths.map(strength => `
+                    <div class="strength-card">
+                        <div class="strength-rank">#${strength.rank}</div>
+                        <div class="strength-name">${strength.name}</div>
+                        <div class="strength-domain">${strength.domain}</div>
                     </div>
                 `).join('');
+
+                // Create radar chart with all 34 strengths
+                if (data.cliftonStrengths.allStrengths) {
+                    createStrengthsRadarChart(data.cliftonStrengths.allStrengths);
+                }
             }
         }
 
-        // Create CliftonStrengths Radar Chart
+        // Create CliftonStrengths Radar Chart with all 34 strengths
         function createStrengthsRadarChart(strengthsData) {
             const canvas = document.getElementById('strengthsRadarChart');
             if (!canvas) {
@@ -1065,23 +1204,21 @@
                 'Influencing': 'rgba(196, 86, 33, 0.8)'
             };
 
-            // Take top 8 strengths for readability
-            const topStrengths = strengthsData.slice(0, 8);
-            
+            // Use all 34 strengths but make labels smaller for readability
             try {
                 new Chart(ctx, {
                     type: 'radar',
                     data: {
-                        labels: topStrengths.map(s => s.name),
+                        labels: strengthsData.map(s => s.name),
                         datasets: [{
                             label: 'Strength Score',
-                            data: topStrengths.map(s => s.score),
-                            backgroundColor: 'rgba(146, 64, 14, 0.2)',
-                            borderColor: 'rgba(146, 64, 14, 0.8)',
-                            pointBackgroundColor: topStrengths.map(s => domainColors[s.domain] || 'rgba(146, 64, 14, 0.8)'),
+                            data: strengthsData.map(s => s.score),
+                            backgroundColor: 'rgba(146, 64, 14, 0.1)',
+                            borderColor: 'rgba(146, 64, 14, 0.6)',
+                            pointBackgroundColor: strengthsData.map(s => domainColors[s.domain] || 'rgba(146, 64, 14, 0.8)'),
                             pointBorderColor: 'white',
-                            pointBorderWidth: 2,
-                            pointRadius: 5,
+                            pointBorderWidth: 1,
+                            pointRadius: 3,
                             borderWidth: 2
                         }]
                     },
@@ -1091,6 +1228,23 @@
                         plugins: {
                             legend: {
                                 display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(context) {
+                                        const index = context[0].dataIndex;
+                                        const strength = strengthsData[index];
+                                        return `#${strength.rank} ${strength.name}`;
+                                    },
+                                    label: function(context) {
+                                        const index = context.dataIndex;
+                                        const strength = strengthsData[index];
+                                        return [
+                                            `Score: ${strength.score}`,
+                                            `Domain: ${strength.domain}`
+                                        ];
+                                    }
+                                }
                             }
                         },
                         scales: {
@@ -1108,16 +1262,20 @@
                                 },
                                 pointLabels: {
                                     font: {
-                                        size: 11,
+                                        size: 8,
                                         family: 'Inter'
                                     },
-                                    color: '#64748b'
+                                    color: '#64748b',
+                                    callback: function(label, index) {
+                                        // Show top 10 strength names, others as numbers
+                                        return index < 10 ? label : `#${index + 1}`;
+                                    }
                                 }
                             }
                         }
                     }
                 });
-                console.log('Radar chart created successfully');
+                console.log('Radar chart created successfully with all 34 strengths');
             } catch (error) {
                 console.error('Error creating radar chart:', error);
             }
