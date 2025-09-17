@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Luke Thinks</title>
+    <meta name="description" content="Finance professional turned analytical thinker, documenting the learning journey in the Netherlands">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-brown: #92400e;
+            --secondary-brown: #c05621;
+            --accent-amber: #ea580c;
+            --light-amber: #fbbf24;
+            --cream: #fef7f0;
+            --light-cream: #f7fafc;
+            --dark-text: #0f172a;
+            --medium-text: #1e293b;
+            --light-text: #64748b;
+            --very-light-text: #94a3b8;
+            --border-light: rgba(226, 232, 240, 0.5);
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--medium-text);
+            background: linear-gradient(135deg, var(--cream) 0%, var(--light-cream) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+        }
+
+        .logo-main {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            line-height: 1;
+        }
+
+        .logo-sub {
+            font-size: 0.8rem;
+            color: var(--accent-amber);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(146, 64, 14, 0.1);
+            color: var(--primary-brown);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(146, 64, 14, 0.2);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--dark-text);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .hero-highlight {
+            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            margin-bottom: 3rem;
+            line-height: 1.5;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0 4rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .bio-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--border-light);
+        }
+
+        .bio-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bio-section h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
+            border-radius: 2px;
+        }
+
+        .bio-section p {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            color: var(--medium-text);
+        }
+
+        .bio-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight-text {
+            background: linear-gradient(135deg, rgba(146, 64, 14, 0.1), rgba(234, 88, 12, 0.05));
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            color: var(--primary-brown);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .sidebar-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px var(--shadow-light);
+            border: 1px solid var(--border-light);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Profile Card */
+        .profile-card {
+            text-align: center;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: 800;
+            box-shadow: 0 8px 25px rgba(146, 64, 14, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-location {
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        /* Contact Links */
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(146, 64, 14, 0.05);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--medium-text);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+        }
+
+        .contact-link:hover {
+            background: var(--primary-brown);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(146, 64, 14, 0.3);
+        }
+
+        .contact-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .contact-text {
+            font-weight: 600;
+        }
+
+        /* Fun Facts */
+        .fun-facts {
+            list-style: none;
+        }
+
+        .fun-fact {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(146, 64, 14, 0.1);
+        }
+
+        .fun-fact:last-child {
+            border-bottom: none;
+        }
+
+        .fun-fact-icon {
+            font-size: 1.5rem;
+            width: 32px;
+            text-align: center;
+        }
+
+        .fun-fact-text {
+            color: var(--medium-text);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Strengths */
+        .strengths-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .strength-item {
+            background: linear-gradient(135deg, rgba(146, 64, 14, 0.1), rgba(234, 88, 12, 0.05));
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary-brown);
+            font-size: 0.85rem;
+            border: 1px solid rgba(146, 64, 14, 0.2);
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            margin: 3rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 16px;
+            top: 32px;
+            bottom: -16px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-amber), var(--light-amber));
+            opacity: 0.3;
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-year {
+            color: var(--accent-amber);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-title {
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-description {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-text);
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--light-amber);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .bio-section {
+                padding: 2rem;
+            }
+
+            .strengths-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item {
+                gap: 1rem;
+            }
+        }
+
+        /* Loading animations */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="fade-in">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">L</div>
+                    <a href="/" class="logo-text">
+                        <span class="logo-main">Luke Thinks</span>
+                        <span class="logo-sub">LEARNING LAB</span>
+                    </a>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="#research">Research</a></li>
+                        <li><a href="#experiments">Experiments</a></li>
+                        <li><a href="#learning">Learning</a></li>
+                        <li><a href="/about.html" class="active">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge" id="hero-badge">
+                    👋 Nice to meet you
+                </div>
+                
+                <h1 id="hero-title">
+                    I'm <span class="hero-highlight">Luke</span>,<br>
+                    an analytical thinker<br>
+                    in the Netherlands
+                </h1>
+                
+                <p class="hero-tagline" id="hero-tagline">
+                    Finance professional turned curious learner, documenting my journey through data, 
+                    experiments, and the occasional Dutch language mishap.
+                </p>
+            </div>
+        </section>
+
+        <div class="main-content">
+            <div class="content-grid">
+                <div class="bio-section">
+                    <h2>My Story</h2>
+                    
+                    <div id="bio-content">
+                        <!-- Content will be loaded from JSON -->
+                        <p>Loading...</p>
+                    </div>
+
+                    <div class="timeline" id="timeline-content">
+                        <!-- Timeline will be loaded from JSON -->
+                    </div>
+                </div>
+
+                <aside class="sidebar">
+                    <div class="sidebar-card profile-card">
+                        <div class="avatar">L</div>
+                        <div class="profile-name" id="profile-name">Luke van den Top</div>
+                        <div class="profile-location" id="profile-location">
+                            🇳🇱 Nijmegen, Netherlands
+                        </div>
+                        
+                        <div class="contact-links" id="contact-links">
+                            <!-- Contact links will be loaded from JSON -->
+                        </div>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">⚡ Quick Facts</h3>
+                        
+                        <ul class="fun-facts" id="fun-facts">
+                            <!-- Facts will be loaded from JSON -->
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">💪 Top Strengths</h3>
+                        
+                        <div class="strengths-grid" id="strengths-grid">
+                            <!-- Strengths will be loaded from JSON -->
+                        </div>
+                        
+                        <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--light-text); text-align: center;">
+                            Based on CliftonStrengths assessment
+                        </p>
+                    </div>
+                </aside>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <p>© 2025 Luke van den Top • Thanks for getting to know me</p>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="mailto:hello@lukethinks.nl">Contact</a>
+                    <a href="/rss">RSS</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Fallback data in case JSON file doesn't exist
+        const fallbackData = {
+            hero: {
+                badge: "👋 Nice to meet you",
+                title: "I'm Luke, an analytical thinker in the Netherlands",
+                tagline: "Finance professional turned curious learner, documenting my journey through data, experiments, and the occasional Dutch language mishap."
+            },
+            bio: {
+                paragraphs: [
+                    "I'm a finance professional living in the Netherlands, where I've spent the last six years trying to master Dutch (spoiler: still working on it). What started as a career in FP&A has evolved into a fascinating journey of analytical thinking and continuous learning.",
+                    "My approach to problems is deeply rooted in my CliftonStrengths - Harmony, Context, and Analytical thinking. I believe in understanding the \"why\" behind everything, whether it's Federal Reserve policy decisions, supplement effectiveness, or why my Dutch pronunciation still makes locals chuckle.",
+                    "Currently, I'm preparing for an Associate Product Manager transition, which has led me to explore business frameworks, case study methodologies, and product thinking. This learning lab is where I document those discoveries, test hypotheses, and share what actually works.",
+                    "When I'm not diving into financial models or experimenting with new productivity methods, you'll find me attempting to have conversations in Dutch with varying degrees of success, or analyzing whether that new supplement actually improved my energy levels (spoiler: data is everything)."
+                ]
+            },
+            timeline: [
+                {
+                    year: "2025",
+                    icon: "🎯",
+                    title: "APM Journey Begins",
+                    description: "Started intensive preparation for Associate Product Manager roles, diving deep into business cases and product frameworks"
+                },
+                {
+                    year: "2024",
+                    icon: "🧠",
+                    title: "Learning Lab Launch",
+                    description: "Created this space to document experiments, analyses, and learning discoveries"
+                },
+                {
+                    year: "2019-2024",
+                    icon: "📊",
+                    title: "FP&A Professional",
+                    description: "Built expertise in financial modeling, analysis, and data-driven decision making"
+                },
+                {
+                    year: "2019",
+                    icon: "🇳🇱",
+                    title: "Netherlands Adventure",
+                    description: "Moved to the Netherlands, began the ongoing quest to speak Dutch fluently"
+                }
+            ],
+            contact: {
+                name: "Luke van den Top",
+                location: "🇳🇱 Nijmegen, Netherlands",
+                links: [
+                    {
+                        icon: "💼",
+                        text: "LinkedIn Profile",
+                        url: "https://linkedin.com/in/lukevandenTop",
+                        external: true
+                    },
+                    {
+                        icon: "📧",
+                        text: "Email Me",
+                        url: "mailto:hello@lukethinks.nl",
+                        external: false
+                    },
+                    {
+                        icon: "🏠",
+                        text: "Back to Homepage",
+                        url: "/",
+                        external: false
+                    }
+                ]
+            },
+            facts: [
+                {
+                    icon: "🇳🇱",
+                    text: "6 years in Netherlands, Dutch still a work in progress"
+                },
+                {
+                    icon: "📊",
+                    text: "Finance & FP&A professional with analytical mindset"
+                },
+                {
+                    icon: "🧪",
+                    text: "Running 12+ personal experiments simultaneously"
+                },
+                {
+                    icon: "🎯",
+                    text: "Preparing for Associate Product Manager transition"
+                },
+                {
+                    icon: "☕",
+                    text: "Believes coffee + data = productivity"
+                }
+            ],
+            strengths: [
+                "Harmony",
+                "Context", 
+                "Analytical",
+                "Individualization",
+                "Arranger",
+                "Responsibility"
+            ]
+        };
+
+        // Load content from JSON file or use fallback
+        async function loadAboutData() {
+            let data = fallbackData;
+            
+            try {
+                const response = await fetch('/data/about.json');
+                if (response.ok) {
+                    data = await response.json();
+                    console.log('Loaded data from JSON file');
+                } else {
+                    console.log('JSON file not found, using fallback data');
+                }
+            } catch (error) {
+                console.log('Using fallback data:', error.message);
+            }
+            
+            // Update hero section
+            document.getElementById('hero-badge').textContent = data.hero.badge;
+            document.getElementById('hero-title').innerHTML = data.hero.title.replace('Luke', '<span class="hero-highlight">Luke</span>');
+            document.getElementById('hero-tagline').textContent = data.hero.tagline;
+            
+            // Update bio section
+            const bioContent = document.getElementById('bio-content');
+            bioContent.innerHTML = data.bio.paragraphs.map(paragraph => {
+                return `<p>${paragraph.replace(/\b(finance professional|CliftonStrengths|Associate Product Manager transition)\b/gi, '<span class="highlight-text">$1</span>')}</p>`;
+            }).join('');
+            
+            // Update timeline
+            const timelineContent = document.getElementById('timeline-content');
+            timelineContent.innerHTML = data.timeline.map(item => `
+                <div class="timeline-item">
+                    <div class="timeline-icon">${item.icon}</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">${item.year}</div>
+                        <div class="timeline-title">${item.title}</div>
+                        <div class="timeline-description">${item.description}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update contact info
+            document.getElementById('profile-name').textContent = data.contact.name;
+            document.getElementById('profile-location').innerHTML = data.contact.location;
+            
+            const contactLinks = document.getElementById('contact-links');
+            contactLinks.innerHTML = data.contact.links.map(link => `
+                <a href="${link.url}" class="contact-link" ${link.external ? 'target="_blank"' : ''}>
+                    <div class="contact-icon">${link.icon}</div>
+                    <div class="contact-text">${link.text}</div>
+                </a>
+            `).join('');
+            
+            // Update fun facts
+            const funFacts = document.getElementById('fun-facts');
+            funFacts.innerHTML = data.facts.map(fact => `
+                <li class="fun-fact">
+                    <div class="fun-fact-icon">${fact.icon}</div>
+                    <div class="fun-fact-text">${fact.text}</div>
+                </li>
+            `).join('');
+            
+            // Update strengths
+            const strengthsGrid = document.getElementById('strengths-grid');
+            strengthsGrid.innerHTML = data.strengths.map(strength => 
+                `<div class="strength-item">${strength}</div>`
+            ).join('');
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadAboutData);
+    </script>
+</body>
+</html>
