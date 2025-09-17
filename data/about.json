@@ -1,0 +1,19 @@
+{
+  "hero": {
+    "badge": "👋 Nice to meet you",
+    "title": "I'm Luke, an analytical thinker in the Netherlands", 
+    "tagline": "Finance professional turned curious learner, documenting my journey through data, experiments, and the occasional Dutch language mishap."
+  },
+  "bio": {
+    "paragraphs": [
+      "I'm a finance professional living in the Netherlands, where I've spent the last six years trying to master Dutch (spoiler: still working on it). What started as a career in Accounting and then FP&A has evolved into a fascinating journey of analytical thinking and continuous learning.",
+      "My approach to problems is deeply rooted in my CliftonStrengths - Harmony, Context, and Analytical thinking. I believe in understanding the \"why\" behind everything."
+    ]
+  },
+  "facts": [
+    {
+      "icon": "🇳🇱",
+      "text": "6 years in Netherlands, Dutch still a work in progress"
+    }
+  ]
+}
