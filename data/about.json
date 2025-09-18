@@ -91,7 +91,7 @@ timeline: [
       {
         "icon": "📧",
         "text": "Email Me",
-        "url": "lukethinks@outlook.com",
+        "url": "mailto:lukethinks@outlook.com",
         "external": false
       },
       {
