@@ -1,681 +1,4 @@
-<script>
-        // Chart variables
-        let currentChart = null;
-        let currentView = 'radar';
-
-        // Fallback data in case JSON file doesn't exist
-        const fallbackData = {
-            hero: {
-                badge: "👋 Nice to meet you",
-                title: "I'm Luke, an analytical thinker in the Netherlands",
-                tagline: "Finance professional turned curious learner, documenting my journey through data, experiments."
-            },
-            bio: {
-                paragraphs: [
-                    "I'm a finance professional living in the Netherlands, where I've spent the last six years trying to master Dutch (spoiler: still working on it). What started as a career in FP&A has evolved into a fascinating journey of analytical thinking and continuous learning.",
-                    "My approach to problems is deeply rooted in my Gallup Strengths. I believe in understanding the \"why\" behind everything, whether it's Federal Reserve policy decisions, supplement effectiveness, or why my Dutch pronunciation still makes locals chuckle.",
-                    "Currently, I'm working in FP&A, with experience in SSC's & Accounting, which has led me to explore business frameworks, case study methodologies, and product thinking. This learning lab is where I document those discoveries, test hypotheses, and share what actually works.",
-                    "When I'm not diving into financial models or experimenting with new productivity methods i'll be out cycling or swimming."
-                ]
-            },
-            timeline: [
-                {
-                    year: "2089",
-                    icon: "🎓",
-                    title: "PhD in Dutch Linguistics (Finally)",
-                    description: "After 70 years of dedicated practice, Luke becomes the world's foremost expert on why 'de' vs 'het' makes no logical sense. Writes dissertation entirely in perfect Dutch while locals still occasionally ask him to repeat himself",
-                    type: "future",
-                    isJoke: true
-                },
-                {
-                    year: "2025",
-                    icon: "🎯",
-                    title: "APM Journey Begins",
-                    description: "Started intensive preparation for ACCA APM, diving deep into business cases and learnings frameworks using AI",
-                    type: "career"
-                },
-                {
-                    year: "2025",
-                    icon: "🧠",
-                    title: "Learning Lab Launch",
-                    description: "Created lukethinks.nl as a space to document experiments, analyses, and learning discoveries",
-                    type: "project"
-                },
-                {
-                    year: "2025",
-                    icon: "📈",
-                    title: "FP&A Analyst experience",
-                    description: "Had to oppurtunity to experience FP&A, leading financial modeling and analysis for strategic initiatives",
-                    type: "career"
-                },
-                {
-                    year: "2023",
-                    icon: "💍",
-                    title: "Married the love of my live",
-                    description: "Celebrated our love in front of friends and family.",
-                    type: "personal"
-                },
-                {
-                    year: "2020",
-                    icon: "🏠",
-                    title: "Bought First Home",
-                    description: "Navigated the Dutch housing market (somehow) and became a homeowner in Amersfoort Region",
-                    type: "personal"
-                },
-                {
-                    year: "2019-2021",
-                    icon: "📊",
-                    title: "Career in Accounting",
-                    description: "Built expertise in financial planning, budgeting, and variance analysis while mastering Excel wizardry",
-                    type: "career"
-                },
-                {
-                    year: "2019",
-                    icon: "🇳🇱",
-                    title: "Netherlands Adventure Begins ❤",
-                    description: "Moved to the Netherlands for love and career opportunities - began the ongoing quest to speak Dutch fluently",
-                    type: "personal"
-                },
-                {
-                    year: "2018",
-                    icon: "🎓",
-                    title: "Finance Career Transition",
-                    description: "Pivoted from previous career into finance, drawn by the analytical challenges and data-driven decision making",
-                    type: "career"
-                }
-            ],
-            contact: {
-                name: "Luke van den Top",
-                location: "🇳🇱 Nijmegen, Netherlands",
-                links: [
-                    {
-                        icon: "💼",
-                        text: "LinkedIn Profile",
-                        url: "https://linkedin.com/in/lukevandenTop",
-                        external: true
-                    },
-                    {
-                        icon: "📧",
-                        text: "Email Me",
-                        url: "mailto:lukethinks@outlook.com",
-                        external: false
-                    },
-                    {
-                        icon: "🏠",
-                        text: "Back to Homepage",
-                        url: "/",
-                        external: false
-                    }
-                ]
-            },
-            facts: [
-                {
-                    icon: "🇳🇱",
-                    text: "6 years in Netherlands, Dutch still a work in progress"
-                },
-                {
-                    icon: "📊",
-                    text: "Finance & FP&A professional with analytical mindset"
-                },
-                {
-                    icon: "🧪",
-                    text: "Running 12+ personal experiments simultaneously"
-                },
-                {
-                    icon: "🎯",
-                    text: "Working on an FP&A transition"
-                },
-                {
-                    icon: "🚲",
-                    text: "Cycled 66,000+ km — around 🌍 1.6 times"
-                },
-                {
-                    icon: "☕",
-                    text: "Believes coffee + data = productivity"
-                }
-            ],
-            cliftonStrengths: {
-                description: "My complete CliftonStrengths 34 profile from 2022",
-                topStrengths: [
-                    {"name": "Harmony", "rank": 1, "domain": "Relationship Building"},
-                    {"name": "Context", "rank": 2, "domain": "Strategic Thinking"},
-                    {"name": "Analytical", "rank": 3, "domain": "Strategic Thinking"},
-                    {"name": "Individualization", "rank": 4, "domain": "Relationship Building"},
-                    {"name": "Arranger", "rank": 5, "domain": "Executing"},
-                    {"name": "Responsibility", "rank": 6, "domain": "Executing"},
-                    {"name": "Focus", "rank": 7, "domain": "Executing"},
-                    {"name": "Intellection", "rank": 8, "domain": "Strategic Thinking"}
-                ],
-                allStrengths: [
-                    {"name": "Harmony", "rank": 1, "domain": "Relationship Building", "score": 85},
-                    {"name": "Context", "rank": 2, "domain": "Strategic Thinking", "score": 82},
-                    {"name": "Analytical", "rank": 3, "domain": "Strategic Thinking", "score": 80},
-                    {"name": "Individualization", "rank": 4, "domain": "Relationship Building", "score": 78},
-                    {"name": "Arranger", "rank": 5, "domain": "Executing", "score": 76},
-                    {"name": "Responsibility", "rank": 6, "domain": "Executing", "score": 74},
-                    {"name": "Focus", "rank": 7, "domain": "Executing", "score": 72},
-                    {"name": "Intellection", "rank": 8, "domain": "Strategic Thinking", "score": 70},
-                    {"name": "Learner", "rank": 9, "domain": "Strategic Thinking", "score": 68},
-                    {"name": "Relator", "rank": 10, "domain": "Relationship Building", "score": 66},
-                    {"name": "Maximizer", "rank": 11, "domain": "Influencing", "score": 64},
-                    {"name": "Input", "rank": 12, "domain": "Strategic Thinking", "score": 62},
-                    {"name": "Consistency", "rank": 13, "domain": "Executing", "score": 60},
-                    {"name": "Competition", "rank": 14, "domain": "Influencing", "score": 58},
-                    {"name": "Activator", "rank": 15, "domain": "Influencing", "score": 56},
-                    {"name": "Ideation", "rank": 16, "domain": "Strategic Thinking", "score": 54},
-                    {"name": "Command", "rank": 17, "domain": "Influencing", "score": 52},
-                    {"name": "Significance", "rank": 18, "domain": "Influencing", "score": 50},
-                    {"name": "Empathy", "rank": 19, "domain": "Relationship Building", "score": 48},
-                    {"name": "Discipline", "rank": 20, "domain": "Executing", "score": 46},
-                    {"name": "Futuristic", "rank": 21, "domain": "Strategic Thinking", "score": 44},
-                    {"name": "Self-Assurance", "rank": 22, "domain": "Influencing", "score": 42},
-                    {"name": "Restorative", "rank": 23, "domain": "Executing", "score": 40},
-                    {"name": "Communication", "rank": 24, "domain": "Influencing", "score": 38},
-                    {"name": "Includer", "rank": 25, "domain": "Relationship Building", "score": 36},
-                    {"name": "Developer", "rank": 26, "domain": "Relationship Building", "score": 34},
-                    {"name": "Deliberative", "rank": 27, "domain": "Executing", "score": 32},
-                    {"name": "Connectedness", "rank": 28, "domain": "Relationship Building", "score": 30},
-                    {"name": "Belief", "rank": 29, "domain": "Executing", "score": 28},
-                    {"name": "Positivity", "rank": 30, "domain": "Relationship Building", "score": 26},
-                    {"name": "Achiever", "rank": 31, "domain": "Executing", "score": 24},
-                    {"name": "Woo", "rank": 32, "domain": "Influencing", "score": 22},
-                    {"name": "Adaptability", "rank": 33, "domain": "Relationship Building", "score": 20},
-                    {"name": "Strategic", "rank": 34, "domain": "Strategic Thinking", "score": 18}
-                ]
-            }
-        };
-
-        // Typing effect
-        function createTypingEffect() {
-            const texts = [
-                "Finance professional turned curious learner",
-                "Documenting my analytical journey in the Netherlands", 
-                "Breaking down complex problems with data",
-                "From FP&A to APM preparation and beyond"
-            ];
-            
-            let textIndex = 0;
-            let charIndex = 0;
-            let isDeleting = false;
-            const typingElement = document.getElementById('typing-text');
-            
-            function typeText() {
-                const currentText = texts[textIndex];
-                
-                if (isDeleting) {
-                    typingElement.textContent = currentText.substring(0, charIndex - 1);
-                    charIndex--;
-                } else {
-                    typingElement.textContent = currentText.substring(0, charIndex + 1);
-                    charIndex++;
-                }
-                
-                let typeSpeed = isDeleting ? 50 : 100;
-                
-                if (!isDeleting && charIndex === currentText.length) {
-                    typeSpeed = 2000; // Pause at end
-                    isDeleting = true;
-                } else if (isDeleting && charIndex === 0) {
-                    isDeleting = false;
-                    textIndex = (textIndex + 1) % texts.length;
-                }
-                
-                setTimeout(typeText, typeSpeed);
-            }
-            
-            typeText();
-        }
-
-        // Create floating particles
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    const particle = document.createElement('div');
-                    particle.className = 'particle';
-                    
-                    const size = Math.random() * 4 + 2;
-                    particle.style.width = size + 'px';
-                    particle.style.height = size + 'px';
-                    particle.style.left = Math.random() * 100 + '%';
-                    particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
-                    particle.style.animationDelay = Math.random() * 2 + 's';
-                    
-                    particlesContainer.appendChild(particle);
-                    
-                    // Remove particle after animation
-                    setTimeout(() => {
-                        particle.remove();
-                    }, 8000);
-                }, i * 200);
-            }
-            
-            // Continuously create new particles
-            setTimeout(createParticles, 2000);
-        }
-        function toggleChart() {
-            const btn = document.getElementById('chartToggle');
-            
-            if (currentView === 'radar') {
-                currentView = 'domain';
-                btn.textContent = 'View: Radar Chart';
-                createDomainChart();
-            } else {
-                currentView = 'radar';
-                btn.textContent = 'View: Domain Breakdown';
-                createRadarChart();
-            }
-        }
-
-        // Create radar chart
-        function createRadarChart() {
-            const canvas = document.getElementById('strengthsChart');
-            const ctx = canvas.getContext('2d');
-            
-            if (currentChart) {
-                currentChart.destroy();
-            }
-
-            const strengthsData = fallbackData.cliftonStrengths.allStrengths;
-            
-            currentChart = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: strengthsData.map(s => s.name),
-                    datasets: [{
-                        label: 'Strength Score',
-                        data: strengthsData.map(s => s.score),
-                        backgroundColor: 'rgba(146, 64, 14, 0.1)',
-                        borderColor: 'rgba(146, 64, 14, 0.6)',
-                        pointBackgroundColor: strengthsData.map(s => {
-                            const colors = {
-                                'Strategic Thinking': 'rgba(146, 64, 14, 0.8)',
-                                'Relationship Building': 'rgba(234, 88, 12, 0.8)', 
-                                'Executing': 'rgba(251, 191, 36, 0.8)',
-                                'Influencing': 'rgba(196, 86, 33, 0.8)'
-                            };
-                            return colors[s.domain] || 'rgba(146, 64, 14, 0.8)';
-                        }),
-                        pointBorderColor: 'white',
-                        pointBorderWidth: 1,
-                        pointRadius: 3,
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(context) {
-                                    const index = context[0].dataIndex;
-                                    const strength = strengthsData[index];
-                                    return `#${strength.rank} ${strength.name}`;
-                                },
-                                label: function(context) {
-                                    const index = context.dataIndex;
-                                    const strength = strengthsData[index];
-                                    return [
-                                        `Score: ${strength.score}`,
-                                        `Domain: ${strength.domain}`
-                                    ];
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: {
-                                display: false
-                            },
-                            grid: {
-                                color: 'rgba(146, 64, 14, 0.2)'
-                            },
-                            angleLines: {
-                                color: 'rgba(146, 64, 14, 0.2)'
-                            },
-                            pointLabels: {
-                                font: {
-                                    size: 8,
-                                    family: 'Inter'
-                                },
-                                color: '#64748b',
-                                callback: function(label, index) {
-                                    return index < 10 ? label : `#${index + 1}`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Create domain chart
-        function createDomainChart() {
-            const canvas = document.getElementById('strengthsChart');
-            const ctx = canvas.getContext('2d');
-            
-            if (currentChart) {
-                currentChart.destroy();
-            }
-
-            // Calculate domain totals
-            const domains = {};
-            fallbackData.cliftonStrengths.allStrengths.forEach(strength => {
-                if (!domains[strength.domain]) {
-                    domains[strength.domain] = { total: 0, count: 0, strengths: [] };
-                }
-                domains[strength.domain].total += strength.score;
-                domains[strength.domain].count += 1;
-                domains[strength.domain].strengths.push(strength);
-            });
-
-            const domainData = Object.keys(domains).map(domain => ({
-                domain,
-                average: Math.round(domains[domain].total / domains[domain].count),
-                count: domains[domain].count,
-                topStrength: domains[domain].strengths.sort((a, b) => a.rank - b.rank)[0]
-            }));
-
-            currentChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: domainData.map(d => d.domain),
-                    datasets: [{
-                        label: 'Average Score',
-                        data: domainData.map(d => d.average),
-                        backgroundColor: [
-                            'rgba(146, 64, 14, 0.8)',
-                            'rgba(234, 88, 12, 0.8)',
-                            'rgba(251, 191, 36, 0.8)',
-                            'rgba(196, 86, 33, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(146, 64, 14, 1)',
-                            'rgba(234, 88, 12, 1)',
-                            'rgba(251, 191, 36, 1)',
-                            'rgba(196, 86, 33, 1)'
-                        ],
-                        borderWidth: 2,
-                        borderRadius: 8,
-                        borderSkipped: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(context) {
-                                    return context[0].label;
-                                },
-                                label: function(context) {
-                                    const domainInfo = domainData[context.dataIndex];
-                                    return [
-                                        `Average Score: ${domainInfo.average}`,
-                                        `${domainInfo.count} strengths in domain`,
-                                        `Top: #${domainInfo.topStrength.rank} ${domainInfo.topStrength.name}`
-                                    ];
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            grid: {
-                                color: 'rgba(146, 64, 14, 0.1)'
-                            },
-                            ticks: {
-                                color: '#64748b',
-                                font: {
-                                    family: 'Inter'
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: '#64748b',
-                                font: {
-                                    family: 'Inter',
-                                    size: 10
-                                },
-                                maxRotation: 45
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Load content from JSON file or use fallback
-        async function loadAboutData() {
-            let data = fallbackData;
-            
-            try {
-                const response = await fetch('/data/about.json');
-                if (response.ok) {
-                    data = await response.json();
-                    console.log('Loaded data from JSON file');
-                } else {
-                    console.log('JSON file not found, using fallback data');
-                }
-            } catch (error) {
-                console.log('Using fallback data:', error.message);
-            }
-            
-            // Update hero section
-            document.getElementById('hero-badge').textContent = data.hero.badge;
-            document.getElementById('hero-title').innerHTML = data.hero.title.replace('Luke', '<span class="hero-highlight">Luke</span>');
-            // Don't update hero-tagline as it's now handled by typing effect
-            
-            // Update bio section
-            const bioContent = document.getElementById('bio-content');
-            bioContent.innerHTML = data.bio.paragraphs.map(paragraph => {
-                return `<p>${paragraph.replace(/\b(finance professional|CliftonStrengths|Associate Product Manager transition)\b/gi, '<span class="highlight-text">$1</span>')}</p>`;
-            }).join('');
-            
-            // Update timeline - clean version without any lines
-            if (data.timeline) {
-                const timelineContent = document.getElementById('timeline-content');
-                timelineContent.innerHTML = data.timeline.map(item => `
-                    <div class="timeline-item ${item.type || ''} ${item.isJoke ? 'future' : ''}">
-                        <div class="timeline-icon">${item.icon}</div>
-                        <div class="timeline-year">${item.year}</div>
-                        <div class="timeline-title">${item.title}${item.isJoke ? ' 🔮' : ''}</div>
-                        <div class="timeline-description">${item.description}</div>
-                    </div>
-                `).join('');
-            }
-            
-            // Update contact info
-            document.getElementById('profile-name').textContent = data.contact.name;
-            document.getElementById('profile-location').innerHTML = data.contact.location;
-            
-            const contactLinks = document.getElementById('contact-links');
-            contactLinks.innerHTML = data.contact.links.map(link => `
-                <a href="${link.url}" class="contact-link" ${link.external ? 'target="_blank"' : ''}>
-                    <div class="contact-icon">${link.icon}</div>
-                    <div class="contact-text">${link.text}</div>
-                </a>
-            `).join('');
-            
-            // Update fun facts
-            const funFacts = document.getElementById('fun-facts');
-            funFacts.innerHTML = data.facts.map(fact => `
-                <div class="fact-card">
-                    <div class="fact-icon">${fact.icon}</div>
-                    <div class="fact-text">${fact.text}</div>
-                </div>
-            `).join('');
-            
-            // Update top strengths cards and create charts
-            if (data.cliftonStrengths) {
-                const topStrengths = data.cliftonStrengths.topStrengths || data.cliftonStrengths.allStrengths.slice(0, 8);
-                const topStrengthsContainer = document.getElementById('top-strengths');
-                topStrengthsContainer.innerHTML = topStrengths.map(strength => `
-                    <div class="strength-card">
-                        <div class="strength-rank">#${strength.rank}</div>
-                        <div class="strength-name">${strength.name}</div>
-                        <div class="strength-domain">${strength.domain}</div>
-                    </div>
-                `).join('');
-
-                // Update fallback data with loaded data for charts
-                if (data.cliftonStrengths.allStrengths) {
-                    fallbackData.cliftonStrengths = data.cliftonStrengths;
-                }
-
-                // Create initial radar chart
-                setTimeout(() => {
-                    createRadarChart();
-                }, 100);
-            }
-        }
-
-        // Load data when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, starting data load...');
-            loadAboutData();
-            
-            // Start typing effect after a short delay
-            setTimeout(() => {
-                createTypingEffect();
-            }, 1000);
-            
-            // Start particles
-            setTimeout(() => {
-                createParticles();
-            }, 2000);
-        });
-
-        // Header scroll effect to match index page
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(255, 255, 255, 0.98)';
-                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.boxShadow = 'none';
-            }
-        });
-    </script>
-                    <script>
-        // Fallback data in case JSON file doesn't exist
-        const fallbackData = {
-            hero: {
-                badge: "👋 Nice to meet you",
-                title: "I'm Luke, an analytical thinker in the Netherlands",
-                tagline: "Finance professional turned curious learner, documenting my journey through data, experiments."
-            },
-            bio: {
-                paragraphs: [
-                    "I'm a finance professional living in the Netherlands, where I've spent the last six years trying to master Dutch (spoiler: still working on it). What started as a career in FP&A has evolved into a fascinating journey of analytical thinking and continuous learning.",
-                    "My approach to problems is deeply rooted in my Gallup Strengths. I believe in understanding the \"why\" behind everything, whether it's Federal Reserve policy decisions, supplement effectiveness, or why my Dutch pronunciation still makes locals chuckle.",
-                    "Currently, I'm working in FP&A, with experience in SSC's & Accounting, which has led me to explore business frameworks, case study methodologies, and product thinking. This learning lab is where I document those discoveries, test hypotheses, and share what actually works.",
-                    "When I'm not diving into financial models or experimenting with new productivity methods i'll be out cycling or swimming."
-                ]
-            },
-            contact: {
-                name: "Luke van den Top",
-                location: "🇳🇱 Nijmegen, Netherlands",
-                links: [
-                    {
-                        icon: "💼",
-                        text: "LinkedIn Profile",
-                        url: "https://linkedin.com/in/lukevandenTop",
-                        external: true
-                    },
-                    {
-                        icon: "📧",
-                        text: "Email Me",
-                        url: "mailto:lukethinks@outlook.com",
-                        external: false
-                    },
-                    {
-                        icon: "🏠",
-                        text: "Back to Homepage",
-                        url: "/",
-                        external: false
-                    }
-                ]
-            }
-        };
-
-        // Load content from JSON file or use fallback
-        async function loadAboutData() {
-            let data = fallbackData;
-            
-            try {
-                const response = await fetch('/data/about.json');
-                if (response.ok) {
-                    data = await response.json();
-                    console.log('Loaded data from JSON file');
-                } else {
-                    console.log('JSON file not found, using fallback data');
-                }
-            } catch (error) {
-                console.log('Using fallback data:', error.message);
-            }
-            
-            // Update hero section
-            document.getElementById('hero-badge').textContent = data.hero.badge;
-            document.getElementById('hero-title').innerHTML = data.hero.title.replace('Luke', '<span class="hero-highlight">Luke</span>');
-            document.getElementById('hero-tagline').textContent = data.hero.tagline;
-            
-            // Update bio section
-            const bioContent = document.getElementById('bio-content');
-            bioContent.innerHTML = data.bio.paragraphs.map(paragraph => {
-                return `<p>${paragraph.replace(/\b(finance professional|CliftonStrengths|Associate Product Manager transition)\b/gi, '<span class="highlight-text">$1</span>')}</p>`;
-            }).join('');
-            
-            // Update contact info
-            document.getElementById('profile-name').textContent = data.contact.name;
-            document.getElementById('profile-location').innerHTML = data.contact.location;
-            
-            const contactLinks = document.getElementById('contact-links');
-            contactLinks.innerHTML = data.contact.links.map(link => `
-                <a href="${link.url}" class="contact-link" ${link.external ? 'target="_blank"' : ''}>
-                    <div class="contact-icon">${link.icon}</div>
-                    <div class="contact-text">${link.text}</div>
-                </a>
-            `).join('');
-        }
-
-        // Load data when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, starting data load...');
-            loadAboutData();
-        });
-
-        // Header scroll effect to match index page
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(255, 255, 255, 0.98)';
-                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.boxShadow = 'none';
-            }
-        });
-    </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -719,10 +42,10 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 20px;
         }
 
-        /* Header Styles - Match Index Page Exactly */
+        /* Header Styles */
         header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -831,50 +154,9 @@
             pointer-events: none;
         }
 
-        /* Typing Animation */
-        .typing-text {
-            border-right: 2px solid var(--accent-amber);
-            animation: blink-caret 1s infinite;
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: var(--accent-amber); }
-        }
-
-        /* Floating particles */
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(146, 64, 14, 0.1);
-            border-radius: 50%;
-            animation: float 8s infinite ease-in-out;
-        }
-
-        .particle:nth-child(odd) {
-            background: rgba(234, 88, 12, 0.08);
-            animation-delay: -2s;
-        }
-
-        .particle:nth-child(3n) {
-            background: rgba(251, 191, 36, 0.06);
-            animation-delay: -4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .hero-content {
@@ -921,12 +203,57 @@
             line-height: 1.5;
         }
 
+        /* Typing Animation */
+        .typing-text {
+            border-right: 2px solid var(--accent-amber);
+            animation: blink-caret 1s infinite;
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--accent-amber); }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(146, 64, 14, 0.1);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .particle:nth-child(odd) {
+            background: rgba(234, 88, 12, 0.08);
+            animation-delay: -2s;
+        }
+
+        .particle:nth-child(3n) {
+            background: rgba(251, 191, 36, 0.06);
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
         /* Main Content */
         .main-content {
             padding: 2rem 0 4rem;
         }
 
-        /* Content Sections */
         .content-section {
             margin-bottom: 4rem;
         }
@@ -950,94 +277,225 @@
             margin: 0 auto;
         }
 
-        /* Bio Section */
-        .bio-grid {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 3rem;
-            align-items: start;
+        /* Profile Card - Mobile First */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 3rem;
         }
 
+        .profile-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--border-light);
+            max-width: 400px;
+            margin: 0 auto 3rem;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 800;
+            box-shadow: 0 8px 25px rgba(146, 64, 14, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .profile-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-location {
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(146, 64, 14, 0.05);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--medium-text);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+        }
+
+        .contact-link:hover {
+            background: var(--primary-brown);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(146, 64, 14, 0.3);
+        }
+
+        .contact-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .contact-text {
+            font-weight: 600;
+        }
+
+        /* Bio Section */
         .bio-content {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
             border-radius: 20px;
             padding: 2.5rem;
             box-shadow: 0 4px 20px var(--shadow-light);
             border: 1px solid var(--border-light);
+            margin-bottom: 3rem;
         }
 
-        .bio-section h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark-text);
+        .bio-content p {
             margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            line-height: 1.7;
+            color: var(--medium-text);
         }
 
-        .bio-section h2::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
-            border-radius: 2px;
+        .bio-content p:last-child {
+            margin-bottom: 0;
         }
 
-        /* Horizontal Timeline */
+        .highlight-text {
+            background: linear-gradient(135deg, rgba(146, 64, 14, 0.1), rgba(234, 88, 12, 0.05));
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            color: var(--primary-brown);
+        }
+
+        /* IMPROVED TIMELINE - Vertical Alternating */
         .timeline-container {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
             border-radius: 20px;
-            padding: 3rem 1rem;
+            padding: 3rem 2rem;
             box-shadow: 0 4px 20px var(--shadow-light);
             border: 1px solid var(--border-light);
-        }
-
-        .timeline-scroll {
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            scroll-behavior: smooth;
-        }
-
-        .timeline-scroll::-webkit-scrollbar {
-            display: none;
+            position: relative;
         }
 
         .timeline {
-            display: flex;
-            gap: 2rem;
-            padding: 1rem 0;
-            min-width: max-content;
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Central timeline line */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent-amber), var(--light-amber), var(--primary-brown));
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
 
         .timeline-item {
+            position: relative;
+            width: 100%;
+            margin-bottom: 4rem;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            text-align: center;
-            min-width: 280px;
-            max-width: 280px;
-            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Alternating left and right */
+        .timeline-item:nth-child(odd) {
+            justify-content: flex-end;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 16px;
-            padding: 2rem 1.5rem;
-            box-shadow: 0 2px 12px rgba(146, 64, 14, 0.08);
-            border: 1px solid rgba(146, 64, 14, 0.1);
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(146, 64, 14, 0.1);
+            border: 1px solid rgba(146, 64, 14, 0.15);
+            width: 45%;
+            position: relative;
             transition: all 0.3s ease;
         }
 
-        .timeline-item:hover {
+        .timeline-content:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(146, 64, 14, 0.15);
+            box-shadow: 0 8px 30px rgba(146, 64, 14, 0.15);
         }
 
-        .timeline-item.future {
-            opacity: 0.8;
+        /* Speech bubble arrows */
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 30px;
+            border: 10px solid transparent;
+            border-right-color: rgba(255, 255, 255, 0.9);
         }
 
+        .timeline-item:nth-child(even) .timeline-content::before {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 30px;
+            border: 10px solid transparent;
+            border-left-color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Timeline icons on the center line */
         .timeline-icon {
+            position: absolute;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
             width: 50px;
             height: 50px;
             background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
@@ -1046,59 +504,39 @@
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 1rem;
-            border: 3px solid white;
+            border: 4px solid white;
             box-shadow: 0 4px 15px rgba(146, 64, 14, 0.3);
-            position: relative;
-        }
-
-        .timeline-marker {
-            position: absolute;
-            top: 69px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 12px;
-            height: 12px;
-            background: white;
-            border: 3px solid var(--accent-amber);
-            border-radius: 50%;
-            z-index: 3;
-            box-shadow: 0 2px 8px rgba(146, 64, 14, 0.2);
+            z-index: 10;
         }
 
         .timeline-year {
             color: var(--accent-amber);
             font-weight: 700;
             font-size: 0.9rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
         }
 
         .timeline-title {
             font-weight: 700;
             color: var(--dark-text);
-            margin-bottom: 0.75rem;
-            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
             line-height: 1.3;
         }
 
-        .timeline-item.future {
-            opacity: 0.9;
+        .timeline-description {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
+        /* Timeline type colors */
         .timeline-item.future .timeline-icon {
             background: linear-gradient(135deg, #94a3b8, #64748b);
             animation: pulse 2s infinite;
-        }
-
-        .timeline-item.future .timeline-year {
-            color: #64748b;
-        }
-
-        .timeline-item.future .timeline-description {
-            font-style: italic;
-            color: var(--very-light-text);
         }
 
         .timeline-item.personal .timeline-icon {
@@ -1113,29 +551,22 @@
             background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        .timeline-item.future {
+            opacity: 0.9;
         }
 
-        /* Mobile Timeline */
-        @media (max-width: 768px) {
-            .timeline-container {
-                padding: 2rem 1rem;
-            }
+        .timeline-item.future .timeline-year {
+            color: #64748b;
+        }
 
-            .timeline {
-                flex-direction: column;
-                align-items: center;
-                gap: 2rem;
-                padding: 0;
-            }
+        .timeline-item.future .timeline-description {
+            font-style: italic;
+            color: var(--very-light-text);
+        }
 
-            .timeline-item {
-                min-width: auto;
-                max-width: 100%;
-                width: 100%;
-            }
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.05); }
         }
 
         /* CliftonStrengths Section */
@@ -1163,28 +594,6 @@
             font-style: italic;
         }
 
-        .strengths-content {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .chart-container {
-            width: 100%;
-            height: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        .chart-wrapper {
-            position: relative;
-            width: 380px;
-            height: 380px;
-        }
-
         .chart-toggle {
             display: flex;
             justify-content: center;
@@ -1208,10 +617,34 @@
             box-shadow: 0 4px 15px rgba(146, 64, 14, 0.3);
         }
 
+        .strengths-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            order: 1;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 400px;
+        }
+
         .top-strengths {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
+            order: 2;
         }
 
         .strength-card {
@@ -1292,252 +725,6 @@
             line-height: 1.4;
         }
 
-        .highlight-text {
-            background: linear-gradient(135deg, rgba(146, 64, 14, 0.1), rgba(234, 88, 12, 0.05));
-            padding: 0.2rem 0.5rem;
-            border-radius: 6px;
-            font-weight: 600;
-            color: var(--primary-brown);
-        }
-
-        /* Sidebar */
-        .sidebar {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .sidebar-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 2px 10px var(--shadow-light);
-            border: 1px solid var(--border-light);
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar-card:hover {
-            transform: translateY(-4px);
-        }
-
-        /* Profile Card */
-        .profile-card {
-            text-align: center;
-            position: sticky;
-            top: 100px;
-        }
-
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: 0 auto 1.5rem;
-            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 3rem;
-            font-weight: 800;
-            box-shadow: 0 8px 25px rgba(146, 64, 14, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .avatar::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            animation: shimmer 3s ease-in-out infinite;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
-        .profile-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--dark-text);
-            margin-bottom: 0.5rem;
-        }
-
-        .profile-location {
-            color: var(--light-text);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        /* Contact Links */
-        .contact-links {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .contact-link {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: rgba(146, 64, 14, 0.05);
-            border-radius: 12px;
-            text-decoration: none;
-            color: var(--medium-text);
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-light);
-        }
-
-        .contact-link:hover {
-            background: var(--primary-brown);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(146, 64, 14, 0.3);
-        }
-
-        .contact-icon {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .contact-text {
-            font-weight: 600;
-        }
-
-        /* Fun Facts */
-        .fun-facts {
-            list-style: none;
-        }
-
-        .fun-fact {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(146, 64, 14, 0.1);
-        }
-
-        .fun-fact:last-child {
-            border-bottom: none;
-        }
-
-        .fun-fact-icon {
-            font-size: 1.5rem;
-            width: 32px;
-            text-align: center;
-        }
-
-        .fun-fact-text {
-            color: var(--medium-text);
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-
-        /* Strengths */
-        .strengths-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-        }
-
-        .strength-item {
-            background: linear-gradient(135deg, rgba(146, 64, 14, 0.1), rgba(234, 88, 12, 0.05));
-            padding: 0.75rem;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 600;
-            color: var(--primary-brown);
-            font-size: 0.85rem;
-            border: 1px solid rgba(146, 64, 14, 0.2);
-        }
-
-        .sidebar-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--dark-text);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Timeline */
-        .timeline {
-            margin: 3rem 0;
-        }
-
-        .timeline-item {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 16px;
-            top: 32px;
-            bottom: -16px;
-            width: 2px;
-            background: linear-gradient(180deg, var(--accent-amber), var(--light-amber));
-            opacity: 0.3;
-        }
-
-        .timeline-item:last-child::before {
-            display: none;
-        }
-
-        .timeline-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 2;
-        }
-
-        .timeline-content {
-            flex: 1;
-        }
-
-        .timeline-year {
-            color: var(--accent-amber);
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .timeline-title {
-            font-weight: 700;
-            color: var(--dark-text);
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-description {
-            color: var(--light-text);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
         /* Footer - Full Width */
         footer {
             background: var(--dark-text);
@@ -1576,33 +763,24 @@
             color: var(--light-amber);
         }
 
-        /* Mobile Responsive */
+        /* Mobile Optimizations */
         @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
             .hero h1 {
                 font-size: 2.2rem;
             }
 
-            .bio-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .profile-card {
-                position: static;
-            }
-
-            .strengths-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .top-strengths {
-                grid-template-columns: 1fr;
+            .hero-content {
+                padding: 0 20px;
             }
 
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
+                padding: 0 20px;
             }
 
             nav ul {
@@ -1610,8 +788,76 @@
                 justify-content: center;
             }
 
+            /* Mobile Timeline - Single Column */
+            .timeline::before {
+                left: 30px;
+                transform: none;
+            }
+
+            .timeline-item {
+                justify-content: flex-start !important;
+                margin-bottom: 3rem;
+            }
+
+            .timeline-content {
+                width: calc(100% - 80px);
+                margin-left: 60px;
+            }
+
+            .timeline-content::before {
+                left: -10px !important;
+                right: auto !important;
+                border: 10px solid transparent;
+                border-right-color: rgba(255, 255, 255, 0.9) !important;
+                border-left-color: transparent !important;
+            }
+
+            .timeline-icon {
+                left: 30px;
+                transform: translateX(-50%);
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .strengths-content {
+                gap: 2rem;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+
+            .top-strengths {
+                grid-template-columns: 1fr;
+            }
+
             .facts-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                margin: 0 0 2rem;
+                padding: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Larger Desktop */
+        @media (min-width: 1200px) {
+            .strengths-content {
+                grid-template-columns: 2fr 1fr;
+            }
+
+            .chart-container {
+                order: 2;
+            }
+
+            .top-strengths {
+                order: 1;
             }
         }
 
@@ -1669,44 +915,47 @@
         </section>
 
         <div class="main-content">
-            <section class="content-section">
-                <div class="bio-grid">
-                    <div class="sidebar-card profile-card">
-                        <div class="avatar">L</div>
-                        <div class="profile-name" id="profile-name">Luke van den Top</div>
-                        <div class="profile-location" id="profile-location">
-                            🇳🇱 Nijmegen, Netherlands
-                        </div>
-                        
-                        <div class="contact-links" id="contact-links">
-                            <a href="https://linkedin.com/in/lukevandenTop" class="contact-link" target="_blank">
-                                <div class="contact-icon">💼</div>
-                                <div class="contact-text">LinkedIn Profile</div>
-                            </a>
-                            
-                            <a href="mailto:lukethinks@outlook.com" class="contact-link">
-                                <div class="contact-icon">📧</div>
-                                <div class="contact-text">Email Me</div>
-                            </a>
-                            
-                            <a href="/" class="contact-link">
-                                <div class="contact-icon">🏠</div>
-                                <div class="contact-text">Back to Homepage</div>
-                            </a>
-                        </div>
+            <!-- Profile Section - Mobile First -->
+            <section class="profile-section">
+                <div class="profile-card">
+                    <div class="avatar">L</div>
+                    <div class="profile-name" id="profile-name">Luke van den Top</div>
+                    <div class="profile-location" id="profile-location">
+                        🇳🇱 Nijmegen, Netherlands
                     </div>
-
-                    <div class="bio-content">
-                        <div id="bio-content">
-                            <p>I'm a finance professional living in the Netherlands, where I've spent the last six years trying to master Dutch (spoiler: still working on it). What started as a career in FP&A has evolved into a fascinating journey of analytical thinking and continuous learning.</p>
-                            <p>My approach to problems is deeply rooted in my <span class="highlight-text">CliftonStrengths</span>. I believe in understanding the "why" behind everything, whether it's Federal Reserve policy decisions, supplement effectiveness, or why my Dutch pronunciation still makes locals chuckle.</p>
-                            <p>Currently, I'm working in FP&A, with experience in SSC's & Accounting, which has led me to explore business frameworks, case study methodologies, and product thinking. This learning lab is where I document those discoveries, test hypotheses, and share what actually works.</p>
-                            <p>When I'm not diving into financial models or experimenting with new productivity methods i'll be out cycling or swimming.</p>
-                        </div>
+                    
+                    <div class="contact-links" id="contact-links">
+                        <a href="https://linkedin.com/in/lukevandenTop" class="contact-link" target="_blank">
+                            <div class="contact-icon">💼</div>
+                            <div class="contact-text">LinkedIn Profile</div>
+                        </a>
+                        
+                        <a href="mailto:lukethinks@outlook.com" class="contact-link">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-text">Email Me</div>
+                        </a>
+                        
+                        <a href="/" class="contact-link">
+                            <div class="contact-icon">🏠</div>
+                            <div class="contact-text">Back to Homepage</div>
+                        </a>
                     </div>
                 </div>
             </section>
 
+            <!-- Bio Section -->
+            <section class="content-section">
+                <div class="bio-content">
+                    <div id="bio-content">
+                        <p>I'm a finance professional living in the Netherlands, where I've spent the last six years trying to master Dutch (spoiler: still working on it). What started as a career in FP&A has evolved into a fascinating journey of analytical thinking and continuous learning.</p>
+                        <p>My approach to problems is deeply rooted in my <span class="highlight-text">CliftonStrengths</span>. I believe in understanding the "why" behind everything, whether it's Federal Reserve policy decisions, supplement effectiveness, or why my Dutch pronunciation still makes locals chuckle.</p>
+                        <p>Currently, I'm working in FP&A, with experience in SSC's & Accounting, which has led me to explore business frameworks, case study methodologies, and product thinking. This learning lab is where I document those discoveries, test hypotheses, and share what actually works.</p>
+                        <p>When I'm not diving into financial models or experimenting with new productivity methods i'll be out cycling or swimming.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Timeline Section -->
             <section class="content-section">
                 <div class="section-header">
                     <h2 class="section-title">My Journey</h2>
@@ -1716,58 +965,82 @@
                 </div>
                 
                 <div class="timeline-container">
-                    <div class="timeline-scroll">
-                        <div class="timeline" id="timeline-content">
-                            <div class="timeline-item future">
-                                <div class="timeline-icon">🎓</div>
+                    <div class="timeline" id="timeline-content">
+                        <div class="timeline-item future">
+                            <div class="timeline-icon">🎓</div>
+                            <div class="timeline-content">
                                 <div class="timeline-year">2089</div>
                                 <div class="timeline-title">PhD in Dutch Linguistics (Finally) 🔮</div>
                                 <div class="timeline-description">After 70 years of dedicated practice, Luke becomes the world's foremost expert on why 'de' vs 'het' makes no logical sense. Writes dissertation entirely in perfect Dutch while locals still occasionally ask him to repeat himself</div>
                             </div>
-                            <div class="timeline-item career">
-                                <div class="timeline-icon">🎯</div>
+                        </div>
+                        
+                        <div class="timeline-item career">
+                            <div class="timeline-icon">🎯</div>
+                            <div class="timeline-content">
                                 <div class="timeline-year">2025</div>
                                 <div class="timeline-title">APM Journey Begins</div>
                                 <div class="timeline-description">Started intensive preparation for ACCA APM, diving deep into business cases and learnings frameworks using AI</div>
                             </div>
-                            <div class="timeline-item project">
-                                <div class="timeline-icon">🧠</div>
+                        </div>
+                        
+                        <div class="timeline-item project">
+                            <div class="timeline-icon">🧠</div>
+                            <div class="timeline-content">
                                 <div class="timeline-year">2025</div>
                                 <div class="timeline-title">Learning Lab Launch</div>
                                 <div class="timeline-description">Created lukethinks.nl as a space to document experiments, analyses, and learning discoveries</div>
                             </div>
-                            <div class="timeline-item career">
-                                <div class="timeline-icon">📈</div>
+                        </div>
+                        
+                        <div class="timeline-item career">
+                            <div class="timeline-icon">📈</div>
+                            <div class="timeline-content">
                                 <div class="timeline-year">2025</div>
                                 <div class="timeline-title">FP&A Analyst experience</div>
                                 <div class="timeline-description">Had to opportunity to experience FP&A, leading financial modeling and analysis for strategic initiatives</div>
                             </div>
-                            <div class="timeline-item personal">
-                                <div class="timeline-icon">💍</div>
+                        </div>
+                        
+                        <div class="timeline-item personal">
+                            <div class="timeline-icon">💍</div>
+                            <div class="timeline-content">
                                 <div class="timeline-year">2023</div>
                                 <div class="timeline-title">Married the love of my life</div>
                                 <div class="timeline-description">Celebrated our love in front of friends and family</div>
                             </div>
-                            <div class="timeline-item personal">
-                                <div class="timeline-icon">🏠</div>
+                        </div>
+                        
+                        <div class="timeline-item personal">
+                            <div class="timeline-icon">🏠</div>
+                            <div class="timeline-content">
                                 <div class="timeline-year">2020</div>
                                 <div class="timeline-title">Bought First Home</div>
                                 <div class="timeline-description">Navigated the Dutch housing market and became a homeowner in Amersfoort Region</div>
                             </div>
-                            <div class="timeline-item career">
-                                <div class="timeline-icon">📊</div>
+                        </div>
+                        
+                        <div class="timeline-item career">
+                            <div class="timeline-icon">📊</div>
+                            <div class="timeline-content">
                                 <div class="timeline-year">2019-2021</div>
                                 <div class="timeline-title">Career in Accounting</div>
                                 <div class="timeline-description">Built expertise in financial planning, budgeting, and variance analysis while mastering Excel wizardry</div>
                             </div>
-                            <div class="timeline-item personal">
-                                <div class="timeline-icon">🇳🇱</div>
+                        </div>
+                        
+                        <div class="timeline-item personal">
+                            <div class="timeline-icon">🇳🇱</div>
+                            <div class="timeline-content">
                                 <div class="timeline-year">2019</div>
                                 <div class="timeline-title">Netherlands Adventure Begins ❤</div>
                                 <div class="timeline-description">Moved to the Netherlands for love and career opportunities - began the ongoing quest to speak Dutch fluently</div>
                             </div>
-                            <div class="timeline-item career">
-                                <div class="timeline-icon">🎓</div>
+                        </div>
+                        
+                        <div class="timeline-item career">
+                            <div class="timeline-icon">🎓</div>
+                            <div class="timeline-content">
                                 <div class="timeline-year">2018</div>
                                 <div class="timeline-title">Finance Career Transition</div>
                                 <div class="timeline-description">Pivoted from previous career into finance, drawn by the analytical challenges and data-driven decision making</div>
@@ -1777,6 +1050,7 @@
                 </div>
             </section>
 
+            <!-- CliftonStrengths Section -->
             <section class="content-section">
                 <div class="section-header">
                     <h2 class="section-title">How I Think</h2>
@@ -1850,6 +1124,7 @@
                 </div>
             </section>
 
+            <!-- Fun Facts Section -->
             <section class="content-section">
                 <div class="section-header">
                     <h2 class="section-title">Quick Facts</h2>
@@ -1900,5 +1175,359 @@
             </div>
         </footer>
     </div>
+
+    <script>
+        // Chart variables
+        let currentChart = null;
+        let currentView = 'radar';
+
+        // Typing effect
+        function createTypingEffect() {
+            const texts = [
+                "Finance professional turned curious learner",
+                "Documenting my analytical journey in the Netherlands", 
+                "Breaking down complex problems with data",
+                "From FP&A to APM preparation and beyond"
+            ];
+            
+            let textIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            const typingElement = document.getElementById('typing-text');
+            
+            function typeText() {
+                const currentText = texts[textIndex];
+                
+                if (isDeleting) {
+                    typingElement.textContent = currentText.substring(0, charIndex - 1);
+                    charIndex--;
+                } else {
+                    typingElement.textContent = currentText.substring(0, charIndex + 1);
+                    charIndex++;
+                }
+                
+                let typeSpeed = isDeleting ? 50 : 100;
+                
+                if (!isDeleting && charIndex === currentText.length) {
+                    typeSpeed = 2000; // Pause at end
+                    isDeleting = true;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    textIndex = (textIndex + 1) % texts.length;
+                }
+                
+                setTimeout(typeText, typeSpeed);
+            }
+            
+            typeText();
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    
+                    const size = Math.random() * 4 + 2;
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                    particle.style.animationDelay = Math.random() * 2 + 's';
+                    
+                    particlesContainer.appendChild(particle);
+                    
+                    // Remove particle after animation
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 8000);
+                }, i * 200);
+            }
+            
+            // Continuously create new particles
+            setTimeout(createParticles, 2000);
+        }
+
+        // Chart toggle function
+        function toggleChart() {
+            const btn = document.getElementById('chartToggle');
+            
+            if (currentView === 'radar') {
+                currentView = 'domain';
+                btn.textContent = 'View: Radar Chart';
+                createDomainChart();
+            } else {
+                currentView = 'radar';
+                btn.textContent = 'View: Domain Breakdown';
+                createRadarChart();
+            }
+        }
+
+        // Fallback CliftonStrengths data
+        const strengthsData = [
+            {"name": "Harmony", "rank": 1, "domain": "Relationship Building", "score": 85},
+            {"name": "Context", "rank": 2, "domain": "Strategic Thinking", "score": 82},
+            {"name": "Analytical", "rank": 3, "domain": "Strategic Thinking", "score": 80},
+            {"name": "Individualization", "rank": 4, "domain": "Relationship Building", "score": 78},
+            {"name": "Arranger", "rank": 5, "domain": "Executing", "score": 76},
+            {"name": "Responsibility", "rank": 6, "domain": "Executing", "score": 74},
+            {"name": "Focus", "rank": 7, "domain": "Executing", "score": 72},
+            {"name": "Intellection", "rank": 8, "domain": "Strategic Thinking", "score": 70},
+            {"name": "Learner", "rank": 9, "domain": "Strategic Thinking", "score": 68},
+            {"name": "Relator", "rank": 10, "domain": "Relationship Building", "score": 66},
+            {"name": "Maximizer", "rank": 11, "domain": "Influencing", "score": 64},
+            {"name": "Input", "rank": 12, "domain": "Strategic Thinking", "score": 62},
+            {"name": "Consistency", "rank": 13, "domain": "Executing", "score": 60},
+            {"name": "Competition", "rank": 14, "domain": "Influencing", "score": 58},
+            {"name": "Activator", "rank": 15, "domain": "Influencing", "score": 56},
+            {"name": "Ideation", "rank": 16, "domain": "Strategic Thinking", "score": 54},
+            {"name": "Command", "rank": 17, "domain": "Influencing", "score": 52},
+            {"name": "Significance", "rank": 18, "domain": "Influencing", "score": 50},
+            {"name": "Empathy", "rank": 19, "domain": "Relationship Building", "score": 48},
+            {"name": "Discipline", "rank": 20, "domain": "Executing", "score": 46},
+            {"name": "Futuristic", "rank": 21, "domain": "Strategic Thinking", "score": 44},
+            {"name": "Self-Assurance", "rank": 22, "domain": "Influencing", "score": 42},
+            {"name": "Restorative", "rank": 23, "domain": "Executing", "score": 40},
+            {"name": "Communication", "rank": 24, "domain": "Influencing", "score": 38},
+            {"name": "Includer", "rank": 25, "domain": "Relationship Building", "score": 36},
+            {"name": "Developer", "rank": 26, "domain": "Relationship Building", "score": 34},
+            {"name": "Deliberative", "rank": 27, "domain": "Executing", "score": 32},
+            {"name": "Connectedness", "rank": 28, "domain": "Relationship Building", "score": 30},
+            {"name": "Belief", "rank": 29, "domain": "Executing", "score": 28},
+            {"name": "Positivity", "rank": 30, "domain": "Relationship Building", "score": 26},
+            {"name": "Achiever", "rank": 31, "domain": "Executing", "score": 24},
+            {"name": "Woo", "rank": 32, "domain": "Influencing", "score": 22},
+            {"name": "Adaptability", "rank": 33, "domain": "Relationship Building", "score": 20},
+            {"name": "Strategic", "rank": 34, "domain": "Strategic Thinking", "score": 18}
+        ];
+
+        // Create radar chart
+        function createRadarChart() {
+            const canvas = document.getElementById('strengthsChart');
+            const ctx = canvas.getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+            
+            currentChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: strengthsData.map(s => s.name),
+                    datasets: [{
+                        label: 'Strength Score',
+                        data: strengthsData.map(s => s.score),
+                        backgroundColor: 'rgba(146, 64, 14, 0.1)',
+                        borderColor: 'rgba(146, 64, 14, 0.6)',
+                        pointBackgroundColor: strengthsData.map(s => {
+                            const colors = {
+                                'Strategic Thinking': 'rgba(146, 64, 14, 0.8)',
+                                'Relationship Building': 'rgba(234, 88, 12, 0.8)', 
+                                'Executing': 'rgba(251, 191, 36, 0.8)',
+                                'Influencing': 'rgba(196, 86, 33, 0.8)'
+                            };
+                            return colors[s.domain] || 'rgba(146, 64, 14, 0.8)';
+                        }),
+                        pointBorderColor: 'white',
+                        pointBorderWidth: 1,
+                        pointRadius: 3,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    const index = context[0].dataIndex;
+                                    const strength = strengthsData[index];
+                                    return `#${strength.rank} ${strength.name}`;
+                                },
+                                label: function(context) {
+                                    const index = context.dataIndex;
+                                    const strength = strengthsData[index];
+                                    return [
+                                        `Score: ${strength.score}`,
+                                        `Domain: ${strength.domain}`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                display: false
+                            },
+                            grid: {
+                                color: 'rgba(146, 64, 14, 0.2)'
+                            },
+                            angleLines: {
+                                color: 'rgba(146, 64, 14, 0.2)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 8,
+                                    family: 'Inter'
+                                },
+                                color: '#64748b',
+                                callback: function(label, index) {
+                                    return index < 10 ? label : `#${index + 1}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create domain chart
+        function createDomainChart() {
+            const canvas = document.getElementById('strengthsChart');
+            const ctx = canvas.getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            // Calculate domain totals
+            const domains = {};
+            strengthsData.forEach(strength => {
+                if (!domains[strength.domain]) {
+                    domains[strength.domain] = { total: 0, count: 0, strengths: [] };
+                }
+                domains[strength.domain].total += strength.score;
+                domains[strength.domain].count += 1;
+                domains[strength.domain].strengths.push(strength);
+            });
+
+            const domainData = Object.keys(domains).map(domain => ({
+                domain,
+                average: Math.round(domains[domain].total / domains[domain].count),
+                count: domains[domain].count,
+                topStrength: domains[domain].strengths.sort((a, b) => a.rank - b.rank)[0]
+            }));
+
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: domainData.map(d => d.domain),
+                    datasets: [{
+                        label: 'Average Score',
+                        data: domainData.map(d => d.average),
+                        backgroundColor: [
+                            'rgba(146, 64, 14, 0.8)',
+                            'rgba(234, 88, 12, 0.8)',
+                            'rgba(251, 191, 36, 0.8)',
+                            'rgba(196, 86, 33, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(146, 64, 14, 1)',
+                            'rgba(234, 88, 12, 1)',
+                            'rgba(251, 191, 36, 1)',
+                            'rgba(196, 86, 33, 1)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].label;
+                                },
+                                label: function(context) {
+                                    const domainInfo = domainData[context.dataIndex];
+                                    return [
+                                        `Average Score: ${domainInfo.average}`,
+                                        `${domainInfo.count} strengths in domain`,
+                                        `Top: #${domainInfo.topStrength.rank} ${domainInfo.topStrength.name}`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(146, 64, 14, 0.1)'
+                            },
+                            ticks: {
+                                color: '#64748b',
+                                font: {
+                                    family: 'Inter'
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#64748b',
+                                font: {
+                                    family: 'Inter',
+                                    size: 10
+                                },
+                                maxRotation: 45
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, starting initialization...');
+            
+            // Start typing effect after a short delay
+            setTimeout(() => {
+                createTypingEffect();
+            }, 1000);
+            
+            // Start particles
+            setTimeout(() => {
+                createParticles();
+            }, 2000);
+            
+            // Create initial radar chart
+            setTimeout(() => {
+                createRadarChart();
+            }, 500);
+        });
+
+        // Header scroll effect to match index page
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
