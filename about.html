@@ -490,20 +490,18 @@
                 return `<p>${paragraph.replace(/\b(finance professional|CliftonStrengths|Associate Product Manager transition)\b/gi, '<span class="highlight-text">$1</span>')}</p>`;
             }).join('');
             
-            // Update timeline
-            const timelineContent = document.getElementById('timeline-content');
-            timelineContent.innerHTML = `
-                <div class="timeline-line"></div>
-                ${data.timeline.map(item => `
+            // Update timeline - clean version without any lines
+            if (data.timeline) {
+                const timelineContent = document.getElementById('timeline-content');
+                timelineContent.innerHTML = data.timeline.map(item => `
                     <div class="timeline-item ${item.type || ''} ${item.isJoke ? 'future' : ''}">
                         <div class="timeline-icon">${item.icon}</div>
                         <div class="timeline-year">${item.year}</div>
                         <div class="timeline-title">${item.title}${item.isJoke ? ' 🔮' : ''}</div>
                         <div class="timeline-description">${item.description}</div>
-                        <div class="timeline-marker"></div>
                     </div>
-                `).join('')}
-            `;
+                `).join('');
+            }
             
             // Update contact info
             document.getElementById('profile-name').textContent = data.contact.name;
@@ -809,16 +807,16 @@
             transform: translateY(-1px);
         }
 
-        /* Hero Section */
+        /* Hero Section - Full Width */
         .hero {
-            padding: 3rem 0;
+            padding: 4rem 0;
             text-align: center;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
             margin: 2rem 0;
-            border-radius: 24px;
-            box-shadow: 0 4px 20px var(--shadow-light);
             position: relative;
             overflow: hidden;
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
         }
 
         .hero::before {
@@ -884,6 +882,7 @@
             margin: 0 auto;
             position: relative;
             z-index: 2;
+            padding: 0 24px;
         }
 
         .hero-badge {
@@ -989,14 +988,9 @@
         .timeline-container {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
             border-radius: 20px;
-            padding: 2.5rem;
+            padding: 3rem 1rem;
             box-shadow: 0 4px 20px var(--shadow-light);
             border: 1px solid var(--border-light);
-            position: relative;
-        }
-
-        .timeline-wrapper {
-            position: relative;
         }
 
         .timeline-scroll {
@@ -1005,7 +999,6 @@
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
             -ms-overflow-style: none;
-            padding: 1rem;
             scroll-behavior: smooth;
         }
 
@@ -1015,11 +1008,9 @@
 
         .timeline {
             display: flex;
-            gap: 3rem;
+            gap: 2rem;
+            padding: 1rem 0;
             min-width: max-content;
-            position: relative;
-            align-items: flex-start;
-            padding: 2rem 1rem 1rem 1rem;
         }
 
         .timeline-item {
@@ -1027,12 +1018,19 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            min-width: 200px;
-            max-width: 200px;
-            position: relative;
-            z-index: 2;
-            background: white;
-            padding: 0 1rem;
+            min-width: 280px;
+            max-width: 280px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 2px 12px rgba(146, 64, 14, 0.08);
+            border: 1px solid rgba(146, 64, 14, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(146, 64, 14, 0.15);
         }
 
         .timeline-item.future {
@@ -1085,6 +1083,10 @@
             line-height: 1.3;
         }
 
+        .timeline-item.future {
+            opacity: 0.9;
+        }
+
         .timeline-item.future .timeline-icon {
             background: linear-gradient(135deg, #94a3b8, #64748b);
             animation: pulse 2s infinite;
@@ -1111,25 +1113,29 @@
             background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
         }
 
-        .timeline-item.future .timeline-marker {
-            border-color: #64748b;
-        }
-
-        .timeline-item.personal .timeline-marker {
-            border-color: #f59e0b;
-        }
-
-        .timeline-item.career .timeline-marker {
-            border-color: var(--accent-amber);
-        }
-
-        .timeline-item.project .timeline-marker {
-            border-color: var(--primary-brown);
-        }
-
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
+        }
+
+        /* Mobile Timeline */
+        @media (max-width: 768px) {
+            .timeline-container {
+                padding: 2rem 1rem;
+            }
+
+            .timeline {
+                flex-direction: column;
+                align-items: center;
+                gap: 2rem;
+                padding: 0;
+            }
+
+            .timeline-item {
+                min-width: auto;
+                max-width: 100%;
+                width: 100%;
+            }
         }
 
         /* CliftonStrengths Section */
@@ -1532,12 +1538,15 @@
             line-height: 1.5;
         }
 
-        /* Footer */
+        /* Footer - Full Width */
         footer {
             background: var(--dark-text);
             color: white;
             padding: 3rem 0 2rem;
             text-align: center;
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            margin-top: 4rem;
         }
 
         .footer-content {
@@ -1546,6 +1555,9 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
         .footer-links {
@@ -1586,31 +1598,6 @@
 
             .top-strengths {
                 grid-template-columns: 1fr;
-            }
-
-            .timeline {
-                flex-direction: column;
-                align-items: center;
-                gap: 2rem;
-            }
-
-            .timeline::before {
-                top: 0;
-                bottom: 0;
-                left: 50%;
-                right: auto;
-                width: 3px;
-                height: auto;
-                background: linear-gradient(180deg, var(--accent-amber), var(--light-amber), var(--primary-brown));
-            }
-
-            .timeline-item {
-                min-width: auto;
-                max-width: 300px;
-            }
-
-            .timeline-description {
-                max-width: none;
             }
 
             .header-content {
