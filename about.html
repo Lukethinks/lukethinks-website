@@ -482,7 +482,7 @@
             // Update hero section
             document.getElementById('hero-badge').textContent = data.hero.badge;
             document.getElementById('hero-title').innerHTML = data.hero.title.replace('Luke', '<span class="hero-highlight">Luke</span>');
-            document.getElementById('hero-tagline').textContent = data.hero.tagline;
+            // Don't update hero-tagline as it's now handled by typing effect
             
             // Update bio section
             const bioContent = document.getElementById('bio-content');
@@ -554,6 +554,16 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, starting data load...');
             loadAboutData();
+            
+            // Start typing effect after a short delay
+            setTimeout(() => {
+                createTypingEffect();
+            }, 1000);
+            
+            // Start particles
+            setTimeout(() => {
+                createParticles();
+            }, 2000);
         });
 
         // Header scroll effect to match index page
@@ -995,27 +1005,21 @@
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
             -ms-overflow-style: none;
-            padding: 2rem 1rem;
+            padding: 1rem;
             scroll-behavior: smooth;
+        }
+
+        .timeline-scroll::-webkit-scrollbar {
+            display: none;
         }
 
         .timeline {
             display: flex;
-            gap: 2rem;
+            gap: 3rem;
             min-width: max-content;
             position: relative;
             align-items: flex-start;
-        }
-
-        .timeline-line {
-            position: absolute;
-            top: 80px;
-            left: 2rem;
-            right: 2rem;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent-amber), var(--light-amber), var(--primary-brown));
-            border-radius: 2px;
-            z-index: 1;
+            padding: 2rem 1rem 1rem 1rem;
         }
 
         .timeline-item {
@@ -1023,10 +1027,12 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            min-width: 240px;
-            max-width: 240px;
+            min-width: 200px;
+            max-width: 200px;
             position: relative;
             z-index: 2;
+            background: white;
+            padding: 0 1rem;
         }
 
         .timeline-item.future {
@@ -1079,10 +1085,51 @@
             line-height: 1.3;
         }
 
-        .timeline-description {
-            color: var(--light-text);
-            font-size: 0.85rem;
-            line-height: 1.4;
+        .timeline-item.future .timeline-icon {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            animation: pulse 2s infinite;
+        }
+
+        .timeline-item.future .timeline-year {
+            color: #64748b;
+        }
+
+        .timeline-item.future .timeline-description {
+            font-style: italic;
+            color: var(--very-light-text);
+        }
+
+        .timeline-item.personal .timeline-icon {
+            background: linear-gradient(135deg, #f59e0b, var(--light-amber));
+        }
+
+        .timeline-item.career .timeline-icon {
+            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
+        }
+
+        .timeline-item.project .timeline-icon {
+            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+        }
+
+        .timeline-item.future .timeline-marker {
+            border-color: #64748b;
+        }
+
+        .timeline-item.personal .timeline-marker {
+            border-color: #f59e0b;
+        }
+
+        .timeline-item.career .timeline-marker {
+            border-color: var(--accent-amber);
+        }
+
+        .timeline-item.project .timeline-marker {
+            border-color: var(--primary-brown);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         /* CliftonStrengths Section */
@@ -1645,14 +1692,29 @@
                         </div>
                         
                         <div class="contact-links" id="contact-links">
-                            <!-- Contact links will be loaded from JSON -->
+                            <a href="https://linkedin.com/in/lukevandenTop" class="contact-link" target="_blank">
+                                <div class="contact-icon">💼</div>
+                                <div class="contact-text">LinkedIn Profile</div>
+                            </a>
+                            
+                            <a href="mailto:lukethinks@outlook.com" class="contact-link">
+                                <div class="contact-icon">📧</div>
+                                <div class="contact-text">Email Me</div>
+                            </a>
+                            
+                            <a href="/" class="contact-link">
+                                <div class="contact-icon">🏠</div>
+                                <div class="contact-text">Back to Homepage</div>
+                            </a>
                         </div>
                     </div>
 
                     <div class="bio-content">
                         <div id="bio-content">
-                            <!-- Content will be loaded from JSON -->
-                            <p>Loading...</p>
+                            <p>I'm a finance professional living in the Netherlands, where I've spent the last six years trying to master Dutch (spoiler: still working on it). What started as a career in FP&A has evolved into a fascinating journey of analytical thinking and continuous learning.</p>
+                            <p>My approach to problems is deeply rooted in my <span class="highlight-text">CliftonStrengths</span>. I believe in understanding the "why" behind everything, whether it's Federal Reserve policy decisions, supplement effectiveness, or why my Dutch pronunciation still makes locals chuckle.</p>
+                            <p>Currently, I'm working in FP&A, with experience in SSC's & Accounting, which has led me to explore business frameworks, case study methodologies, and product thinking. This learning lab is where I document those discoveries, test hypotheses, and share what actually works.</p>
+                            <p>When I'm not diving into financial models or experimenting with new productivity methods i'll be out cycling or swimming.</p>
                         </div>
                     </div>
                 </div>
@@ -1669,7 +1731,60 @@
                 <div class="timeline-container">
                     <div class="timeline-scroll">
                         <div class="timeline" id="timeline-content">
-                            <!-- Timeline will be loaded from JSON -->
+                            <div class="timeline-item future">
+                                <div class="timeline-icon">🎓</div>
+                                <div class="timeline-year">2089</div>
+                                <div class="timeline-title">PhD in Dutch Linguistics (Finally) 🔮</div>
+                                <div class="timeline-description">After 70 years of dedicated practice, Luke becomes the world's foremost expert on why 'de' vs 'het' makes no logical sense. Writes dissertation entirely in perfect Dutch while locals still occasionally ask him to repeat himself</div>
+                            </div>
+                            <div class="timeline-item career">
+                                <div class="timeline-icon">🎯</div>
+                                <div class="timeline-year">2025</div>
+                                <div class="timeline-title">APM Journey Begins</div>
+                                <div class="timeline-description">Started intensive preparation for ACCA APM, diving deep into business cases and learnings frameworks using AI</div>
+                            </div>
+                            <div class="timeline-item project">
+                                <div class="timeline-icon">🧠</div>
+                                <div class="timeline-year">2025</div>
+                                <div class="timeline-title">Learning Lab Launch</div>
+                                <div class="timeline-description">Created lukethinks.nl as a space to document experiments, analyses, and learning discoveries</div>
+                            </div>
+                            <div class="timeline-item career">
+                                <div class="timeline-icon">📈</div>
+                                <div class="timeline-year">2025</div>
+                                <div class="timeline-title">FP&A Analyst experience</div>
+                                <div class="timeline-description">Had to opportunity to experience FP&A, leading financial modeling and analysis for strategic initiatives</div>
+                            </div>
+                            <div class="timeline-item personal">
+                                <div class="timeline-icon">💍</div>
+                                <div class="timeline-year">2023</div>
+                                <div class="timeline-title">Married the love of my life</div>
+                                <div class="timeline-description">Celebrated our love in front of friends and family</div>
+                            </div>
+                            <div class="timeline-item personal">
+                                <div class="timeline-icon">🏠</div>
+                                <div class="timeline-year">2020</div>
+                                <div class="timeline-title">Bought First Home</div>
+                                <div class="timeline-description">Navigated the Dutch housing market and became a homeowner in Amersfoort Region</div>
+                            </div>
+                            <div class="timeline-item career">
+                                <div class="timeline-icon">📊</div>
+                                <div class="timeline-year">2019-2021</div>
+                                <div class="timeline-title">Career in Accounting</div>
+                                <div class="timeline-description">Built expertise in financial planning, budgeting, and variance analysis while mastering Excel wizardry</div>
+                            </div>
+                            <div class="timeline-item personal">
+                                <div class="timeline-icon">🇳🇱</div>
+                                <div class="timeline-year">2019</div>
+                                <div class="timeline-title">Netherlands Adventure Begins ❤</div>
+                                <div class="timeline-description">Moved to the Netherlands for love and career opportunities - began the ongoing quest to speak Dutch fluently</div>
+                            </div>
+                            <div class="timeline-item career">
+                                <div class="timeline-icon">🎓</div>
+                                <div class="timeline-year">2018</div>
+                                <div class="timeline-title">Finance Career Transition</div>
+                                <div class="timeline-description">Pivoted from previous career into finance, drawn by the analytical challenges and data-driven decision making</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1697,7 +1812,46 @@
 
                     <div class="strengths-content">
                         <div class="top-strengths" id="top-strengths">
-                            <!-- Top 8 strengths will be loaded -->
+                            <div class="strength-card">
+                                <div class="strength-rank">#1</div>
+                                <div class="strength-name">Harmony</div>
+                                <div class="strength-domain">Relationship Building</div>
+                            </div>
+                            <div class="strength-card">
+                                <div class="strength-rank">#2</div>
+                                <div class="strength-name">Context</div>
+                                <div class="strength-domain">Strategic Thinking</div>
+                            </div>
+                            <div class="strength-card">
+                                <div class="strength-rank">#3</div>
+                                <div class="strength-name">Analytical</div>
+                                <div class="strength-domain">Strategic Thinking</div>
+                            </div>
+                            <div class="strength-card">
+                                <div class="strength-rank">#4</div>
+                                <div class="strength-name">Individualization</div>
+                                <div class="strength-domain">Relationship Building</div>
+                            </div>
+                            <div class="strength-card">
+                                <div class="strength-rank">#5</div>
+                                <div class="strength-name">Arranger</div>
+                                <div class="strength-domain">Executing</div>
+                            </div>
+                            <div class="strength-card">
+                                <div class="strength-rank">#6</div>
+                                <div class="strength-name">Responsibility</div>
+                                <div class="strength-domain">Executing</div>
+                            </div>
+                            <div class="strength-card">
+                                <div class="strength-rank">#7</div>
+                                <div class="strength-name">Focus</div>
+                                <div class="strength-domain">Executing</div>
+                            </div>
+                            <div class="strength-card">
+                                <div class="strength-rank">#8</div>
+                                <div class="strength-name">Intellection</div>
+                                <div class="strength-domain">Strategic Thinking</div>
+                            </div>
                         </div>
                         
                         <div class="chart-container">
@@ -1719,7 +1873,30 @@
                 
                 <div class="facts-container">
                     <div class="facts-grid" id="fun-facts">
-                        <!-- Facts will be loaded from JSON -->
+                        <div class="fact-card">
+                            <div class="fact-icon">🇳🇱</div>
+                            <div class="fact-text">6 years in Netherlands, Dutch still a work in progress</div>
+                        </div>
+                        <div class="fact-card">
+                            <div class="fact-icon">📊</div>
+                            <div class="fact-text">Finance & FP&A professional with analytical mindset</div>
+                        </div>
+                        <div class="fact-card">
+                            <div class="fact-icon">🧪</div>
+                            <div class="fact-text">Running 12+ personal experiments simultaneously</div>
+                        </div>
+                        <div class="fact-card">
+                            <div class="fact-icon">🎯</div>
+                            <div class="fact-text">Working on an FP&A transition</div>
+                        </div>
+                        <div class="fact-card">
+                            <div class="fact-icon">🚲</div>
+                            <div class="fact-text">Cycled 66,000+ km — around 🌍 1.6 times</div>
+                        </div>
+                        <div class="fact-card">
+                            <div class="fact-icon">☕</div>
+                            <div class="fact-text">Believes coffee + data = productivity</div>
+                        </div>
                     </div>
                 </div>
             </section>
