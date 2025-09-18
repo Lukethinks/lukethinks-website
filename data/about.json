@@ -2,89 +2,82 @@
   "hero": {
     "badge": "👋 Nice to meet you",
     "title": "I'm Luke, an analytical thinker in the Netherlands",
-    "tagline": "Finance professional turned curious learner, documenting my journey through data, experiments, and the occasional Dutch language mishap."
+    "tagline": "Finance professional turned curious learner, documenting my journey through data, experiments."
   },
   "bio": {
     "paragraphs": [
-      "I'm a finance professional living in the Netherlands, where I've spent the last six years trying to master Dutch (spoiler: still working on it). What started as a career in FP&A has evolved into a fascinating journey of analytical thinking and continuous learning.",
-      "My approach to problems is deeply rooted in my CliftonStrengths - Harmony, Context, and Analytical thinking. I believe in understanding the \"why\" behind everything, whether it's Federal Reserve policy decisions, supplement effectiveness, or why my Dutch pronunciation still makes locals chuckle.",
-      "Currently, I'm preparing for an Associate Product Manager transition, which has led me to explore business frameworks, case study methodologies, and product thinking. This learning lab is where I document those discoveries, test hypotheses, and share what actually works.",
-      "When I'm not diving into financial models or experimenting with new productivity methods, you'll find me attempting to have conversations in Dutch with varying degrees of success, or analyzing whether that new supplement actually improved my energy levels (spoiler: data is everything)."
+"I'm a finance professional living in the Netherlands, where I've spent the last six years trying to master Dutch (spoiler: still working on it). What started as a career in FP&A has evolved into a fascinating journey of analytical thinking and continuous learning.",
+                    "My approach to problems is deeply rooted in my Gallup Strengths. I believe in understanding the \"why\" behind everything, whether it's Federal Reserve policy decisions, supplement effectiveness, or why my Dutch pronunciation still makes locals chuckle.",
+                    "Currently, I'm working in FP&A, with experience in SSC's & Accounting, which has led me to explore business frameworks, case study methodologies, and product thinking. This learning lab is where I document those discoveries, test hypotheses, and share what actually works.",
+                    "When I'm not diving into financial models or experimenting with new productivity methods i'll be out cycling or swimming."
     ]
   },
-  "timeline": [
-    {
-      "year": "2030",
-      "icon": "🤖",
-      "title": "Finally Masters Dutch",
-      "description": "After 11 years of practice, Luke achieves native-level fluency and celebrates by ordering coffee without getting confused looks from the barista",
-      "type": "future",
-      "isJoke": true
-    },
-    {
-      "year": "2025",
-      "icon": "🎯",
-      "title": "APM Journey Begins",
-      "description": "Started intensive preparation for Associate Product Manager roles, diving deep into business cases and product frameworks",
-      "type": "career"
-    },
-    {
-      "year": "2024",
-      "icon": "🧠",
-      "title": "Learning Lab Launch",
-      "description": "Created lukethinks.nl as a space to document experiments, analyses, and learning discoveries",
-      "type": "project"
-    },
-    {
-      "year": "2023",
-      "icon": "💍",
-      "title": "Married My Best Friend",
-      "description": "Got married to my wonderful Dutch partner - finally making my Netherlands residency official in the best way possible",
-      "type": "personal"
-    },
-    {
-      "year": "2022",
-      "icon": "📈",
-      "title": "Senior FP&A Analyst",
-      "description": "Promoted to senior role, leading financial modeling and analysis for strategic initiatives",
-      "type": "career"
-    },
-    {
-      "year": "2021",
-      "icon": "🏠",
-      "title": "Bought First Home",
-      "description": "Navigated the Dutch housing market (somehow) and became a homeowner in Nijmegen",
-      "type": "personal"
-    },
-    {
-      "year": "2020",
-      "icon": "🔍",
-      "title": "Discovered CliftonStrengths",
-      "description": "Completed the assessment and finally understood why I analyze everything - it's literally my top strength",
-      "type": "personal"
-    },
-    {
-      "year": "2019-2021",
-      "icon": "📊",
-      "title": "FP&A Analyst",
-      "description": "Built expertise in financial planning, budgeting, and variance analysis while mastering Excel wizardry",
-      "type": "career"
-    },
-    {
-      "year": "2019",
-      "icon": "🇳🇱",
-      "title": "Netherlands Adventure Begins",
-      "description": "Moved to the Netherlands for love and career opportunities - began the ongoing quest to speak Dutch fluently",
-      "type": "personal"
-    },
-    {
-      "year": "2018",
-      "icon": "🎓",
-      "title": "Finance Career Transition",
-      "description": "Pivoted from previous career into finance, drawn by the analytical challenges and data-driven decision making",
-      "type": "career"
-    }
-  ],
+timeline: [
+                {
+                    year: "2089",
+                    icon: "🎓",
+                    title: "PhD in Dutch Linguistics (Finally)",
+                    description: "After 70 years of dedicated practice, Luke becomes the world's foremost expert on why 'de' vs 'het' makes no logical sense. Writes dissertation entirely in perfect Dutch while locals still occasionally ask him to repeat himself",
+                    type: "future",
+                    isJoke: true
+                },
+                {
+                    year: "2025",
+                    icon: "🎯",
+                    title: "APM Journey Begins",
+                    description: "Started intensive preparation for ACCA APM, diving deep into business cases and learnings frameworks using AI",
+                    type: "career"
+                },
+                {
+                    year: "2025",
+                    icon: "🧠",
+                    title: "Learning Lab Launch",
+                    description: "Created lukethinks.nl as a space to document experiments, analyses, and learning discoveries",
+                    type: "project"
+                },
+                {
+                    year: "2025",
+                    icon: "📈",
+                    title: "FP&A Analyst experience",
+                    description: "Had to oppurtunity to experience FP&A, leading financial modeling and analysis for strategic initiatives",
+                    type: "career"
+                },
+                {
+                    year: "2023",
+                    icon: "💍",
+                    title: "Married the love of my live",
+                    description: "Celebrated our love in front of friends and family.",
+                    type: "personal"
+                },
+                {
+                    year: "2020",
+                    icon: "🏠",
+                    title: "Bought First Home",
+                    description: "Navigated the Dutch housing market (somehow) and became a homeowner in Amersfoort Region",
+                    type: "personal"
+                },
+                {
+                    year: "2019-2021",
+                    icon: "📊",
+                    title: "Career in Accounting",
+                    description: "Built expertise in financial planning, budgeting, and variance analysis while mastering Excel wizardry",
+                    type: "career"
+                },
+                {
+                    year: "2019",
+                    icon: "🇳🇱",
+                    title: "Netherlands Adventure Begins ❤",
+                    description: "Moved to the Netherlands for love and career opportunities - began the ongoing quest to speak Dutch fluently",
+                    type: "personal"
+                },
+                {
+                    year: "2018",
+                    icon: "🎓",
+                    title: "Finance Career Transition",
+                    description: "Pivoted from previous career into finance, drawn by the analytical challenges and data-driven decision making",
+                    type: "career"
+                }
+            ],
   "contact": {
     "name": "Luke van den Top",
     "location": "🇳🇱 Nijmegen, Netherlands",
@@ -98,7 +91,7 @@
       {
         "icon": "📧",
         "text": "Email Me",
-        "url": "mailto:hello@lukethinks.nl",
+        "url": "mailto:test@test.com",
         "external": false
       },
       {
@@ -124,11 +117,11 @@
     },
     {
       "icon": "🎯",
-      "text": "Preparing for Associate Product Manager transition"
+      "text": "Working on an FP&A transition"
     },
     {
-      "icon": "💍",
-      "text": "Married in 2023 to my Dutch partner"
+icon: "🚲",
+text: "Cycled 66,000+ km — around 🌍 1.6 times"
     },
     {
       "icon": "☕",
