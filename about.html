@@ -39,13 +39,7 @@
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
+        /* Header Styles - Matching Index */
         header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -130,16 +124,18 @@
             transform: translateY(-1px);
         }
 
-        /* Hero Section - Full Width */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section - Matching Index Style */
         .hero {
             padding: 4rem 0;
             text-align: center;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
-            margin: 2rem 0;
             position: relative;
             overflow: hidden;
-            width: 100vw;
-            margin-left: calc(50% - 50vw);
         }
 
         .hero::before {
@@ -164,7 +160,6 @@
             margin: 0 auto;
             position: relative;
             z-index: 2;
-            padding: 0 24px;
         }
 
         .hero-badge {
@@ -773,10 +768,6 @@
                 font-size: 2.2rem;
             }
 
-            .hero-content {
-                padding: 0 20px;
-            }
-
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
@@ -873,28 +864,28 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="fade-in">
-            <div class="header-content">
-                <div class="logo-section">
-                    <div class="logo-icon">L</div>
-                    <a href="/" class="logo-text">
-                        <span class="logo-main">Luke Thinks</span>
-                        <span class="logo-sub">LEARNING LAB</span>
-                    </a>
-                </div>
-                <nav>
-                    <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="#research">Research</a></li>
-                        <li><a href="#experiments">Experiments</a></li>
-                        <li><a href="#learning">Learning</a></li>
-                        <li><a href="/about.html" class="active">About</a></li>
-                    </ul>
-                </nav>
+    <header class="fade-in">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">L</div>
+                <a href="/" class="logo-text">
+                    <span class="logo-main">Luke Thinks</span>
+                    <span class="logo-sub">LEARNING LAB</span>
+                </a>
             </div>
-        </header>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#research">Research</a></li>
+                    <li><a href="#experiments">Experiments</a></li>
+                    <li><a href="#learning">Learning</a></li>
+                    <li><a href="/about.html" class="active">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
+    <div class="container">
         <section class="hero">
             <div class="particles" id="particles"></div>
             <div class="hero-content">
@@ -947,10 +938,10 @@
             <section class="content-section">
                 <div class="bio-content">
                     <div id="bio-content">
-<p>I'm a finance professional who moved to the Netherlands six years ago from Essex, England. What began as a career in accounting has evolved into a fascinating journey of analytical thinking and continuous learning—with Dutch language adventures providing ongoing entertainment for locals.<p>
-<p>My approach to problems is deeply rooted in my CliftonStrengths profile. I'm driven to understand the <span class="highlight-text">"why" behind everything</span>, whether it's Federal Reserve policy decisions, AI accounting structures, or the mysterious logic of Dutch grammar rules.<p>
-<p>Currently working in <span class="highlight-text">FP&A with experience across accounting and shared service centers</span>, I've developed a passion for business frameworks, process optimization, and data storytelling. This learning lab serves as my professional outlet for documenting discoveries, testing hypotheses, and sharing the analytical insights that emerge from my curiosity.<p>
-<p>When I'm not diving into financial models or experimenting with new productivity methods, you'll find me cycling through the Dutch countryside.<p>
+<p>I'm a finance professional who moved to the Netherlands six years ago from Essex, England. What began as a career in accounting has evolved into a fascinating journey of analytical thinking and continuous learning—with Dutch language adventures providing ongoing entertainment for locals.</p>
+<p>My approach to problems is deeply rooted in my CliftonStrengths profile. I'm driven to understand the <span class="highlight-text">"why" behind everything</span>, whether it's Federal Reserve policy decisions, AI accounting structures, or the mysterious logic of Dutch grammar rules.</p>
+<p>Currently working in <span class="highlight-text">FP&A with experience across accounting and shared service centers</span>, I've developed a passion for business frameworks, process optimization, and data storytelling. This learning lab serves as my professional outlet for documenting discoveries, testing hypotheses, and sharing the analytical insights that emerge from my curiosity.</p>
+<p>When I'm not diving into financial models or experimenting with new productivity methods, you'll find me cycling through the Dutch countryside.</p>
                     </div>
                 </div>
             </section>
@@ -1003,7 +994,7 @@
                         </div>
 
                             <div class="timeline-item career">
-                            <div class="timeline-icon">💽</div>
+                            <div class="timeline-icon">👽</div>
                             <div class="timeline-content">
                                 <div class="timeline-year">2022-2025</div>
                                 <div class="timeline-title">Finance Business Intelligence Role</div>
@@ -1028,14 +1019,7 @@
                                 <div class="timeline-description">Navigated the Dutch housing market and became a homeowner in Amersfoort Region</div>
                             </div>
                         </div>
-                        <div class="timeline-item personal">
-                            <div class="timeline-icon">🇳🇱</div>
-                            <div class="timeline-content">
-                                <div class="timeline-year">2019</div>
-                                <div class="timeline-title">Netherlands Adventure Begins ❤</div>
-                                <div class="timeline-description">Moved to the Netherlands for love</div>
-                            </div>
-                        </div>
+                        
                         <div class="timeline-item career">
                             <div class="timeline-icon">📊</div>
                             <div class="timeline-content">
@@ -1045,9 +1029,16 @@
                             </div>
                         </div>
                         
-
-                        
-
+                        <div class="timeline-item personal">
+                            <div class="timeline-icon">🇳🇱</div>
+                            <div class="timeline-content">
+                                <div class="timeline-year">2019</div>
+                                <div class="timeline-title">Netherlands Adventure Begins ❤</div>
+                                <div class="timeline-description">Moved to the Netherlands for love</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- CliftonStrengths Section -->
@@ -1163,18 +1154,18 @@
                 </div>
             </section>
         </div>
-
-        <footer>
-            <div class="footer-content">
-                <p>© 2025 Luke van den Top • Thanks for getting to know me</p>
-                <div class="footer-links">
-                    <a href="/">Home</a>
-                    <a href="mailto:hello@lukethinks.nl">Contact</a>
-                    <a href="/rss">RSS</a>
-                </div>
-            </div>
-        </footer>
     </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 Luke van den Top • Thanks for getting to know me</p>
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="mailto:hello@lukethinks.nl">Contact</a>
+                <a href="/rss">RSS</a>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // Chart variables
