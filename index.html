@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luke Thinks - Personal Learning Lab 2</title>
+    <title>Luke Thinks - Personal Learning Lab</title>
     <meta name="description" content="Where I figure things out, experiment with ideas, and share discoveries">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -38,13 +38,7 @@
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* Header Styles */
+        /* Header Styles - Standardized to match about page */
         header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -60,6 +54,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
         .logo-section {
@@ -124,6 +121,13 @@
             background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
             box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
             transform: translateY(-1px);
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         /* Hero Section - Full Viewport */
@@ -301,60 +305,6 @@
             font-weight: 600;
         }
 
-        /* Quick Actions */
-        .hero-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 16px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            min-width: 160px;
-            text-align: center;
-        }
-
-        .action-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .action-btn:hover::before {
-            left: 100%;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(146, 64, 14, 0.4);
-        }
-
-        .action-btn.secondary {
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--primary-brown);
-            border: 2px solid var(--primary-brown);
-        }
-
-        .action-btn.secondary:hover {
-            background: var(--primary-brown);
-            color: white;
-        }
-
         /* Scroll Indicator */
         .scroll-indicator {
             position: absolute;
@@ -394,10 +344,13 @@
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
             border-radius: 40px 40px 0 0;
             margin-top: 2rem;
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
         }
 
         .latest-section .container {
             max-width: 1400px;
+            padding: 0 24px;
         }
 
         .section-header {
@@ -516,6 +469,9 @@
             color: white;
             padding: 3rem 0 2rem;
             text-align: center;
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            margin-top: 4rem;
         }
 
         .footer-content {
@@ -524,6 +480,9 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
         .footer-links {
@@ -559,6 +518,7 @@
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
+                padding: 0 20px;
             }
             
             nav ul {
@@ -566,18 +526,12 @@
                 justify-content: center;
             }
 
-            .hero-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .action-btn {
-                width: 100%;
-                max-width: 280px;
-            }
-
             .section-title {
                 font-size: 2rem;
+            }
+
+            .container {
+                padding: 0 16px;
             }
         }
 
@@ -602,28 +556,28 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="fade-in">
-            <div class="header-content">
-                <div class="logo-section">
-                    <div class="logo-icon">L</div>
-                    <a href="/" class="logo-text">
-                        <span class="logo-main">Luke Thinks</span>
-                        <span class="logo-sub">LEARNING LAB</span>
-                    </a>
-                </div>
-                <nav>
-                    <ul>
-                        <li><a href="/" class="active">Home</a></li>
-                        <li><a href="#research">Research</a></li>
-                        <li><a href="#experiments">Experiments</a></li>
-                        <li><a href="#learning">Learning</a></li>
-                        <li><a href="/about.html">About</a></li>
-                    </ul>
-                </nav>
+    <header class="fade-in">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">L</div>
+                <a href="/" class="logo-text">
+                    <span class="logo-main">Luke Thinks</span>
+                    <span class="logo-sub">LEARNING LAB</span>
+                </a>
             </div>
-        </header>
+            <nav>
+                <ul>
+                    <li><a href="/" class="active">Home</a></li>
+                    <li><a href="#research">Research</a></li>
+                    <li><a href="#experiments">Experiments</a></li>
+                    <li><a href="#learning">Learning</a></li>
+                    <li><a href="/about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
+    <div class="container">
         <section class="hero">
             <div class="hero-content slide-up">
                 <div class="hero-badge">
@@ -690,8 +644,6 @@
                         </div>
                     </a>
                 </div>
-
-
             </div>
 
             <div class="scroll-indicator">
@@ -699,8 +651,10 @@
                 <div class="scroll-arrow">↓</div>
             </div>
         </section>
+    </div>
 
-        <section class="latest-section" id="latest">
+    <section class="latest-section" id="latest">
+        <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Latest Analysis</h2>
                 <p class="section-subtitle">
@@ -718,7 +672,6 @@
                     <p class="post-excerpt">
                         I built an interactive visualization to understand how Federal Reserve board composition affects monetary policy. The hawk/dove balance is more complex than I initially thought.
                     </p>
-
                 </article>
 
                 <article class="featured-post">
@@ -730,7 +683,6 @@
                     <p class="post-excerpt">
                         Working through bite-sized business cases to develop analytical frameworks. Here are three cases that taught me the most about structured thinking.
                     </p>
-
                 </article>
 
                 <article class="featured-post">
@@ -742,7 +694,6 @@
                     <p class="post-excerpt">
                         After years of experimenting, I've found a sustainable approach to supplements. Data-driven analysis of what works and why collagen became a game-changer.
                     </p>
-
                 </article>
 
                 <article class="featured-post">
@@ -754,22 +705,21 @@
                     <p class="post-excerpt">
                         Despite having a Dutch family and living here for six years, I still struggle with fluency. What I'm discovering about language anxiety and AI practice.
                     </p>
-
                 </article>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <footer>
-            <div class="footer-content">
-                <p>© 2025 Luke van den Top • A space for thinking out loud</p>
-                <div class="footer-links">
-                    <a href="/about">About</a>
-                    <a href="mailto:hello@lukethinks.nl">Contact</a>
-                    <a href="/rss">RSS</a>
-                </div>
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 Luke van den Top • A space for thinking out loud</p>
+            <div class="footer-links">
+                <a href="/about.html">About</a>
+                <a href="mailto:hello@lukethinks.nl">Contact</a>
+                <a href="/rss">RSS</a>
             </div>
-        </footer>
-    </div>
+        </div>
+    </footer>
 
     <script>
         // Smooth scrolling for anchor links
