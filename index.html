@@ -292,7 +292,34 @@
         .nav-card-stat {
             text-align: center;
         }
+/* --- key part for LinkedIn + Email --- */
+.nav-card-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+    font-size: 0.95rem;
+}
 
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #0077b5; /* LinkedIn-like blue */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #005582;
+}
+
+.divider {
+    color: #aaa;
+}
         .stat-number {
             font-size: 1.5rem;
             font-weight: 700;
