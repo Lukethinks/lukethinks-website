@@ -42,13 +42,15 @@
         }
 
 .container {
-    max-width: 100%;
+    width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 2rem;
 }
 
         /* Header Styles */
         header {
+    width: 100%;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-light);
@@ -57,12 +59,17 @@
             top: 0;
             z-index: 1000;
             transition: all 0.3s ease;
-        }
+        
+}
 
 .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
 }
         .logo-section {
             display: flex;
@@ -135,6 +142,17 @@
             position: relative;
             overflow: hidden;
         }
+
+.hero {
+    width: 100%;
+    max-width: none;
+}
+
+.hero-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
 
         .hero::before {
             content: '';
@@ -239,9 +257,11 @@
         }
 
         .section-header {
+    width: 100%;
             text-align: center;
             margin-bottom: 3rem;
-        }
+        
+}
 
         .section-title {
             font-size: 2.5rem;
@@ -451,12 +471,14 @@
 
         /* Footer */
         footer {
+    width: 100%;
             background: var(--dark-text);
             color: white;
             padding: 3rem 0 2rem;
             text-align: center;
             margin-top: 4rem;
-        }
+        
+}
 
         .footer-content {
             display: flex;
@@ -464,7 +486,11 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
-        }
+        
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
 
         .footer-links {
             display: flex;
@@ -485,8 +511,11 @@
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .container {
-                padding: 0 16px;
-            }
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
 
             .hero h1 {
                 font-size: 2.5rem;
@@ -495,7 +524,11 @@
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
-            }
+            
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
 
             nav ul {
                 flex-wrap: wrap;
@@ -542,8 +575,7 @@
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
-    <div class="container">
-        <header class="fade-in">
+    <header class="fade-in">
             <div class="header-content">
                 <div class="logo-section">
                     <div class="logo-icon">L</div>
@@ -563,6 +595,7 @@
                 </nav>
             </div>
         </header>
+    <div class="container">
 
         <section class="hero">
             <div class="hero-content">
