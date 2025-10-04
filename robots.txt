@@ -1,0 +1,23 @@
+# robots.txt for lukethinks.nl
+
+# Allow all search engines to crawl everything
+User-agent: *
+Allow: /
+
+# Block access to any future admin or private directories
+# (Uncomment and customize if needed)
+# Disallow: /admin/
+# Disallow: /private/
+# Disallow: /drafts/
+
+# Prevent indexing of assets that don't need to appear in search
+# (Uncomment if you add these directories)
+# Disallow: /assets/
+# Disallow: /_vercel/
+
+# Sitemap location - helps search engines find all your pages
+Sitemap: https://lukethinks.nl/sitemap.xml
+
+# Optional: Crawl-delay for aggressive bots (usually not needed)
+# User-agent: *
+# Crawl-delay: 10
