@@ -162,13 +162,16 @@
             100% { transform: rotate(360deg); }
         }
 
-        .hero-content {
-            max-width: 700px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-            padding: 0 24px;
-        }
+.hero {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 80px;
+}
 
         .hero-badge {
             display: inline-flex;
