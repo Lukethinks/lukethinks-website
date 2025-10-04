@@ -48,22 +48,26 @@
     padding: 0 24px;
 }
 
-        /* Header */
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-light);
-            padding: 1.5rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
+/* Header - Full Width */
+header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-light);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    width: 100%;  /* ADD THIS */
+}
 
 .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 1200px;    /* ADD THIS */
+    margin: 0 auto;       /* ADD THIS */
+    padding: 0 24px;      /* ADD THIS */
 }
 
         .logo-section {
@@ -400,25 +404,25 @@
             font-size: 0.95rem;
         }
 
-        /* Footer */
-        footer {
-            background: var(--dark-text);
-            color: white;
-            padding: 3rem 0 2rem;
-            text-align: center;
-            margin-top: 4rem;
-        }
+footer {
+    background: var(--dark-text);
+    color: white;
+    padding: 3rem 0 2rem;
+    text-align: center;
+    width: 100%;        /* ADD THIS */
+    margin-top: 4rem;
+}
 
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: 1200px;  /* ADD THIS */
+    margin: 0 auto;     /* ADD THIS */
+    padding: 0 24px;    /* ADD THIS */
+}
 
         .footer-links {
             display: flex;
@@ -998,5 +1002,6 @@
 </body>
 
 </html>
+
 
 
