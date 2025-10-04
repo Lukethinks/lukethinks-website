@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Understanding ASC 323 Equity Method Accounting | Luke Thinks</title>
+    <meta name="description" content="Clear breakdown of ASC 323 equity method accounting for finance professionals—from the 20% threshold to significant influence criteria, with practical application challenges">
+    <meta name="keywords" content="ASC 323, equity method accounting, significant influence, GAAP accounting, investment accounting, financial reporting">
+    
+    <meta property="og:title" content="Understanding ASC 323: Equity Method Accounting Explained">
+    <meta property="og:description" content="Practical guide to equity method accounting under ASC 323—when to use it, how it works, and real-world application challenges">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://lukethinks.nl/asc-323-equity-method-accounting">
+    
+    <link rel="canonical" href="https://lukethinks.nl/asc-323-equity-method-accounting">
+    
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Understanding ASC 323: Equity Method Accounting",
+      "author": {
+        "@type": "Person",
+        "name": "Luke van den Top",
+        "url": "https://lukethinks.nl/about.html"
+      },
+      "datePublished": "2025-10-04",
+      "dateModified": "2025-10-04",
+      "description": "Practical guide to equity method accounting under ASC 323 for finance professionals",
+      "keywords": "ASC 323, equity method accounting, significant influence, GAAP",
+      "articleSection": "Learning",
+      "wordCount": "2200",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Luke Thinks"
+      }
+    }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-brown: #92400e;
+            --secondary-brown: #c05621;
+            --accent-amber: #ea580c;
+            --light-amber: #fbbf24;
+            --cream: #fef7f0;
+            --light-cream: #f7fafc;
+            --dark-text: #0f172a;
+            --medium-text: #1e293b;
+            --light-text: #64748b;
+            --very-light-text: #94a3b8;
+            --border-light: rgba(226, 232, 240, 0.5);
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: var(--medium-text);
+            background: linear-gradient(135deg, var(--cream) 0%, var(--light-cream) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+        }
+
+        .logo-main {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            line-height: 1;
+        }
+
+        .logo-sub {
+            font-size: 0.8rem;
+            color: var(--accent-amber);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .breadcrumbs {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 24px;
+        }
+
+        .breadcrumbs ol {
+            list-style: none;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .breadcrumbs a {
+            color: var(--light-text);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumbs a:hover {
+            color: var(--accent-amber);
+        }
+
+        .breadcrumbs .separator {
+            color: var(--very-light-text);
+        }
+
+        .breadcrumbs .current {
+            color: var(--medium-text);
+            font-weight: 600;
+        }
+
+        .article-header {
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--light-text);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .article-category {
+            background: rgba(146, 64, 14, 0.1);
+            color: var(--primary-brown);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .article-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .article-subtitle {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            font-weight: 500;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .toc-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 20px var(--shadow-light);
+        }
+
+        .toc-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 0.75rem;
+        }
+
+        .toc-list a {
+            color: var(--medium-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .toc-list a:hover {
+            color: var(--accent-amber);
+            background: rgba(146, 64, 14, 0.05);
+            transform: translateX(5px);
+        }
+
+        .article-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 20px var(--shadow-light);
+        }
+
+        .article-content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin: 3rem 0 1.5rem 0;
+            padding-top: 1rem;
+            border-top: 2px solid rgba(146, 64, 14, 0.1);
+        }
+
+        .article-content h2:first-child {
+            margin-top: 0;
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .article-content h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin: 2rem 0 1rem 0;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+            line-height: 1.7;
+        }
+
+        .article-content strong {
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        .callout {
+            background: linear-gradient(135deg, rgba(146, 64, 14, 0.05), rgba(234, 88, 12, 0.03));
+            border-left: 4px solid var(--accent-amber);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+        }
+
+        .callout-title {
+            font-weight: 700;
+            color: var(--primary-brown);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .callout p:last-child {
+            margin-bottom: 0;
+        }
+
+        .example-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid var(--border-light);
+        }
+
+        .example-title {
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .key-points {
+            background: linear-gradient(135deg, rgba(146, 64, 14, 0.1), rgba(234, 88, 12, 0.05));
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid var(--accent-amber);
+        }
+
+        .key-points h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-points li {
+            padding-left: 2rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .key-points li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-amber);
+            font-weight: 700;
+        }
+
+        .related-content {
+            background: rgba(100, 116, 139, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .related-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+
+        .related-link {
+            color: var(--accent-amber);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(234, 88, 12, 0.3);
+            transition: border-color 0.3s;
+        }
+
+        .related-link:hover {
+            border-bottom-color: var(--accent-amber);
+        }
+
+        footer {
+            background: var(--dark-text);
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
+            width: 100%;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--light-amber);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .sr-only {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <header class="fade-in">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">L</div>
+                <a href="/" class="logo-text">
+                    <span class="logo-main">Luke Thinks</span>
+                    <span class="logo-sub">LEARNING LAB</span>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/research.html">Research</a></li>
+                    <li><a href="#experiments">Experiments</a></li>
+                    <li><a href="/learning.html" class="active">Learning</a></li>
+                    <li><a href="/about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <nav aria-label="breadcrumb" class="breadcrumbs">
+        <ol>
+            <li><a href="/">Home</a></li>
+            <li class="separator">›</li>
+            <li><a href="/learning.html">Learning</a></li>
+            <li class="separator">›</li>
+            <li class="current">ASC 323 Equity Method</li>
+        </ol>
+    </nav>
+
+    <div class="container">
+        <article class="article-header">
+            <h1 class="sr-only">ASC 323 Equity Method Accounting: Complete Guide for Finance Professionals</h1>
+            
+            <div class="article-meta">
+                <span class="article-category">Accounting Standards</span>
+                <span class="meta-item">October 4, 2025</span>
+                <span class="meta-item">12 min read</span>
+            </div>
+
+            <h2 class="article-title">Understanding ASC 323: Equity Method Accounting</h2>
+            
+            <p class="article-subtitle">When significant influence meets financial reporting—breaking down the mechanics, thresholds, and real-world challenges of equity method accounting</p>
+        </article>
+
+        <div class="toc-container">
+            <h3 class="toc-title">📋 Contents</h3>
+            <ul class="toc-list">
+                <li><a href="#what-is">What Is Equity Method Accounting?</a></li>
+                <li><a href="#when-to-use">When to Use Equity Method</a></li>
+                <li><a href="#mechanics">How It Works: The Mechanics</a></li>
+                <li><a href="#significant-influence">Determining Significant Influence</a></li>
+                <li><a href="#challenges">Common Application Challenges</a></li>
+                <li><a href="#practical">Practical Implications</a></li>
+            </ul>
+        </div>
+
+        <div class="article-content">
+            <p>I've been trying to understand equity method accounting—specifically ASC 323—because it keeps appearing in complex investment structures. This standard determines how companies account for investments where they have influence but not control. After working through the guidance and real examples, here's what I've learned about when and how to apply it.</p>
+
+            <h2 id="what-is">What Is Equity Method Accounting?</h2>
+
+            <p>Equity method accounting is a way to report investments in other companies when you have <strong>significant influence</strong> over the investee but don't control them. Instead of just recording dividends as income, you recognize your proportionate share of the investee's earnings or losses in your own income statement.</p>
+
+            <div class="callout">
+                <div class="callout-title">The Core Concept</div>
+                <p>Under equity method, your investment account on the balance sheet increases when the investee makes money and decreases when it loses money or pays dividends. You're essentially treating your investment stake as if it were a one-line consolidation of the investee's financial performance.</p>
+            </div>
+
+            <p>This differs from two other investment accounting methods:</p>
+
+            <ul>
+                <li><strong>Fair value method:</strong> Used when you have no significant influence (typically less than 20% ownership). You mark the investment to market value each period.</li>
+                <li><strong>Consolidation:</strong> Used when you control the entity (typically more than 50% ownership). You combine all of the investee's assets, liabilities, revenues, and expenses line-by-line with your own.</li>
+            </ul>
+
+            <p>Equity method sits in the middle—you have enough influence to warrant more than passive investor treatment, but not enough control to justify full consolidation.</p>
+
+            <h2 id="when-to-use">When to Use Equity Method</h2>
+
+            <p>ASC 323 provides two main criteria for determining when equity method applies:</p>
+
+            <h3>The 20% Ownership Threshold</h3>
+
+            <p>There's a <strong>rebuttable presumption</strong> that if you own 20% or more of voting stock, you have significant influence. This is just a starting point—not an absolute rule. You still need to assess the actual influence you exercise.</p>
+
+            <div class="example-box">
+                <div class="example-title">Ownership Threshold Examples</div>
+                <p><strong>Scenario 1:</strong> You own 25% of Company A. No other investor owns more than 10%. You have board representation and participate in policy decisions. → <em>Equity method likely applies.</em></p>
+                <p><strong>Scenario 2:</strong> You own 22% of Company B. Another investor owns 51% and controls all decisions. You have no board seat and no input on operations. → <em>Equity method may not apply despite 20%+ ownership.</em></p>
+                <p><strong>Scenario 3:</strong> You own 18% of Company C but have two board seats out of seven, veto rights on major decisions, and provide significant operational support. → <em>Equity method may apply despite sub-20% ownership.</em></p>
+            </div>
+
+            <h3>Significant Influence Indicators</h3>
+
+            <p>Beyond ownership percentage, ASC 323 identifies several indicators of significant influence:</p>
+
+            <ul>
+                <li><strong>Board representation:</strong> Having seats on the investee's board of directors</li>
+                <li><strong>Policy participation:</strong> Involvement in policy-making processes</li>
+                <li><strong>Material transactions:</strong> Significant commercial relationships between investor and investee</li>
+                <li><strong>Management interchange:</strong> Providing key personnel or technical expertise</li>
+                <li><strong>Technological dependency:</strong> Investee relies on investor's technology or processes</li>
+            </ul>
+
+            <h2 id="mechanics">How It Works: The Mechanics</h2>
+
+            <p>Once you determine equity method applies, here's how the accounting works step-by-step:</p>
+
+            <h3>Initial Recognition</h3>
+
+            <p>You record the investment at cost:</p>
+
+            <div class="example-box">
+                <p><strong>Entry:</strong> Debit Investment in Associate $10,000,000</p>
+                <p style="padding-left: 2rem;">Credit Cash $10,000,000</p>
+                <p><em>To record 25% equity investment in XYZ Company</em></p>
+            </div>
+
+            <h3>Recording Investee Earnings</h3>
+
+            <p>Each reporting period, you record your share of the investee's net income (or loss):</p>
+
+            <div class="example-box">
+                <p><strong>If investee reports $4M net income, and you own 25%:</strong></p>
+                <p>Debit Investment in Associate $1,000,000</p>
+                <p style="padding-left: 2rem;">Credit Equity in Earnings of Associate $1,000,000</p>
+                <p><em>Your share: $4M × 25% = $1M flows through income statement</em></p>
+            </div>
+
+            <h3>Recording Dividends</h3>
+
+            <p>When the investee pays dividends, you reduce the investment account (not recognize income, since you already recognized earnings):</p>
+
+            <div class="example-box">
+                <p><strong>If investee pays $2M dividend, and you own 25%:</strong></p>
+                <p>Debit Cash $500,000</p>
+                <p style="padding-left: 2rem;">Credit Investment in Associate $500,000</p>
+                <p><em>Your share: $2M × 25% = $500k reduces investment balance</em></p>
+            </div>
+
+            <h3>Impact on Balance Sheet</h3>
+
+            <p>Your investment account changes as follows:</p>
+
+            <ul>
+                <li><strong>Increases:</strong> When investee reports net income</li>
+                <li><strong>Decreases:</strong> When investee reports losses or pays dividends</li>
+                <li><strong>No change:</strong> When investee's equity increases/decreases for other reasons (like OCI items)</li>
+            </ul>
+
+            <h2 id="significant-influence">Determining Significant Influence</h2>
+
+            <p>This is where theory meets messy reality. Determining "significant influence" requires judgment, and companies can reach different conclusions on similar facts.</p>
+
+            <div class="callout">
+                <div class="callout-title">The Judgment Challenge</div>
+                <p>ASC 323 states that "ability to exercise significant influence" is the key criterion, not just the existence of certain indicators. Two companies with identical ownership stakes and board seats might make different conclusions based on how active that influence actually is.</p>
+            </div>
+
+            <h3>Ability vs. Exercise of Influence</h3>
+
+            <p>A critical distinction: you need the <em>ability</em> to exercise significant influence, not proof that you're currently exercising it. If you have board seats but haven't attended meetings, you still have the ability.</p>
+
+            <h3>Rebutting the 20% Presumption</h3>
+
+            <p>When you own 20% or more but lack significant influence, you must document why:</p>
+
+            <ul>
+                <li>Another investor has majority control and blocks your influence</li>
+                <li>Legal restrictions prevent you from exercising influence (e.g., bankruptcy proceedings)</li>
+                <li>You've attempted to exercise influence and been consistently unsuccessful</li>
+                <li>You lack timely financial information needed to apply equity method</li>
+            </ul>
+
+            <h2 id="challenges">Common Application Challenges</h2>
+
+            <p>Several practical issues create complexity in applying ASC 323:</p>
+
+            <h3>1. Timing of Financial Information</h3>
+
+            <p>You need the investee's financial results to record your share of earnings. If the investee reports on a lag (e.g., 30-60 days after your quarter end), you face a dilemma:</p>
+
+            <ul>
+                <li>Wait for actual results (but delay your own reporting)</li>
+                <li>Estimate results based on preliminary information</li>
+                <li>Use prior quarter results with a lag (ASC 323 allows up to 3-month lag with disclosure)</li>
+            </ul>
+
+            <h3>2. Different Accounting Policies</h3>
+
+            <p>If the investee uses different accounting policies than you do, should you adjust their earnings before recording your share? ASC 323 requires adjustments for material differences, particularly in:</p>
+
+            <ul>
+                <li>Revenue recognition methods</li>
+                <li>Depreciation policies</li>
+                <li>Inventory valuation</li>
+            </ul>
+
+            <h3>3. Losses Exceeding Investment Balance</h3>
+
+            <p>What happens when the investee reports losses that would reduce your investment account below zero? Generally, you stop recording losses once the investment reaches zero unless you have:</p>
+
+            <ul>
+                <li>Guaranteed the investee's obligations</li>
+                <li>Committed to provide additional financial support</li>
+                <li>Other interests that will absorb the losses</li>
+            </ul>
+
+            <h3>4. Impairment Considerations</h3>
+
+            <p>Equity method investments require regular impairment assessment. Under ASC 323, you evaluate whether a loss in value is "other-than-temporary" considering:</p>
+
+            <ul>
+                <li>Duration and severity of decline in fair value</li>
+                <li>Financial condition and near-term prospects of investee</li>
+                <li>Your intent and ability to retain the investment</li>
+            </ul>
+
+            <h2 id="practical">Practical Implications for Financial Analysis</h2>
+
+            <p>Understanding equity method accounting matters for financial statement analysis because it affects both the balance sheet and income statement in non-intuitive ways.</p>
+
+            <h3>Income Statement Impact</h3>
+
+            <p>Equity method earnings appear as a single line item (typically "Equity in earnings of affiliates" or similar). This creates several analytical challenges:</p>
+
+            <ul>
+                <li>You can't see revenue vs. expenses of the investee</li>
+                <li>Investee profitability might differ significantly from your core operations</li>
+                <li>Operating margins calculated without adjusting for equity earnings can be misleading</li>
+            </ul>
+
+            <h3>Cash Flow Implications</h3>
+
+            <p>Equity method earnings increase net income but don't generate cash unless the investee pays dividends. In the cash flow statement:</p>
+
+            <ul>
+                <li>Equity earnings are <em>added back</em> in operating activities (non-cash income)</li>
+                <li>Dividends received from equity method investees are <em>added</em> to operating cash flow</li>
+            </ul>
+
+            <p>This creates a disconnect: income statement shows earnings, but cash doesn't arrive until dividends are paid.</p>
+
+            <div class="callout">
+                <div class="callout-title">Cash Flow Analysis Alert</div>
+                <p>A company with large equity method earnings but low dividend payouts will show net income that significantly exceeds operating cash flow. This isn't necessarily a red flag—it's a structural feature of equity method accounting—but it matters for valuation and cash flow analysis.</p>
+            </div>
+
+            <h3>The Microsoft-OpenAI Example</h3>
+
+            <p>Microsoft's treatment of its OpenAI investment illustrates equity method complexity. Despite holding no voting rights and lacking board representation, Microsoft applies equity method based on its profit-sharing arrangement and significant commercial relationship. This creates several interesting dynamics:</p>
+
+            <ul>
+                <li><strong>Quarterly losses:</strong> Microsoft reported $683M in Q1 FY2025 equity method losses from OpenAI</li>
+                <li><strong>No board control:</strong> Yet equity method applies based on profit-sharing structure</li>
+                <li><strong>Circular revenue:</strong> Microsoft sells Azure services to OpenAI while recognizing OpenAI's losses</li>
+            </ul>
+
+            <div class="related-content">
+                <h3 class="related-title">🔗 Related Analysis</h3>
+                <p>For a deeper dive into how Microsoft's OpenAI investment challenges traditional equity method application, see my analysis: <a href="/ai-article.html" class="related-link">When Billion-Dollar AI Partnerships Meet Reality: A $50B Accounting Crisis</a></p>
+            </div>
+
+            <div class="key-points">
+                <h3>Key Takeaways</h3>
+                <ul>
+                    <li>Equity method applies when you have significant influence (presumed at 20%+ ownership, but requires judgment)</li>
+                    <li>You record your proportionate share of investee earnings/losses in income, not just cash dividends</li>
+                    <li>Investment account increases with investee profits, decreases with losses and dividends</li>
+                    <li>Determining "significant influence" involves subjective assessment of multiple factors beyond ownership</li>
+                    <li>Cash flow implications differ from income statement treatment—watch for earnings without cash generation</li>
+                    <li>Modern partnerships (like Microsoft-OpenAI) challenge traditional equity method boundaries</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 2px solid rgba(146, 64, 14, 0.1);">
+                <a href="/learning.html" style="display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown)); color: white; padding: 1rem 2rem; border-radius: 12px; text-decoration: none; font-weight: 700; transition: all 0.3s ease;">
+                    ← Back to Learning
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 Luke van den Top • Breaking down accounting concepts from Netherlands</p>
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/about.html">About</a>
+                <a href="mailto:hello@lukethinks.nl">Contact</a>
+                <a href="/rss">RSS</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        document.querySelectorAll('.toc-list a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 100;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.callout, .example-box, .key-points').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
