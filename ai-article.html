@@ -9,8 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <style>
         * {
             margin: 0;
@@ -42,33 +42,33 @@
             min-height: 100vh;
         }
 
-.container {
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 0 24px;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
 
-/* Header - Full Width */
-header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border-light);
-    padding: 1.5rem 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    transition: all 0.3s ease;
-    width: 100%;  /* ADD THIS */
-}
+        /* Header - Full Width */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
 
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;    /* ADD THIS */
-    margin: 0 auto;       /* ADD THIS */
-    padding: 0 24px;      /* ADD THIS */
-}
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
 
         .logo-section {
             display: flex;
@@ -333,28 +333,6 @@ header {
             font-size: 0.9rem;
         }
 
-        /* Chart Container */
-        .chart-container {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 16px;
-            padding: 2rem;
-            margin: 2rem 0;
-            border: 1px solid var(--border-light);
-        }
-
-        .chart-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--dark-text);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .chart-wrapper {
-            position: relative;
-            height: 400px;
-        }
-
         /* Key Takeaways */
         .key-takeaways {
             background: linear-gradient(135deg, rgba(146, 64, 14, 0.1), rgba(234, 88, 12, 0.05));
@@ -404,25 +382,26 @@ header {
             font-size: 0.95rem;
         }
 
-footer {
-    background: var(--dark-text);
-    color: white;
-    padding: 3rem 0 2rem;
-    text-align: center;
-    width: 100%;        /* ADD THIS */
-    margin-top: 4rem;
-}
+        /* Footer - Full Width */
+        footer {
+            background: var(--dark-text);
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
+            width: 100%;
+            margin-top: 4rem;
+        }
 
-.footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    max-width: 1200px;  /* ADD THIS */
-    margin: 0 auto;     /* ADD THIS */
-    padding: 0 24px;    /* ADD THIS */
-}
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
 
         .footer-links {
             display: flex;
@@ -475,10 +454,6 @@ footer {
             .stats-box {
                 grid-template-columns: 1fr;
             }
-
-            .chart-wrapper {
-                height: 300px;
-            }
         }
 
         /* Loading animation */
@@ -498,7 +473,7 @@ footer {
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
-</body>
+<body>
     <header class="fade-in">
         <div class="header-content">
             <div class="logo-section">
@@ -1002,6 +977,5 @@ footer {
 </body>
 
 </html>
-
 
 
