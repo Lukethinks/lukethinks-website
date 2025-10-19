@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary SEO -->
+    <title>Cycling Clothing Guide: What to Wear for Any Weather | Interactive Tool</title>
+    <meta name="description" content="Free interactive cycling clothing calculator for Netherlands and beyond. Get personalized kit recommendations based on temperature, wind, rain, and ride intensity. Perfect for winter cycling, commuting, and training rides.">
+    <meta name="keywords" content="cycling clothing guide, what to wear cycling, winter cycling clothing, cycling kit calculator, cycling temperature guide, Netherlands cycling, bike clothing recommendations, cycling layers, cold weather cycling, rain cycling gear">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Interactive Cycling Clothing Guide - What to Wear for Any Weather">
+    <meta property="og:description" content="Get personalized cycling kit recommendations based on temperature, wind, rain, and intensity. Includes visual diagram and safety warnings.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lukethinks.nl/cycling-clothing-guide">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://lukethinks.nl/cycling-clothing-guide">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-brown: #92400e;
+            --secondary-brown: #c05621;
+            --accent-amber: #ea580c;
+            --light-amber: #fbbf24;
+            --cream: #fef7f0;
+            --light-cream: #f7fafc;
+            --dark-text: #0f172a;
+            --medium-text: #1e293b;
+            --light-text: #64748b;
+            --very-light-text: #94a3b8;
+            --border-light: rgba(226, 232, 240, 0.5);
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--medium-text);
+            background: linear-gradient(135deg, var(--cream) 0%, var(--light-cream) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+        }
+
+        .logo-main {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            line-height: 1;
+        }
+
+        .logo-sub {
+            font-size: 0.8rem;
+            color: var(--accent-amber);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            padding: 1.5rem 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumbs a {
+            color: var(--light-text);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumbs a:hover {
+            color: var(--accent-amber);
+        }
+
+        .separator {
+            color: var(--very-light-text);
+            margin: 0 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(146, 64, 14, 0.1);
+            color: var(--primary-brown);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(146, 64, 14, 0.2);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--dark-text);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .hero-highlight {
+            background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Main App Container */
+        .app-container {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--border-light);
+        }
+
+        /* Controls Panel */
+        .controls-panel {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(247, 250, 252, 0.9) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        /* Temperature Slider */
+        .temp-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .unit-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .unit-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border-light);
+            background: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .unit-btn.active {
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            color: white;
+            border-color: var(--accent-amber);
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #3b82f6, var(--accent-amber), #ef4444);
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--accent-amber);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--accent-amber);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--light-text);
+            margin-top: 0.5rem;
+        }
+
+        /* Button Groups */
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-light);
+            background: white;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-amber);
+            transform: translateY(-2px);
+        }
+
+        .btn.active {
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            color: white;
+            border-color: var(--accent-amber);
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+        }
+
+        .toggle-btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-light);
+            background: white;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-btn:hover {
+            border-color: var(--accent-amber);
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-color: #059669;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        /* Condition Guidance */
+        .condition-hint {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--very-light-text);
+            line-height: 1.3;
+        }
+
+        /* Alerts & Warnings */
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            border: 2px solid;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        /* Kit Diagram - IMPROVED */
+        .kit-diagram {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(247, 250, 252, 0.9) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+        }
+
+        .diagram-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .kit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .kit-item {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0.4;
+            position: relative;
+        }
+
+        .kit-item.active {
+            border-color: #3b82f6;
+            opacity: 1;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        /* Category-specific colors */
+        .kit-item.head.active {
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .kit-item.upper.active {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .kit-item.hands.active {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .kit-item.lower.active {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .kit-item.feet.active {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .kit-item-category {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--very-light-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .kit-item.active .kit-item-category {
+            color: inherit;
+        }
+
+        .kit-item.head.active .kit-item-category {
+            color: #8b5cf6;
+        }
+
+        .kit-item.upper.active .kit-item-category {
+            color: #3b82f6;
+        }
+
+        .kit-item.hands.active .kit-item-category {
+            color: #f59e0b;
+        }
+
+        .kit-item.lower.active .kit-item-category {
+            color: #10b981;
+        }
+
+        .kit-item.feet.active .kit-item-category {
+            color: #ef4444;
+        }
+
+        .kit-item-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .kit-item-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .kit-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--light-text);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #e5e7eb;
+        }
+
+        .legend-dot.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .legend-dot.inactive {
+            background: transparent;
+        }
+
+        /* Bottom Tabs */
+        .bottom-tabs {
+            margin-top: 2rem;
+        }
+
+        .tab-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            padding: 1rem;
+            border: 2px solid var(--border-light);
+            background: white;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--accent-amber);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            color: white;
+            border-color: var(--accent-amber);
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+        }
+
+        .tab-content {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-light);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-text);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--light-amber);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .grid-2, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .kit-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tab-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <header class="fade-in">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">L</div>
+                    <a href="/" class="logo-text">
+                        <span class="logo-main">Luke Thinks</span>
+                        <span class="logo-sub">LEARNING LAB</span>
+                    </a>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/research.html">Research</a></li>
+                        <li><a href="/experiments.html" class="active">Experiments</a></li>
+                        <li><a href="/learning.html">Learning</a></li>
+                        <li><a href="/about.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <nav aria-label="breadcrumb" class="breadcrumbs">
+        <div class="container">
+            <a href="/">Home</a>
+            <span class="separator">›</span>
+            <a href="/experiments.html">Experiments</a>
+            <span class="separator">›</span>
+            <span>Cycling Clothing Guide</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="hero">
+            <div class="hero-badge">
+                🚴 Interactive Tool
+            </div>
+            <h1>
+                <span class="hero-highlight">Cycling Clothing Guide</span><br>
+                What to Wear for Any Weather
+            </h1>
+            <p class="hero-subtitle">
+                Get personalized kit recommendations based on temperature, wind, rain, and ride intensity. 
+                Perfect for Netherlands cycling and beyond.
+            </p>
+        </section>
+
+        <div class="app-container" id="app">
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <!-- Temperature Control -->
+                <div class="control-group">
+                    <label class="control-label">
+                        🌡️ Temperature: <span id="temp-display">15°C</span>
+                    </label>
+                    <div class="temp-controls">
+                        <div class="unit-toggle">
+                            <button class="unit-btn active" data-unit="C">°C</button>
+                            <button class="unit-btn" data-unit="F">°F</button>
+                        </div>
+                    </div>
+                    <input type="range" class="slider" id="temp-slider" min="-10" max="32" value="15">
+                    <div class="slider-labels">
+                        <span id="min-temp">-10°C</span>
+                        <span id="max-temp">32°C</span>
+                    </div>
+                </div>
+
+                <!-- Mudguards Toggle -->
+                <div class="control-group">
+                    <label class="control-label">Equipment Options</label>
+                    <button class="toggle-btn" id="mudguards-toggle">
+                        <span>🛡️ Mudguards</span>
+                        <span id="mudguards-check"></span>
+                    </button>
+                </div>
+
+                <!-- Conditions -->
+                <div class="grid-4">
+                    <!-- Wind -->
+                    <div class="control-group">
+                        <label class="control-label">
+                            💨 Wind
+                        </label>
+                        <div class="button-group">
+                            <button class="btn active" data-wind="none">None</button>
+                            <button class="btn" data-wind="light">Light</button>
+                            <button class="btn" data-wind="strong">Strong</button>
+                        </div>
+                        <div class="condition-hint" id="wind-hint">Calm: < 5 mph, flags hang limp</div>
+                    </div>
+
+                    <!-- Rain -->
+                    <div class="control-group">
+                        <label class="control-label">
+                            🌧️ Rain
+                        </label>
+                        <div class="button-group">
+                            <button class="btn active" data-rain="dry">Dry</button>
+                            <button class="btn" data-rain="light">Light</button>
+                            <button class="btn" data-rain="heavy">Heavy</button>
+                        </div>
+                        <div class="condition-hint" id="rain-hint">No rain expected</div>
+                    </div>
+
+                    <!-- Sun -->
+                    <div class="control-group">
+                        <label class="control-label">
+                            ☀️ Sun
+                        </label>
+                        <div class="button-group">
+                            <button class="btn" data-sun="full">Full</button>
+                            <button class="btn active" data-sun="mixed">Mixed</button>
+                            <button class="btn" data-sun="overcast">Overcast</button>
+                        </div>
+                    </div>
+
+                    <!-- Intensity -->
+                    <div class="control-group">
+                        <label class="control-label">
+                            🔥 Effort
+                        </label>
+                        <div class="button-group">
+                            <button class="btn" data-effort="easy">Easy</button>
+                            <button class="btn" data-effort="moderate">Moderate</button>
+                            <button class="btn active" data-effort="hard">Hard</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kit Diagram -->
+            <div class="kit-diagram">
+                <h3 class="diagram-title">Your Kit Checklist</h3>
+                <div class="kit-grid" id="kit-grid">
+                    <!-- Kit items will be generated by JavaScript -->
+                </div>
+                <div class="kit-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot active"></div>
+                        <span>Recommended</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot inactive"></div>
+                        <span>Optional/Not Needed</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Tabs -->
+            <div class="bottom-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="warnings">⚠️ Warnings</button>
+                    <button class="tab-btn" data-tab="tips">💡 Pro Tips</button>
+                    <button class="tab-btn" data-tab="maintenance">🔧 Maintenance</button>
+                </div>
+                <div id="tab-content-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2025 Luke van den Top • Cycling experiments from the Netherlands</p>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/about.html">About</a>
+                    <a href="mailto:lukethinks@outlook.com">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // State management
+        const state = {
+            temperature: 15,
+            unit: 'C',
+            windConditions: 'none',
+            rainConditions: 'dry',
+            sunConditions: 'mixed',
+            intensity: 'hard',
+            hasMudguards: false,
+            activeTab: 'warnings'
+        };
+
+        // Conversion functions
+        function toFahrenheit(celsius) {
+            return (celsius * 9/5) + 32;
+        }
+
+        function toCelsius(fahrenheit) {
+            return (fahrenheit - 32) * 5/9;
+        }
+
+        function getCurrentTemp() {
+            return state.unit === 'C' ? 
+                state.temperature : toFahrenheit(state.temperature);
+        }
+
+        // Update temperature display
+        function updateTempDisplay() {
+            const temp = Math.round(getCurrentTemp());
+            document.getElementById('temp-display').textContent = `${temp}°${state.unit}`;
+            
+            const slider = document.getElementById('temp-slider');
+            if (state.unit === 'C') {
+                slider.min = -10;
+                slider.max = 32;
+                slider.value = state.temperature;
+                document.getElementById('min-temp').textContent = '-10°C';
+                document.getElementById('max-temp').textContent = '32°C';
+            } else {
+                slider.min = 14;
+                slider.max = 90;
+                slider.value = Math.round(toFahrenheit(state.temperature));
+                document.getElementById('min-temp').textContent = '14°F';
+                document.getElementById('max-temp').textContent = '90°F';
+            }
+        }
+
+        // Calculate effective temperature
+        function getEffectiveTemp() {
+            let temp = state.unit === 'C' ? 
+                state.temperature : toCelsius(state.temperature);
+
+            // Wind chill adjustment
+            if (state.windConditions === 'light') {
+                temp -= 3;
+            } else if (state.windConditions === 'strong') {
+                temp -= 7;
+            }
+
+            // Wet conditions adjustment
+            if (state.rainConditions === 'light') {
+                temp -= 2;
+            } else if (state.rainConditions === 'heavy') {
+                temp -= 5;
+            }
+
+            // Effort adjustment
+            if (state.intensity === 'easy') {
+                temp -= 3;
+            } else if (state.intensity === 'hard') {
+                temp += 5;
+            }
+
+            return temp;
+        }
+
+        // Get clothing recommendations
+        function getRecommendations() {
+            const effectiveTemp = getEffectiveTemp();
+            
+            return {
+                hasSkullCap: effectiveTemp < 10,
+                hasNeck: effectiveTemp < 5,
+                hasGloves: true,
+                hasWinterGloves: effectiveTemp < 8,
+                hasJacket: effectiveTemp < 18,
+                hasWinterJacket: effectiveTemp < 8,
+                hasRainJacket: state.rainConditions !== 'dry',
+                hasGilet: effectiveTemp >= 10 && effectiveTemp < 18,
+                hasArmWarmers: effectiveTemp >= 12 && effectiveTemp < 20,
+                hasBaselayer: effectiveTemp < 15,
+                hasThermalBaselayer: effectiveTemp < 5,
+                hasLegWarmers: effectiveTemp < 15,
+                hasFeetProtection: effectiveTemp < 12 || state.rainConditions !== 'dry',
+                hasWinterShoes: effectiveTemp < 5
+            };
+        }
+
+        // Get warnings
+        function getWarnings() {
+            const effectiveTemp = getEffectiveTemp();
+            const warnings = [];
+
+            if (effectiveTemp < 0) {
+                warnings.push({
+                    level: 'danger',
+                    icon: '🥶',
+                    message: 'EXTREME COLD WARNING: Frostbite risk for exposed skin. Cover all extremities completely. Consider cutting ride short.'
+                });
+            }
+
+            if (effectiveTemp < 5 && state.rainConditions !== 'dry') {
+                warnings.push({
+                    level: 'danger',
+                    icon: '⚠️',
+                    message: 'HYPOTHERMIA RISK: Cold + wet conditions are dangerous. Layer properly and have bailout options ready.'
+                });
+            }
+
+            if (state.rainConditions !== 'dry' && state.hasMudguards) {
+                warnings.push({
+                    level: 'success',
+                    icon: '✔',
+                    message: state.rainConditions === 'heavy' 
+                        ? 'Mudguards will significantly reduce road spray, keeping you much drier and warmer'
+                        : 'Mudguards will help keep road spray off your back and legs'
+                });
+            } else if (state.rainConditions !== 'dry' && !state.hasMudguards) {
+                warnings.push({
+                    level: 'warning',
+                    icon: '⚠️',
+                    message: state.rainConditions === 'heavy'
+                        ? 'Without mudguards: Expect HEAVY road spray on back and legs. Your clothing will get much wetter.'
+                        : 'Without mudguards: Expect road spray. Consider adding mudguards for wetter conditions.'
+                });
+            }
+
+            return warnings;
+        }
+
+        // Kit items configuration with proper detection
+        const kitItems = [
+            // HEAD
+            { 
+                id: 'helmet', 
+                category: 'HEAD', 
+                categoryClass: 'head',
+                icon: '⛑️', 
+                label: 'Helmet', 
+                alwaysActive: true 
+            },
+            { 
+                id: 'skullCap', 
+                category: 'HEAD', 
+                categoryClass: 'head',
+                icon: '🧢', 
+                label: 'Skull Cap', 
+                check: r => r.hasSkullCap 
+            },
+            { 
+                id: 'neck', 
+                category: 'HEAD', 
+                categoryClass: 'head',
+                icon: '🧣', 
+                label: 'Neck Gaiter', 
+                check: r => r.hasNeck 
+            },
+            // HANDS
+            { 
+                id: 'gloves', 
+                category: 'HANDS', 
+                categoryClass: 'hands',
+                icon: '🧤', 
+                label: r => r.hasWinterGloves ? 'Winter Gloves' : 'Gloves', 
+                alwaysActive: true 
+            },
+            // UPPER BODY
+            { 
+                id: 'baselayer', 
+                category: 'UPPER', 
+                categoryClass: 'upper',
+                icon: '👕', 
+                label: r => r.hasThermalBaselayer ? 'Thermal Base' : 'Base Layer', 
+                check: r => r.hasBaselayer 
+            },
+            { 
+                id: 'jersey', 
+                category: 'UPPER', 
+                categoryClass: 'upper',
+                icon: '👔', 
+                label: 'Jersey', 
+                alwaysActive: true 
+            },
+            { 
+                id: 'armWarmers', 
+                category: 'UPPER', 
+                categoryClass: 'upper',
+                icon: '💪', 
+                label: 'Arm Warmers', 
+                check: r => r.hasArmWarmers 
+            },
+            { 
+                id: 'gilet', 
+                category: 'UPPER', 
+                categoryClass: 'upper',
+                icon: '🦺', 
+                label: 'Gilet', 
+                check: r => r.hasGilet 
+            },
+            { 
+                id: 'jacket', 
+                category: 'UPPER', 
+                categoryClass: 'upper',
+                icon: '🧥', 
+                label: r => {
+                    if (r.hasRainJacket && r.hasWinterJacket) return 'Rain + Winter Jacket';
+                    if (r.hasRainJacket) return 'Rain Jacket';
+                    if (r.hasWinterJacket) return 'Winter Jacket';
+                    return 'Light Jacket';
+                },
+                check: r => r.hasJacket || r.hasRainJacket 
+            },
+            // LOWER BODY
+            { 
+                id: 'shorts', 
+                category: 'LOWER', 
+                categoryClass: 'lower',
+                icon: '🩳', 
+                label: r => getEffectiveTemp() < 10 ? 'Bib Tights' : 'Bib Shorts',
+                alwaysActive: true 
+            },
+            { 
+                id: 'legs', 
+                category: 'LOWER', 
+                categoryClass: 'lower',
+                icon: '🦵', 
+                label: 'Leg Warmers', 
+                check: r => r.hasLegWarmers 
+            },
+            // FEET
+            { 
+                id: 'socks', 
+                category: 'FEET', 
+                categoryClass: 'feet',
+                icon: '🧦', 
+                label: 'Socks', 
+                alwaysActive: true 
+            },
+            { 
+                id: 'shoes', 
+                category: 'FEET', 
+                categoryClass: 'feet',
+                icon: '👟', 
+                label: 'Shoes', 
+                alwaysActive: true 
+            },
+            { 
+                id: 'overshoes', 
+                category: 'FEET', 
+                categoryClass: 'feet',
+                icon: '🥾', 
+                label: r => r.hasWinterShoes ? 'Winter Overshoes' : 'Overshoes',
+                check: r => r.hasFeetProtection 
+            }
+        ];
+
+        // Render kit diagram
+        function renderKitDiagram() {
+            const recommendations = getRecommendations();
+            const grid = document.getElementById('kit-grid');
+
+            grid.innerHTML = kitItems.map(item => {
+                const isActive = item.alwaysActive || 
+                    (item.check && item.check(recommendations));
+                
+                const label = typeof item.label === 'function' 
+                    ? item.label(recommendations) 
+                    : item.label;
+
+                return `
+                    <div class="kit-item ${item.categoryClass} ${isActive ? 'active' : ''}">
+                        <div class="kit-item-category">${item.category}</div>
+                        <div class="kit-item-icon">${item.icon}</div>
+                        <div class="kit-item-label">${label}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render tab content
+        function renderTabContent() {
+            const container = document.getElementById('tab-content-container');
+            const effectiveTemp = getEffectiveTemp();
+            
+            let content = '';
+
+            if (state.activeTab === 'warnings') {
+                const warnings = getWarnings();
+                if (warnings.length === 0) {
+                    content = `
+                        <div class="alert alert-success">
+                            <div style="font-size: 1.5rem;">✅</div>
+                            <div>No warnings for current conditions. Enjoy your ride!</div>
+                        </div>
+                    `;
+                } else {
+                    content = warnings.map(w => `
+                        <div class="alert alert-${w.level}">
+                            <div style="font-size: 1.5rem;">${w.icon}</div>
+                            <div>${w.message}</div>
+                        </div>
+                    `).join('');
+                }
+            } else if (state.activeTab === 'tips') {
+                content = `
+                    <div class="alert alert-info">
+                        <div>
+                            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                                <li>Start slightly cool - you'll warm up after 10-15 minutes of riding</li>
+                                <li>Layer smartly: removable items (arm warmers, gilet) can be stashed in jersey pockets</li>
+                                ${state.windConditions !== 'none' ? '<li>Wind chill is real - add extra layer for wind protection</li>' : ''}
+                                <li>Protect extremities first - hands and feet get cold before your core</li>
+                                ${state.rainConditions !== 'dry' && effectiveTemp < 50 ? '<li><strong>Cold + wet = hypothermia risk.</strong> Pack extra layers and know bailout routes.</li>' : ''}
+                                ${effectiveTemp < 40 ? '<li>Consider toe warmers for very cold rides - they make a huge difference</li>' : ''}
+                                ${effectiveTemp > 75 ? '<li>Hot weather: Light colors, moisture-wicking fabrics, and carry extra water</li>' : ''}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            } else if (state.activeTab === 'maintenance') {
+                content = `
+                    <div class="alert alert-info">
+                        <div>
+                            <h4 style="margin-bottom: 0.5rem; font-weight: 700;">❄️ Winter Bike Care</h4>
+                            <ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.8;">
+                                <li>Wash bike after every wet ride to remove salt and road grit</li>
+                                <li>Clean disc brake rotors weekly with isopropyl alcohol</li>
+                                <li>Lubricate chain more frequently - salt accelerates wear</li>
+                                <li>Check brake pads monthly - wet conditions cause faster wear</li>
+                                <li>Store bike indoors when possible to prevent rust</li>
+                            </ul>
+                            ${state.hasMudguards ? `
+                            <h4 style="margin-bottom: 0.5rem; font-weight: 700;">🛡️ Mudguard Maintenance</h4>
+                            <ul style="margin-left: 1.5rem; margin-bottom: 1rem; line-height: 1.8;">
+                                <li>Check mudguard mounting bolts weekly - they can loosen from vibration</li>
+                                <li>Clear debris from between tire and mudguard after each wet ride</li>
+                                <li>Inspect for cracks or damage, especially at mounting points</li>
+                                <li>Ensure proper clearance - at least 10mm between tire and guard</li>
+                                <li>Clean mudguards thoroughly to prevent dirt buildup affecting alignment</li>
+                            </ul>
+                            ` : ''}
+                            <h4 style="margin-bottom: 0.5rem; font-weight: 700;">☀️ Summer Bike Care</h4>
+                            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                                <li>Check tire pressure before every ride - heat causes expansion</li>
+                                <li>Use dry lube in dusty conditions, wet lube in humid weather</li>
+                                <li>Clean chain and drivetrain weekly for optimal performance</li>
+                                <li>Inspect tires for cuts and embedded debris regularly</li>
+                                <li>Store bike out of direct sunlight to prevent component degradation</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `<div class="tab-content active">${content}</div>`;
+        }
+
+        // Update condition hints
+        function updateConditionHints() {
+            const windHints = {
+                'none': 'Calm: < 5 mph, flags hang limp',
+                'light': 'Light: 5-15 mph, feel wind on face',
+                'strong': 'Strong: > 15 mph, hard to ride straight'
+            };
+
+            const rainHints = {
+                'dry': 'No rain expected',
+                'light': 'Light: Drizzle, occasional drops',
+                'heavy': 'Heavy: Steady rain, puddles'
+            };
+
+            document.getElementById('wind-hint').textContent = windHints[state.windConditions];
+            document.getElementById('rain-hint').textContent = rainHints[state.rainConditions];
+        }
+
+        // Update UI
+        function updateUI() {
+            updateTempDisplay();
+            updateConditionHints();
+            renderKitDiagram();
+            renderTabContent();
+
+            // Update toggle button states
+            document.getElementById('mudguards-check').textContent = state.hasMudguards ? '✔' : '';
+        }
+
+        // Event listeners
+        document.querySelectorAll('.unit-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const newUnit = btn.dataset.unit;
+                if (newUnit !== state.unit) {
+                    if (newUnit === 'F') {
+                        state.temperature = Math.round(toFahrenheit(state.temperature));
+                    } else {
+                        state.temperature = Math.round(toCelsius(state.temperature));
+                    }
+                    state.unit = newUnit;
+                    
+                    document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    updateUI();
+                }
+            });
+        });
+
+        document.getElementById('temp-slider').addEventListener('input', (e) => {
+            state.temperature = Number(e.target.value);
+            updateUI();
+        });
+
+        document.getElementById('mudguards-toggle').addEventListener('click', () => {
+            state.hasMudguards = !state.hasMudguards;
+            document.getElementById('mudguards-toggle').classList.toggle('active');
+            updateUI();
+        });
+
+        // Condition buttons
+        document.querySelectorAll('[data-wind]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.windConditions = btn.dataset.wind;
+                document.querySelectorAll('[data-wind]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateUI();
+            });
+        });
+
+        document.querySelectorAll('[data-rain]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.rainConditions = btn.dataset.rain;
+                document.querySelectorAll('[data-rain]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateUI();
+            });
+        });
+
+        document.querySelectorAll('[data-sun]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.sunConditions = btn.dataset.sun;
+                document.querySelectorAll('[data-sun]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateUI();
+            });
+        });
+
+        document.querySelectorAll('[data-effort]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.intensity = btn.dataset.effort;
+                document.querySelectorAll('[data-effort]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateUI();
+            });
+        });
+
+        // Tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.activeTab = btn.dataset.tab;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderTabContent();
+            });
+        });
+
+        // Initial render
+        updateUI();
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
