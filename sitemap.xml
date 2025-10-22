@@ -7,7 +7,7 @@
   <!-- Homepage - Highest priority, updated frequently -->
   <url>
     <loc>https://lukethinks.nl/</loc>
-    <lastmod>2025-10-04</lastmod>
+    <lastmod>2025-10-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -15,46 +15,31 @@
   <!-- Main Navigation Pages -->
   <url>
     <loc>https://lukethinks.nl/about.html</loc>
-    <lastmod>2025-10-04</lastmod>
+    <lastmod>2025-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://lukethinks.nl/research.html</loc>
-    <lastmod>2025-10-04</lastmod>
+    <lastmod>2025-10-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- Featured Article -->
+  <!-- Featured Articles & Research -->
   <url>
     <loc>https://lukethinks.nl/ai-article.html</loc>
-    <lastmod>2025-10-04</lastmod>
+    <lastmod>2025-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <url>
+    <loc>https://lukethinks.nl/asc-323-equity-method.html</loc>
+    <lastmod>2025-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>
-<!-- Cycling Guide  -->
-<url>
-  <loc>https://lukethinks.nl/cycling-clothing-guide.html</loc>
-  <lastmod>2025-10-19</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.8</priority>
-</url>
-
-<!-- Experiments landing  -->
-<url>
-  <loc>https://lukethinks.nl/experiments.html</loc>
-  <lastmod>2025-10-19</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.9</priority>
-</url>
-<!-- Learning  landing  -->
-<url>
-  <loc>https://lukethinks.nl/learning.html</loc>
-  <lastmod>2025-10-19</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.9</priority>
-</url>
-
