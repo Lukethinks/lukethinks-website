@@ -643,7 +643,33 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+.audio-player-container {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--cream) 0%, #fff7ed 100%);
+  border-radius: 12px;
+  border: 2px solid var(--light-amber);
+  box-shadow: 0 4px 6px var(--shadow-light);
+}
 
+.audio-player-container p {
+  margin: 0 0 1rem 0;
+  color: var(--light-text);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.custom-audio-player {
+  width: 100%;
+  height: 54px;
+  border-radius: 8px;
+  outline: none;
+}
+
+.custom-audio-player:focus {
+  outline: 2px solid var(--accent-amber);
+  outline-offset: 2px;
+}
         /* Screen reader only H1 */
         .sr-only {
             position: absolute;
@@ -724,7 +750,16 @@
                 <li><a href="#financial-analysis">What This Means for Financial Analysis</a></li>
             </ul>
         </div>
-
+        
+<div class="audio-player-container">
+  <p style="margin: 0 0 1rem 0; color: #64748b; font-size: 0.9rem;">
+    🎧 Listen to this article (7 min read)
+  </p>
+  <audio controls class="custom-audio-player">
+    <source src="/audio/ai-thinking-frameworks-narration.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+</div>
         <!-- Main Article Content -->
         <div class="article-content">
             <p>I've been digging into the <a href="/research.html">artificial intelligence investment ecosystem</a>, specifically the massive partnerships between tech giants and AI startups. What I found suggests some uncertainty around traditional <strong>accounting frameworks</strong>, regulatory uncertainty, and rapid technological change affecting <strong>Microsoft's $13 billion OpenAI investment</strong> and <strong>Amazon's $8 billion Anthropic partnership</strong>.</p>
@@ -1163,4 +1198,5 @@
 </body>
 
 </html>
+
 
