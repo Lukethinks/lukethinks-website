@@ -3,8 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
     <title>How a Company That Sells Water to 16 Million Captive Customers is on the Brink - Luke Thinks</title>
-    <meta name="description" content="A deep dive into an aggressive financial engineering scheme in UK water utilities—and the £1 billion emergency deal that just saved Thames Water from collapse">
+    <meta name="title" content="Thames Water Crisis: When Financial Engineering Meets Infrastructure Reality">
+    <meta name="description" content="A deep dive into an aggressive financial engineering scheme in UK water utilities—and the £1 billion emergency deal that just saved Thames Water from collapse. Analysis of 81% leverage, £17bn debt burden, and regulatory failure.">
+    <meta name="keywords" content="Thames Water, financial engineering, UK water crisis, regulatory failure, private equity, infrastructure finance, Macquarie, debt restructuring, utility privatization, water industry analysis">
+    <meta name="author" content="Luke van den Top">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://lukethinks.nl/thames-water-crisis-analysis">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://lukethinks.nl/thames-water-crisis-analysis">
+    <meta property="og:title" content="How a Company That Sells Water to 16 Million Captive Customers is on the Brink">
+    <meta property="og:description" content="Deep dive into Thames Water's £17bn debt crisis: How 81% leverage and aggressive financial engineering brought Britain's largest water company to the edge of collapse.">
+    <meta property="og:image" content="https://lukethinks.nl/assets/thames-water-analysis-og.jpg">
+    <meta property="og:locale" content="en_GB">
+    <meta property="og:site_name" content="Luke Thinks">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://lukethinks.nl/thames-water-crisis-analysis">
+    <meta name="twitter:title" content="Thames Water Crisis: £17bn Debt & The £1bn Emergency Rescue">
+    <meta name="twitter:description" content="How financial engineering with 81% leverage brought a water monopoly serving 16M customers to the brink. A deep-dive analysis.">
+    <meta name="twitter:image" content="https://lukethinks.nl/assets/thames-water-analysis-twitter.jpg">
+    <meta name="twitter:creator" content="@lukethinks">
+    
+    <!-- Article Metadata -->
+    <meta property="article:published_time" content="2025-10-31T00:00:00Z">
+    <meta property="article:modified_time" content="2025-10-31T00:00:00Z">
+    <meta property="article:author" content="Luke van den Top">
+    <meta property="article:section" content="Financial Analysis">
+    <meta property="article:tag" content="Thames Water">
+    <meta property="article:tag" content="Financial Engineering">
+    <meta property="article:tag" content="UK Water Crisis">
+    <meta property="article:tag" content="Infrastructure Finance">
+    <meta property="article:tag" content="Regulatory Failure">
+    
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "How a Company That Sells Water to 16 Million Captive Customers is on the Brink",
+      "alternativeHeadline": "Thames Water Crisis: When Financial Engineering Meets Infrastructure Reality",
+      "image": "https://lukethinks.nl/assets/thames-water-analysis.jpg",
+      "author": {
+        "@type": "Person",
+        "name": "Luke van den Top",
+        "url": "https://lukethinks.nl/about.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Luke Thinks",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://lukethinks.nl/assets/logo.png"
+        }
+      },
+      "datePublished": "2025-10-31",
+      "dateModified": "2025-10-31",
+      "description": "A deep dive into an aggressive financial engineering scheme in UK water utilities—and the £1 billion emergency deal that just saved Thames Water from collapse.",
+      "articleBody": "Analysis of Thames Water's £17 billion debt burden, 81% leverage ratio, and the regulatory failures that allowed aggressive financial engineering to bring Britain's largest water company to the brink of collapse.",
+      "keywords": "Thames Water, financial engineering, UK water crisis, infrastructure finance, private equity, Macquarie, debt restructuring",
+      "wordCount": "15000",
+      "timeRequired": "PT22M",
+      "articleSection": "Financial Analysis",
+      "inLanguage": "en-GB"
+    }
+    </script>
     
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
@@ -15,12 +83,43 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Link to external stylesheet -->
-    <link rel="stylesheet" href="styles.css">
-    
     <style>
-        /* Enhanced Article-Specific Styles */
-        
+        :root {
+            --primary-brown: #92400e;
+            --secondary-brown: #c05621;
+            --accent-amber: #ea580c;
+            --light-amber: #fbbf24;
+            --cream: #fef7f0;
+            --light-cream: #f7fafc;
+            --dark-text: #0f172a;
+            --medium-text: #1e293b;
+            --light-text: #64748b;
+            --very-light-text: #94a3b8;
+            --border-light: rgba(226, 232, 240, 0.5);
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.8;
+            color: var(--medium-text);
+            background: linear-gradient(135deg, var(--cream) 0%, var(--light-cream) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
         /* Progress Bar */
         .progress-container {
             position: fixed;
@@ -39,8 +138,243 @@
             transition: width 0.1s ease;
         }
 
+        /* Header */
         header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
             margin-top: 4px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+        }
+
+        .logo-main {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            line-height: 1;
+        }
+
+        .logo-sub {
+            font-size: 0.8rem;
+            color: var(--accent-amber);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+            box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Sticky TOC - Left Side Compact */
+        .sticky-toc-container {
+            position: fixed;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            max-width: 140px;
+        }
+
+        .sticky-toc {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            padding: 0.75rem 0.5rem;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--border-light);
+        }
+
+        .sticky-toc h4 {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--light-text);
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+            padding: 0 0.25rem;
+        }
+
+        .toc-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .toc-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-size: 0.7rem;
+            padding: 0.35rem 0.5rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .toc-links a:hover {
+            background: var(--cream);
+            color: var(--primary-brown);
+        }
+
+        .toc-links a.active {
+            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Heart/Like Button */
+        .heart-button {
+            position: fixed;
+            bottom: 6rem;
+            right: 2rem;
+            background: white;
+            color: var(--light-text);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--shadow-light);
+            border: 2px solid var(--border-light);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .heart-button:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 6px 20px var(--shadow-medium);
+            border-color: var(--accent-amber);
+        }
+
+        .heart-button.liked {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+            border-color: #dc2626;
+            animation: heartPulse 0.4s ease;
+        }
+
+        @keyframes heartPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .heart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-amber);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(146, 64, 14, 0.3);
+        }
+
+        /* Article Hero */
+        .article-hero {
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        .article-hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            color: var(--light-text);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .article-subtitle {
+            font-size: 1.3rem;
+            color: var(--light-text);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
         }
 
         /* Visual Timeline */
@@ -117,102 +451,7 @@
             line-height: 1.3;
         }
 
-        /* Sticky TOC */
-        .sticky-toc-container {
-            position: fixed;
-            right: 2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 100;
-            max-width: 200px;
-        }
-
-        .sticky-toc {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            padding: 1.5rem 1rem;
-            box-shadow: 0 4px 24px var(--shadow-light);
-            border: 1px solid var(--border-light);
-        }
-
-        .sticky-toc h4 {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--light-text);
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .toc-links {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .toc-links a {
-            color: var(--light-text);
-            text-decoration: none;
-            font-size: 0.85rem;
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            line-height: 1.3;
-        }
-
-        .toc-links a:hover {
-            background: var(--cream);
-            color: var(--primary-brown);
-        }
-
-        .toc-links a.active {
-            background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
-            color: white;
-            font-weight: 600;
-        }
-
         /* Article Content */
-        .article-hero {
-            padding: 3rem 0 2rem;
-            text-align: center;
-        }
-
-        .article-hero h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: var(--dark-text);
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .article-meta {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            color: var(--light-text);
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-        }
-
-        .article-meta span {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .article-subtitle {
-            font-size: 1.3rem;
-            color: var(--light-text);
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            line-height: 1.6;
-        }
-
         .article-content {
             max-width: 800px;
             margin: 0 auto;
@@ -497,6 +736,39 @@
             box-shadow: 0 6px 20px rgba(146, 64, 14, 0.4);
         }
 
+        /* Footer */
+        footer {
+            background: var(--dark-text);
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--light-amber);
+        }
+
         /* Mobile Responsive */
         @media (max-width: 1200px) {
             .sticky-toc-container {
@@ -505,6 +777,10 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
             .article-hero h1 {
                 font-size: 2rem;
             }
@@ -545,6 +821,13 @@
 
             .visual-timeline {
                 padding: 1.5rem;
+            }
+
+            .heart-button {
+                bottom: 5rem;
+                right: 1rem;
+                width: 44px;
+                height: 44px;
             }
 
             .back-to-top {
@@ -595,6 +878,28 @@
         </div>
     </header>
 
+    <!-- Sticky TOC (Desktop Only) - Now on LEFT -->
+    <aside class="sticky-toc-container">
+        <nav class="sticky-toc">
+            <h4>Contents</h4>
+            <div class="toc-links">
+                <a href="#intro">Intro</a>
+                <a href="#part1">1989</a>
+                <a href="#part2">RAB</a>
+                <a href="#part3">Ring-Fence</a>
+                <a href="#part4">Macquarie</a>
+                <a href="#part5">Reg Failure</a>
+                <a href="#part6">Breaking Pt</a>
+                <a href="#part7">Impairment</a>
+                <a href="#part8">Int'l Compare</a>
+                <a href="#part9">Watch</a>
+                <a href="#part10">Rescue</a>
+                <a href="#part11">Implications</a>
+                <a href="#conclusion">Conclusion</a>
+            </div>
+        </nav>
+    </aside>
+
     <!-- Article Hero -->
     <div class="article-hero">
         <div class="container">
@@ -606,28 +911,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Sticky TOC (Desktop Only) -->
-    <aside class="sticky-toc-container">
-        <nav class="sticky-toc">
-            <h4>Contents</h4>
-            <div class="toc-links">
-                <a href="#intro">Introduction</a>
-                <a href="#part1">1989 Setup</a>
-                <a href="#part2">The RAB Machine</a>
-                <a href="#part3">Ring-Fencing</a>
-                <a href="#part4">Macquarie Era</a>
-                <a href="#part5">Regulatory Failure</a>
-                <a href="#part6">Breaking Point</a>
-                <a href="#part7">The Impairment</a>
-                <a href="#part8">International Comparison</a>
-                <a href="#part9">What to Watch</a>
-                <a href="#part10">Rescue Deal</a>
-                <a href="#part11">Implications</a>
-                <a href="#conclusion">Conclusion</a>
-            </div>
-        </nav>
-    </aside>
 
     <!-- Article Content -->
     <article class="article-content">
@@ -721,12 +1004,16 @@
                 <p>This analysis covers 11 major parts: the 1989 privatization setup, how regulators created perfect debt collateral, financial engineering mechanisms, Macquarie's extraction strategy, regulatory failures, the covenant breach crisis, the £4.3bn write-off, international comparisons, what to watch next, future scenarios, and stakeholder implications.</p>
             </div>
 
-            <!-- Remaining content truncated for file size - would continue with all 11 parts as in the Google Doc -->
-            
-            <p><em>[Full article content continues with all 11 parts from the original document...]</em></p>
+            <p><em>[Insert your full Thames Water article content here from the Google Doc - all 11 parts with detailed analysis, tables, comparisons, and conclusions]</em></p>
 
         </div>
     </article>
+
+    <!-- Heart/Like Button -->
+    <button class="heart-button" id="heartButton" aria-label="Like this article">
+        <span id="heartIcon">🤍</span>
+        <span class="heart-count" id="heartCount">0</span>
+    </button>
 
     <!-- Back to top -->
     <a href="#" class="back-to-top" id="backToTop">↑</a>
@@ -796,7 +1083,49 @@
         }
 
         window.addEventListener('scroll', highlightTOC);
-        highlightTOC(); // Call once on load
+        highlightTOC();
+
+        // Heart/Like button functionality
+        const heartButton = document.getElementById('heartButton');
+        const heartIcon = document.getElementById('heartIcon');
+        const heartCount = document.getElementById('heartCount');
+
+        // Load saved state from localStorage
+        let likes = parseInt(localStorage.getItem('article-likes') || '0');
+        let isLiked = localStorage.getItem('article-liked') === 'true';
+
+        // Initialize display
+        heartCount.textContent = likes;
+        if (isLiked) {
+            heartButton.classList.add('liked');
+            heartIcon.textContent = '❤️';
+        }
+
+        heartButton.addEventListener('click', () => {
+            if (!isLiked) {
+                // Like
+                likes++;
+                isLiked = true;
+                heartButton.classList.add('liked');
+                heartIcon.textContent = '❤️';
+                
+                // Save to localStorage
+                localStorage.setItem('article-likes', likes);
+                localStorage.setItem('article-liked', 'true');
+            } else {
+                // Unlike
+                likes--;
+                isLiked = false;
+                heartButton.classList.remove('liked');
+                heartIcon.textContent = '🤍';
+                
+                // Save to localStorage
+                localStorage.setItem('article-likes', likes);
+                localStorage.setItem('article-liked', 'false');
+            }
+            
+            heartCount.textContent = likes;
+        });
     </script>
 </body>
 </html>
