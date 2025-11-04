@@ -288,7 +288,7 @@
         }
 
 
-        /* Timeline visual */
+        /* Timeline visual (STANDARD VERTICAL - Used sparingly) */
         .timeline {
             position: relative;
             padding-left: 3rem;
@@ -333,6 +333,91 @@
             color: var(--primary-brown);
             margin-bottom: 0.5rem;
         }
+
+        /* --- NEW: Horizontal Timeline Grid Styles --- */
+        .horizontal-timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .timeline-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-top: 5px solid var(--accent-amber);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 150px;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .timeline-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-brown);
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 0.5rem;
+        }
+
+        .timeline-card .year {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        /* --- NEW: Detailed Regulatory Timeline (Flow) Styles --- */
+        .viz-timeline {
+            position: relative;
+            padding: 20px 0;
+            border-left: 3px solid var(--accent-amber); /* Visual spine */
+            margin: 2rem 0;
+        }
+        .viz-timeline-item {
+            display: block;
+            margin-bottom: 2rem;
+            padding-left: 25px; /* Space for the circle marker */
+            position: relative;
+        }
+        .viz-timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -9px; /* Position marker over the vertical line */
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            background: var(--primary-brown);
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px var(--cream);
+        }
+        .viz-timeline-date {
+            font-weight: 800;
+            color: var(--primary-brown);
+            font-size: 1em;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .viz-timeline-content {
+            background: var(--cream); /* Light background for the content box */
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        }
+        .viz-timeline-content h4 {
+            color: var(--dark-text);
+            margin-top: 0;
+        }
+        /* --- END NEW TIMELINE STYLES --- */
 
         /* Enhanced tables */
         .data-table-wrapper {
@@ -530,70 +615,7 @@
         .layer h3 { margin-bottom: 10px; font-size: 1.3em; }
         .layer-details { font-size: 0.95em; opacity: 0.95; line-height: 1.5; }
 
-        /* Regulatory Timeline (Renamed to avoid conflict) */
-        .viz-timeline {
-            position: relative;
-            padding: 20px 0;
-        }
-        .viz-timeline-item {
-            display: flex;
-            margin-bottom: 30px;
-            position: relative;
-        }
-        .viz-timeline-date {
-            flex: 0 0 120px;
-            font-weight: bold;
-            color: var(--primary-brown); /* Adapted */
-            font-size: 1.1em;
-        }
-        .viz-timeline-content {
-            flex: 1;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px var(--shadow-light); /* Adapted */
-            border-left: 4px solid var(--accent-amber); /* Adapted */
-        }
-        .viz-timeline-content h4 {
-            color: var(--primary-brown); /* Adapted */
-            margin-bottom: 8px;
-        }
-
-        /* International Comparison Grid */
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .comparison-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px var(--shadow-light); /* Adapted */
-            transition: transform 0.3s ease;
-        }
-        .comparison-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px var(--shadow-medium); /* Adapted */
-        }
-        .comparison-card h3 {
-            color: var(--primary-brown); /* Adapted */
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--accent-amber); /* Adapted */
-            padding-bottom: 8px;
-        }
-        .metric {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-light); /* Adapted */
-        }
-        .metric:last-child { border-bottom: none; }
-        .metric-label { font-weight: 500; color: var(--light-text); } /* Adapted */
-        .metric-value { font-weight: bold; color: var(--primary-brown); } /* Adapted */
-        .metric-value.critical { color: #dc3545; }
-        .metric-value.good { color: #28a745; }
+        
         /* --- END: CHART AND VISUAL STYLES --- */
 
         /* Responsive */
@@ -610,6 +632,10 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+            }
+
+            .horizontal-timeline-grid {
+                grid-template-columns: 1fr; /* Stack cards vertically on mobile */
             }
         }
 
@@ -781,13 +807,22 @@
 
                 <h3>The Blank Slate Handoff</h3>
 
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-year">December 1, 1989</div>
-                        <p>UK government gave away ten regional water monopolies. Not sold—<strong>gave away</strong>.</p>
-                        <p>• £5 billion existing debt written off<br>
-                        • £1.5 billion "green dowry" provided<br>
-                        • <strong>Completely unleveraged balance sheets</strong></p>
+                <!-- REVAMPED TIMELINE 1: Horizontal grid flow -->
+                <div class="horizontal-timeline-grid">
+                    <div class="timeline-card">
+                        <span class="year">Dec 1, 1989</span>
+                        <h4>UK Water Privatised</h4>
+                        <p>Ten regional water monopolies were **given away**, not sold, to private companies.</p>
+                    </div>
+                    <div class="timeline-card">
+                        <span class="year">Financial Clean Slate</span>
+                        <h4>Debt Written Off</h4>
+                        <p>£5 billion in existing government debt was cancelled for the new private companies.</p>
+                    </div>
+                    <div class="timeline-card">
+                        <span class="year">Environmental Fund</span>
+                        <h4>Green Dowry Provided</h4>
+                        <p>£1.5 billion in cash provided to help companies meet initial environmental standards.</p>
                     </div>
                 </div>
 
@@ -817,21 +852,32 @@
 
                 <p>The cornerstone of UK water regulation is the <strong><span class="glossary-term" data-definition="Running total of infrastructure investment, adjusted for inflation">Regulatory Asset Base (RAB)</span></strong>. Think of it as a running total of everything the company has invested in infrastructure, adjusted for inflation.</p>
 
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <strong>Step 1:</strong> Spend £100M building new treatment plant
+                <!-- REVAMPED TIMELINE 2: Horizontal steps flow -->
+                <div class="horizontal-timeline-grid">
+                    <div class="timeline-card">
+                        <span class="year">Step 1: CapEx</span>
+                        <h4>Build New Infrastructure</h4>
+                        <p>Spend £100M building new treatment plant or pipe network.</p>
                     </div>
-                    <div class="timeline-item">
-                        <strong>Step 2:</strong> Ofwat adds £100M to your RAB
+                    <div class="timeline-card">
+                        <span class="year">Step 2: Add to RAB</span>
+                        <h4>Asset Base Grows</h4>
+                        <p>Ofwat verifies and adds the £100M investment to the company's Regulatory Asset Base (RAB).</p>
                     </div>
-                    <div class="timeline-item">
-                        <strong>Step 3:</strong> RAB indexed to inflation yearly
+                    <div class="timeline-card">
+                        <span class="year">Step 3: Indexation</span>
+                        <h4>Inflation Protection</h4>
+                        <p>The RAB value is indexed to inflation (typically RPI or CPIH) yearly.</p>
                     </div>
-                    <div class="timeline-item">
-                        <strong>Step 4:</strong> Earn 3.5-4.5% real return on inflated RAB
+                    <div class="timeline-card">
+                        <span class="year">Step 4: Regulated Return</span>
+                        <h4>Guaranteed Profit</h4>
+                        <p>Earn a regulated return (3.5-4.5% real) on the inflated RAB value.</p>
                     </div>
-                    <div class="timeline-item">
-                        <strong>Step 5:</strong> Pass costs to customers through bills
+                    <div class="timeline-card">
+                        <span class="year">Step 5: Customer Bills</span>
+                        <h4>Cost Recouped</h4>
+                        <p>Pass the costs of investment and returns to customers through water bills.</p>
                     </div>
                 </div>
 
@@ -1114,72 +1160,58 @@
 
                 <p>Three failures of market discipline became apparent:</p>
 
+                <!-- REVAMPED TIMELINE 3: Detailed vertical flow with content boxes -->
                 <div class="chart-section">
                     <p class="chart-description">
-                        This timeline demonstrates the reactive rather than proactive nature of regulatory oversight. 
-                        Each intervention came years after problems emerged, allowing financial engineering to run ahead 
-                        of regulatory control.
+                        The consistent pattern shows regulatory interventions arrived years after 
+                        problems became acute, allowing financial engineering to run ahead of oversight.
                     </p>
-                    <!-- RENAMED TIMELINE -->
                     <div class="viz-timeline">
                         <div class="viz-timeline-item">
-                            <div class="viz-timeline-date">1989-2004</div>
+                            <span class="viz-timeline-date">1989-2004</span>
                             <div class="viz-timeline-content">
                                 <h4>Phase 1: Light-Touch Regulation</h4>
-                                <p>Ofwat allows companies significant discretion over capital structure and financial decisions. 
-                                Companies rapidly increase gearing from near-zero to 60%+ by early 2000s. Capital structure 
-                                treated as "private commercial matter."</p>
+                                <p>Ofwat allowed companies discretion over capital structure. Gearing rapidly increased from near-zero to 60%+.</p>
                             </div>
                         </div>
                         
                         <div class="viz-timeline-item">
-                            <div class="viz-timeline-date">2005-2014</div>
+                            <span class="viz-timeline-date">2005-2014</span>
                             <div class="viz-timeline-content">
                                 <h4>Phase 2: Financial Engineering Emerges</h4>
-                                <p>Private equity and infrastructure funds acquire water companies (Macquarie buys Thames 2006, 
-                                Terra Firma buys Southern 2007). WBS structures proliferate. Ofwat maintains hands-off approach 
-                                despite visible financial engineering.</p>
+                                <p>Private equity (Macquarie) acquires utilities. **Whole Business Securitization (WBS)** structures proliferate, allowing high debt loads.</p>
                             </div>
                         </div>
                         
                         <div class="viz-timeline-item">
-                            <div class="viz-timeline-date">2014</div>
+                            <span class="viz-timeline-date">2014</span>
                             <div class="viz-timeline-content">
                                 <h4>PR14: First Signs of Concern</h4>
-                                <p>Ofwat introduces "totex" approach and reduces allowed returns to reflect lower cost of debt. 
-                                Acknowledges Thames Water's "unsustainable financial position" but determination still permits 
-                                continuation of current structure.</p>
+                                <p>Ofwat acknowledges Thames Water's **"unsustainable financial position"** but determination still permits continuation of the existing structure.</p>
                             </div>
                         </div>
                         
                         <div class="viz-timeline-item">
-                            <div class="viz-timeline-date">2019</div>
+                            <span class="viz-timeline-date">2019</span>
                             <div class="viz-timeline-content">
                                 <h4>PR19: Financial Resilience Focus</h4>
-                                <p>Ofwat implements gearing outperformance mechanism (requiring companies with high gearing to 
-                                share benefits with customers), financial resilience reporting, and tougher performance standards. 
-                                Thames Water faces severe bill reductions (-7.1% real terms) despite high gearing (81.9%).</p>
+                                <p>Ofwat implements tougher standards and enhanced penalty mechanisms (ODIs), forcing high-geared companies to share outperformance benefits.</p>
                             </div>
                         </div>
                         
                         <div class="viz-timeline-item">
-                            <div class="viz-timeline-date">2023</div>
+                            <span class="viz-timeline-date">2023</span>
                             <div class="viz-timeline-content">
                                 <h4>Licence Condition P30: Dividend Controls</h4>
-                                <p>Ofwat introduces new licence condition linking dividends to performance, financial resilience, 
-                                and investment needs. Requires board scrutiny and justification. Applied after billions already 
-                                extracted.</p>
+                                <p>Ofwat introduces P30 linking dividends to performance and financial resilience—**after** billions had already been extracted.</p>
                             </div>
                         </div>
                         
                         <div class="viz-timeline-item">
-                            <div class="viz-timeline-date">2024</div>
+                            <span class="viz-timeline-date">2024</span>
                             <div class="viz-timeline-content">
                                 <h4>Enforcement and Credit Rating Lock-Up</h4>
-                                <p>Ofwat finds Thames Water breached Condition P30 with £37.5 million in improper dividends. 
-                                Imposes £18.2 million penalty and £131.3 million value clawback. Credit rating agencies downgrade 
-                                Thames to junk status (BB+/Ba1), triggering automatic regulatory lock-up. Covenant breach 
-                                (PMICR 1.09x) follows in March 2025.</p>
+                                <p>Thames is fined £18.2M for P30 breach. Credit rating agencies downgrade to **junk status** (BB+/Ba1), triggering automatic regulatory lock-ups.</p>
                             </div>
                         </div>
                     </div>
@@ -1514,7 +1546,7 @@
                         <strong>Ofwat's PR24 Final Determination (Expected April/May 2026)</strong>
                         <p>This will determine:</p>
                         <ul>
-                            <li>Final allowed revenues for 2025-2030</li>
+                            <li>Final allowed revenues for 2wich will determine:030</li>
                             <li>Whether Thames gets more generous allowances than July 2024 draft</li>
                             <li>If the business plan is financially viable or requires restructuring</li>
                         </ul>
@@ -1621,34 +1653,22 @@
 
                 <p>What we're seeing is <strong>Act One of a multi-act restructuring</strong>:</p>
 
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-year">Act One (Oct 2025)</div>
-                        <strong>£1bn emergency funding</strong>
-                        <ul>
-                            <li>Keeps lights on until May 2026</li>
-                            <li>Gives time for comprehensive restructuring negotiations</li>
-                            <li>Demonstrates creditor willingness to engage</li>
-                        </ul>
+                <!-- REVAMPED TIMELINE 4: Future 3-act flow -->
+                <div class="horizontal-timeline-grid">
+                    <div class="timeline-card">
+                        <span class="year">Act 1: Oct 2025</span>
+                        <h4>Emergency Funding</h4>
+                        <p>£1bn injection buys runway until May 2026, demonstrating creditor willingness to engage in restructuring.</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">Act Two (Nov 2025 - Apr 2026)</div>
-                        <strong>Negotiations</strong>
-                        <ul>
-                            <li>Creditors and company negotiate comprehensive restructuring</li>
-                            <li>Ofwat consulted on bill increases needed to make plan viable</li>
-                            <li>Regulatory changes potentially required</li>
-                        </ul>
+                    <div class="timeline-card">
+                        <span class="year">Act 2: Nov 2025 - Apr 2026</span>
+                        <h4>Negotiations & Planning</h4>
+                        <p>Creditors, company, and Ofwat negotiate a comprehensive debt-for-equity swap and future investment plan.</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">Act Three (May - Dec 2026)</div>
-                        <strong>Implementation</strong>
-                        <ul>
-                            <li>Comprehensive debt restructuring executed</li>
-                            <li>Major equity injection (£3-5bn) in exchange for control</li>
-                            <li>Existing shareholders wiped out</li>
-                            <li>New capital structure with sustainable gearing (60-65%)</li>
-                        </ul>
+                    <div class="timeline-card">
+                        <span class="year">Act 3: May - Dec 2026</span>
+                        <h4>Implementation & Debt Swap</h4>
+                        <p>Full debt restructuring executed. Existing shareholders wiped out, new capital structure implemented with sustainable gearing (60-65%).</p>
                     </div>
                 </div>
 
@@ -2064,7 +2084,10 @@
                         SUCCESS_GREEN.replace('0.9', '1')
                     ],
                     borderWidth: 2
-                }]
+                }],
+                plugins: [
+                    Chart.plugins.register(Chart.plugins.annotation), // Ensure annotation plugin is registered
+                ]
             },
             options: {
                 responsive: true,
