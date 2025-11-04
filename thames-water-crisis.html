@@ -137,6 +137,8 @@
             top: 100px;
             max-height: calc(100vh - 120px);
             overflow-y: auto;
+            /* New: ensures it aligns to the grid boundary */
+            align-self: start; 
         }
 
         .toc {
@@ -198,15 +200,16 @@
         /* Article Layout (ADJUSTED FOR WIDTH AND MARGINS) */
         .article-layout {
             display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 4rem; /* Increased gap */
-            max-width: 1500px; /* Increased overall max width */
+            /* New: Increased TOC width and overall max width */
+            grid-template-columns: 280px 1fr; 
+            gap: 5rem; /* Increased gap */
+            max-width: 1600px; 
             margin: 0 auto;
-            padding: 2rem 40px; /* Increased padding */
+            padding: 2rem 40px; 
         }
 
         .article-content {
-            max-width: 900px; /* Increased max width for readability and chart space */
+            max-width: 950px; /* Increased max width for readability and chart space */
             min-width: 0;
         }
 
@@ -258,6 +261,32 @@
         .insight-box strong {
             color: var(--primary-brown);
         }
+        
+        /* New: Heart Button Style */
+        .like-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            color: var(--light-text);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .like-button:hover {
+            color: var(--primary-brown);
+        }
+        .like-button .heart {
+            font-size: 1.2rem;
+            color: #cc0000; /* Red for the heart icon */
+            transition: transform 0.2s;
+        }
+        .like-button:hover .heart {
+            transform: scale(1.1);
+        }
+
 
         /* Timeline visual */
         .timeline {
@@ -662,6 +691,11 @@
             <div class="article-meta">
                 <span>📅 By Luke | Updated: October 31, 2025</span>
                 <span>⏱️ 22 min read</span>
+                <!-- New: Heart/Like Feature -->
+                <button class="like-button" onclick="this.classList.toggle('liked');">
+                    <span class="heart">♥</span> 
+                    <span>Like Article</span>
+                </button>
             </div>
         </div>
     </div>
@@ -695,6 +729,7 @@
             <nav class="toc" aria-label="Table of Contents">
                 <h3>📚 Contents</h3>
                 <ol class="toc-list">
+                    <li><a href="#thought-process"><span class="toc-number">💭</span> Thought Process</a></li>
                     <li><a href="#intro"><span class="toc-number">1</span> The Setup (1989)</a></li>
                     <li><a href="#rab"><span class="toc-number">2</span> The RAB System</a></li>
                     <li><a href="#wbs"><span class="toc-number">3</span> Ring-Fencing</a></li>
@@ -715,7 +750,7 @@
             <section id="thought-process">
                 <h2><span class="section-number">💭</span> Thames Water and My Thought Process</h2>
                 
-                <p>Three months ago, I kept seeing headlines about Thames Water going bankrupt or in financial trouble (from the FT and British news outlets). And I couldn't make sense of it.</p>
+                <p>Three months ago, I kept seeing headlines about Thames Water going bankrupt or in financial trouble (From the FT and British news outlets). And I couldn't make sense of it.</p>
 
                 <p>How does a water company go bankrupt?</p>
 
@@ -732,6 +767,11 @@
                 <p>And now, creditors have just agreed to inject £1 billion to keep the lights on for another six months.</p>
 
                 <p class="big-quote">"This wasn't an accident. Every piece of this structure was deliberate."</p>
+                
+                <h3>A Key Note: AI’s Help in Crafting Brilliant Articles</h3>
+                <p>I’ve been able to learn a lot more through completing an analysis like this, whereby I had some prior knowledge of the Thames Water issues but not the core issues. Crafting this research made me much more informed on a deeper level. I chose this subject because I have no experience in the industry and wanted to elevate my skills and challenge myself. Additional skills such as **prompt engineering & context engineering** (Improved from my previous article Microsoft OpenAI $13B Accounting Crisis Analysis | Luke Thinks).</p>
+                <p>I am seeing my token use come down (More efficient) whilst I am allowing myself to effectively be a better prompter and improve the quality of articles. All the while experimenting through failure and success. My biggest inspiration is through those who work for the great journalistic outlets such as FT, BBC and more. This in itself is the biggest takeaway of the article; it’s allowed me to grow and develop where I didn’t think were previously possible, whilst allowing me to fail and explore.</p>
+                <p>The journey is just beginning.</p>
             </section>
 
             <hr>
@@ -801,6 +841,8 @@
 
                 <p>But here's where it gets interesting: <strong>The RAB also makes perfect collateral for debt.</strong></p>
             </section>
+
+            <hr>
 
             <section id="wbs">
                 <h2><span class="section-number">3</span> The Financial Weapon—How Ring-Fencing Became a Loophole</h2>
@@ -1556,6 +1598,14 @@
                     <li>Forced conversion to not-for-profit models</li>
                     <li>Comprehensive review of privatization model</li>
                 </ul>
+
+                <h3>7. Political Developments</h3>
+                <p>The current government has expressed openness to public ownership for failing utilities. Watch for:</p>
+                <ul>
+                    <li>Statements from: Defra (Steve Reed, Environment Secretary): Policy direction on water sector; HM Treasury: Willingness to provide public funds; Prime Minister's Office: Political appetite for nationalization</li>
+                    <li>Key Signal: Any softening of "no bailouts for private failure" rhetoric = increased probability of temporary nationalization if restructuring fails</li>
+                    <li>Conversely: Strong statements about "private sector must solve private sector problems" = forcing creditor-led solution</li>
+                </ul>
             </section>
 
             <hr>
@@ -1579,7 +1629,6 @@
                             <li>Keeps lights on until May 2026</li>
                             <li>Gives time for comprehensive restructuring negotiations</li>
                             <li>Demonstrates creditor willingness to engage</li>
-                        <li></li>
                         </ul>
                     </div>
                     <div class="timeline-item">
@@ -1607,11 +1656,11 @@
 
                 <ol>
                     <li><strong>Significant Debt Write-Down:</strong> £4-6bn debt forgiveness (bringing total from £17bn to £11-13bn)</li>
-                    <li><strong>Equity Upside:</strong> Debt-for-equity conversion giving creditors majority control</li>
+                    <li><strong>Equity Upside:</strong> Debt-for-equity conversion giving creditors majority control and participation in future value creation</li>
                     <li><strong>Higher Bill Increases:</strong> Beyond PR24 draft determination, potentially £20-25/month for customers</li>
-                    <li><strong>Environmental Concessions:</strong> Permission to operate below full compliance for transition period</li>
+                    <li><strong>Environmental Concessions:</strong> Permission to operate below full compliance for transition period while infrastructure improved</li>
                     <li><strong>Management Changes:</strong> New executive team with restructuring/infrastructure expertise</li>
-                    <li><strong>Regulatory Forbearance:</strong> Ofwat agreement not to impose penalties during restructuring</li>
+                    <li><strong>Regulatory Forbearance:</strong> Ofwat agreement not to impose penalties during restructuring period</li>
                 </ol>
 
                 <div class="insight-box">
@@ -1791,6 +1840,7 @@
     <div class="mobile-toc" id="mobileToc">
         <h3>📚 Contents</h3>
         <ol class="toc-list">
+            <li><a href="#thought-process" onclick="closeMobileToc()"><span class="toc-number">💭</span> Thought Process</a></li>
             <li><a href="#intro" onclick="closeMobileToc()"><span class="toc-number">1</span> The Setup (1989)</a></li>
             <li><a href="#rab" onclick="closeMobileToc()"><span class="toc-number">2</span> The RAB System</a></li>
             <li><a href="#wbs" onclick="closeMobileToc()"><span class="toc-number">3</span> Ring-Fencing</a></li>
