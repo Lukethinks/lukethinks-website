@@ -14,10 +14,23 @@
     
     <!-- START: Chart.js for Visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
     <!-- END: Chart.js for Visualizations -->
 
     <style>
+        :root {
+            --primary-brown: #92400e;
+            --secondary-brown: #c05621;
+            --accent-amber: #ea580c;
+            --accent-amber-light: #fbbf24;
+            --cream: #fef7f0;
+            --dark-text: #0f172a;
+            --medium-text: #1e293b;
+            --light-text: #64748b;
+            --border-light: #e2e8f0;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+        }
+
         /* Reading Progress Bar */
         .progress-bar {
             position: fixed;
@@ -27,6 +40,100 @@
             background: linear-gradient(90deg, var(--primary-brown), var(--accent-amber));
             z-index: 10000;
             transition: width 0.1s ease;
+        }
+
+        /* Core Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--medium-text);
+            background: linear-gradient(135deg, var(--cream) 0%, #f7fafc 100%);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 8px var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .logo-text {
+            text-decoration: none;
+            color: var(--dark-text);
+        }
+
+        .logo-main {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        .logo-sub {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--light-text);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--medium-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--accent-amber);
         }
 
         /* Article Category Badge */
@@ -45,7 +152,7 @@
 
         /* Hero Section */
         .article-hero {
-            padding: 3rem 0 2rem;
+            padding: 4rem 0 3rem;
             text-align: center;
             position: relative;
         }
@@ -88,13 +195,13 @@
             flex-wrap: wrap;
             color: var(--light-text);
             font-size: 0.95rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
 
         /* Key Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin: 3rem 0;
             max-width: 1000px;
@@ -134,11 +241,10 @@
         /* Table of Contents */
         .toc-wrapper {
             position: sticky;
-            top: 100px;
-            max-height: calc(100vh - 120px);
+            top: 120px;
+            max-height: calc(100vh - 140px);
             overflow-y: auto;
-            /* New: ensures it aligns to the grid boundary */
-            align-self: start; 
+            align-self: start;
         }
 
         .toc {
@@ -150,7 +256,7 @@
         }
 
         .toc h3 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 1rem;
             color: var(--dark-text);
             display: flex;
@@ -163,7 +269,7 @@
         }
 
         .toc-list li {
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
         }
 
         .toc-list a {
@@ -177,7 +283,8 @@
             border-radius: 8px;
         }
 
-        .toc-list a:hover, .toc-list a.active {
+        .toc-list a:hover,
+        .toc-list a.active {
             color: var(--primary-brown);
             background: var(--cream);
             padding-left: 1rem;
@@ -195,21 +302,21 @@
             font-size: 0.75rem;
             font-weight: 700;
             margin-right: 0.5rem;
+            flex-shrink: 0;
         }
 
-        /* Article Layout (ADJUSTED FOR WIDTH AND MARGINS) */
+        /* Article Layout */
         .article-layout {
             display: grid;
-            /* New: Increased TOC width and overall max width */
-            grid-template-columns: 280px 1fr; 
-            gap: 5rem; /* Increased gap */
-            max-width: 1600px; 
+            grid-template-columns: 280px 1fr;
+            gap: 4rem;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem 40px; 
+            padding: 2rem 2rem;
         }
 
         .article-content {
-            max-width: 950px; /* Increased max width for readability and chart space */
+            max-width: 850px;
             min-width: 0;
         }
 
@@ -223,6 +330,43 @@
             display: flex;
             align-items: flex-start;
             gap: 1rem;
+        }
+
+        .article-content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin: 2rem 0 1rem;
+            line-height: 1.3;
+        }
+
+        .article-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 1.5rem 0 1.5rem 2rem;
+            line-height: 1.8;
+        }
+
+        .article-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        .article-content hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--border-light), transparent);
+            margin: 3rem 0;
         }
 
         .section-number {
@@ -247,58 +391,42 @@
             margin: 2rem 0;
             border-radius: 12px;
             box-shadow: 0 2px 8px var(--shadow-light);
-            position: relative;
         }
 
-        .insight-box::before {
-            content: "💡";
-            position: absolute;
-            top: 1.5rem;
-            left: -2rem;
-            font-size: 1.5rem;
+        .insight-box p {
+            margin: 0;
+            color: var(--medium-text);
         }
 
         .insight-box strong {
             color: var(--primary-brown);
         }
-        
-        /* New: Heart Button Style */
-        .like-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: none;
-            border: none;
-            color: var(--light-text);
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        .like-button:hover {
-            color: var(--primary-brown);
-        }
-        .like-button .heart {
-            font-size: 1.2rem;
-            color: #cc0000; /* Red for the heart icon */
-            transition: transform 0.2s;
-        }
-        .like-button:hover .heart {
-            transform: scale(1.1);
+
+        /* Big Quote */
+        .big-quote {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: var(--dark-text);
+            font-weight: 600;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: white;
+            border-left: 6px solid var(--accent-amber);
+            border-radius: 12px;
+            box-shadow: 0 4px 16px var(--shadow-light);
         }
 
-
-        /* Timeline visual (STANDARD VERTICAL - Used sparingly) */
+        /* Timeline */
         .timeline {
             position: relative;
-            padding-left: 3rem;
+            padding-left: 2.5rem;
             margin: 2rem 0;
         }
 
         .timeline::before {
             content: '';
             position: absolute;
-            left: 1rem;
+            left: 0.75rem;
             top: 0;
             bottom: 0;
             width: 3px;
@@ -317,7 +445,7 @@
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -2.5rem;
+            left: -1.5rem;
             top: 1.5rem;
             width: 15px;
             height: 15px;
@@ -328,16 +456,16 @@
         }
 
         .timeline-year {
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: var(--primary-brown);
             margin-bottom: 0.5rem;
         }
 
-        /* --- NEW: Horizontal Timeline Grid Styles --- */
+        /* Horizontal Timeline Grid */
         .horizontal-timeline-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 1.5rem;
             margin: 2rem 0;
         }
@@ -359,7 +487,7 @@
         }
 
         .timeline-card h4 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             color: var(--primary-brown);
             margin-bottom: 0.5rem;
@@ -368,30 +496,38 @@
         }
 
         .timeline-card .year {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             color: var(--dark-text);
             margin-bottom: 0.75rem;
             display: block;
         }
 
-        /* --- NEW: Detailed Regulatory Timeline (Flow) Styles --- */
+        .timeline-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Viz Timeline */
         .viz-timeline {
             position: relative;
-            padding: 20px 0;
-            border-left: 3px solid var(--accent-amber); /* Visual spine */
+            padding: 20px 0 20px 25px;
+            border-left: 3px solid var(--accent-amber);
             margin: 2rem 0;
         }
+
         .viz-timeline-item {
             display: block;
             margin-bottom: 2rem;
-            padding-left: 25px; /* Space for the circle marker */
+            padding-left: 0;
             position: relative;
         }
+
         .viz-timeline-item::before {
             content: '';
             position: absolute;
-            left: -9px; /* Position marker over the vertical line */
+            left: -12px;
             top: 5px;
             width: 15px;
             height: 15px;
@@ -400,26 +536,35 @@
             border-radius: 50%;
             box-shadow: 0 0 0 3px var(--cream);
         }
+
         .viz-timeline-date {
             font-weight: 800;
             color: var(--primary-brown);
-            font-size: 1em;
+            font-size: 0.95rem;
             display: block;
             margin-bottom: 0.5rem;
         }
+
         .viz-timeline-content {
-            background: var(--cream); /* Light background for the content box */
+            background: var(--cream);
             padding: 1rem;
             border-radius: 8px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
         }
+
         .viz-timeline-content h4 {
             color: var(--dark-text);
-            margin-top: 0;
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
         }
-        /* --- END NEW TIMELINE STYLES --- */
 
-        /* Enhanced tables */
+        .viz-timeline-content p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Tables */
         .data-table-wrapper {
             overflow-x: auto;
             margin: 2rem 0;
@@ -435,69 +580,162 @@
             overflow: hidden;
         }
 
-        .data-table caption {
-            caption-side: top;
-            text-align: left;
-            padding: 1.5rem;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--dark-text);
-            background: white;
-        }
-
         .data-table thead {
             background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
             color: white;
         }
 
         .data-table th {
-            padding: 1.2rem 1rem;
+            padding: 1rem;
             text-align: left;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .data-table td {
-            padding: 1.2rem 1rem;
+            padding: 1rem;
             border-bottom: 1px solid var(--border-light);
-        }
-
-        .data-table tbody tr:last-child td {
-            border-bottom: none;
         }
 
         .data-table tbody tr:hover {
             background: var(--cream);
         }
 
-        /* Comparison table styling */
-        .comparison-table {
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Comparison Grid */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
             margin: 2rem 0;
         }
 
-        .comparison-table th:first-child {
-            background: var(--dark-text);
-        }
-
-        .comparison-table td strong {
-            color: var(--primary-brown);
-            font-weight: 700;
-        }
-
-        /* Quote styling */
-        .big-quote {
-            font-size: 1.4rem;
-            line-height: 1.6;
-            color: var(--dark-text);
-            font-weight: 600;
-            margin: 3rem 0;
-            padding: 2rem;
+        .comparison-card {
             background: white;
-            border-left: 6px solid var(--accent-amber);
+            padding: 1.5rem;
             border-radius: 12px;
-            box-shadow: 0 4px 16px var(--shadow-light);
+            box-shadow: 0 4px 15px var(--shadow-light);
+            border-top: 4px solid var(--accent-amber);
+        }
+
+        .comparison-card h3 {
+            font-size: 1.1rem;
+            color: var(--primary-brown);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.9rem;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: var(--medium-text);
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: var(--primary-brown);
+        }
+
+        .metric-value.good {
+            color: #10b981;
+        }
+
+        .metric-value.critical {
+            color: #dc2626;
+        }
+
+        /* Charts */
+        .chart-section {
+            margin: 2rem 0;
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px var(--shadow-light);
+        }
+
+        .chart-description {
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 1.5rem 0;
+        }
+
+        .chart-container.tall {
+            height: 500px;
+        }
+
+        .chart-container.wide {
+            height: 600px;
+        }
+
+        /* Structure Diagram */
+        .structure-diagram {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .layer {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            position: relative;
+            transition: transform 0.3s ease;
+            color: white;
+        }
+
+        .layer:hover {
+            transform: translateX(10px);
+        }
+
+        .layer1 {
+            background: linear-gradient(135deg, #92400E 0%, #D97706 100%);
+        }
+
+        .layer2 {
+            background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+        }
+
+        .layer3 {
+            background: linear-gradient(135deg, #4B5563 0%, #6B7280 100%);
+        }
+
+        .layer h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .layer-details {
+            font-size: 0.9rem;
+            opacity: 0.95;
+            line-height: 1.5;
+            color: white;
         }
 
         /* Mobile TOC Toggle */
@@ -535,93 +773,72 @@
             display: block;
         }
 
-        /* Glossary tooltips */
-        .glossary-term {
-            color: var(--primary-brown);
-            font-weight: 600;
-            border-bottom: 2px dotted var(--accent-amber);
-            cursor: help;
-            position: relative;
+        /* Back to top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 999;
+            transition: all 0.3s ease;
         }
 
-        .glossary-term:hover::after {
-            content: attr(data-definition);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
             background: var(--dark-text);
             color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            padding: 3rem 0;
+            margin-top: 4rem;
         }
 
-        /* --- START: CHART AND VISUAL STYLES --- */
-        .chart-section {
-            margin-bottom: 3rem;
-            background: white; /* Matches your article's background */
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px var(--shadow-light);
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
         }
 
-        .chart-description {
-            color: var(--light-text);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-            font-size: 1.05em;
+        .footer-links {
+            display: flex;
+            gap: 2rem;
         }
 
-        .chart-container {
-            position: relative;
-            height: 400px;
-            margin-top: 1.5rem;
-        }
-
-        .chart-container.tall {
-            height: 500px;
-        }
-
-        .chart-container.wide {
-            height: 600px;
-        }
-
-        /* WBS Structure Diagram */
-        .structure-diagram {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        .layer {
-            margin: 15px 0;
-            padding: 20px;
-            border-radius: 8px;
-            position: relative;
-            transition: transform 0.3s ease;
+        .footer-links a {
             color: white;
+            text-decoration: none;
+            transition: color 0.2s;
         }
-        .layer:hover {
-            transform: translateX(10px);
-        }
-        /* Adjusted WBS colors to theme */
-        .layer1 { background: linear-gradient(135deg, #92400E 0%, #D97706 100%); } /* Primary Brown / Accent Amber */
-        .layer2 { background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%); } /* Blue for Finance Layer */
-        .layer3 { background: linear-gradient(135deg, #4B5563 0%, #6B7280 100%); } /* Grey for Holding/Equity Layer */
-        .layer h3 { margin-bottom: 10px; font-size: 1.3em; }
-        .layer-details { font-size: 0.95em; opacity: 0.95; line-height: 1.5; }
 
-        
-        /* --- END: CHART AND VISUAL STYLES --- */
+        .footer-links a:hover {
+            color: var(--accent-amber);
+        }
 
         /* Responsive */
         @media (max-width: 1024px) {
             .article-layout {
                 grid-template-columns: 1fr;
+                gap: 2rem;
             }
 
             .toc-wrapper {
@@ -635,7 +852,7 @@
             }
 
             .horizontal-timeline-grid {
-                grid-template-columns: 1fr; /* Stack cards vertically on mobile */
+                grid-template-columns: 1fr;
             }
         }
 
@@ -648,6 +865,11 @@
                 font-size: 1.1rem;
             }
 
+            .article-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
             .stats-grid {
                 grid-template-columns: 1fr;
             }
@@ -656,27 +878,61 @@
                 font-size: 2rem;
             }
 
-            .section-number {
-                min-width: 35px;
-                height: 35px;
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .article-layout {
+                padding: 1rem;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+
+            .chart-container.tall {
+                height: 350px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .article-hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .article-subtitle {
                 font-size: 1rem;
             }
 
+            .container {
+                padding: 0 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            nav a {
+                font-size: 0.9rem;
+            }
+
             .article-content h2 {
-                font-size: 1.6rem;
-                gap: 0.75rem;
+                font-size: 1.4rem;
+                gap: 0.5rem;
             }
 
-            .timeline {
-                padding-left: 2rem;
-            }
-
-            .timeline::before {
-                left: 0.5rem;
-            }
-
-            .timeline-item::before {
-                left: -1.75rem;
+            .stat-number {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -717,11 +973,6 @@
             <div class="article-meta">
                 <span>📅 By Luke | Updated: October 31, 2025</span>
                 <span>⏱️ 22 min read</span>
-                <!-- New: Heart/Like Feature -->
-                <button class="like-button" onclick="this.classList.toggle('liked');">
-                    <span class="heart">♥</span> 
-                    <span>Like Article</span>
-                </button>
             </div>
         </div>
     </div>
@@ -755,32 +1006,32 @@
             <nav class="toc" aria-label="Table of Contents">
                 <h3>📚 Contents</h3>
                 <ol class="toc-list">
-                    <li><a href="#thought-process"><span class="toc-number">💭</span> Thought Process</a></li>
-                    <li><a href="#intro"><span class="toc-number">1</span> The Setup (1989)</a></li>
-                    <li><a href="#rab"><span class="toc-number">2</span> The RAB System</a></li>
-                    <li><a href="#wbs"><span class="toc-number">3</span> Ring-Fencing</a></li>
-                    <li><a href="#macquarie"><span class="toc-number">4</span> Macquarie Era</a></li>
-                    <li><a href="#ofwat"><span class="toc-number">5</span> Regulatory Failure</a></li>
-                    <li><a href="#crisis"><span class="toc-number">6</span> The Breaking Point</a></li>
-                    <li><a href="#impairment"><span class="toc-number">7</span> £4.3B Impairment</a></li>
-                    <li><a href="#comparison"><span class="toc-number">8</span> International Models</a></li>
-                    <li><a href="#watch"><span class="toc-number">9</span> What to Watch</a></li>
-                    <li><a href="#rescue"><span class="toc-number">10</span> The Rescue Deal</a></li>
-                    <li><a href="#impact"><span class="toc-number">11</span> Who Pays?</a></li>
+                    <li><a href="#intro"><span class="toc-number">1</span> Thought Process</a></li>
+                    <li><a href="#setup"><span class="toc-number">2</span> 1989 Setup</a></li>
+                    <li><a href="#rab"><span class="toc-number">3</span> The RAB System</a></li>
+                    <li><a href="#wbs"><span class="toc-number">4</span> Ring-Fencing</a></li>
+                    <li><a href="#macquarie"><span class="toc-number">5</span> Macquarie Era</a></li>
+                    <li><a href="#ofwat"><span class="toc-number">6</span> Regulatory Failure</a></li>
+                    <li><a href="#crisis"><span class="toc-number">7</span> The Breaking Point</a></li>
+                    <li><a href="#impairment"><span class="toc-number">8</span> £4.3B Impairment</a></li>
+                    <li><a href="#comparison"><span class="toc-number">9</span> International Models</a></li>
+                    <li><a href="#watch"><span class="toc-number">10</span> What to Watch</a></li>
+                    <li><a href="#rescue"><span class="toc-number">11</span> Rescue Deal</a></li>
+                    <li><a href="#impact"><span class="toc-number">12</span> Who Pays?</a></li>
                 </ol>
             </nav>
         </aside>
 
         <!-- Article Content -->
         <article class="article-content">
-            <section id="thought-process">
-                <h2><span class="section-number">💭</span> Thames Water and My Thought Process</h2>
-                
+            <section id="intro">
+                <h2><span class="section-number">1</span> Thames Water and My Thought Process</h2>
+
                 <p>Three months ago, I kept seeing headlines about Thames Water going bankrupt or in financial trouble (From the FT and British news outlets). And I couldn't make sense of it.</p>
 
                 <p>How does a water company go bankrupt?</p>
 
-                <p>They have a legal monopoly. People literally cannot stop paying their water bills. There's no competition. The <span class="glossary-term" data-definition="Regulatory Asset Base: cumulative infrastructure investment value, indexed to inflation">regulatory asset base</span> is indexed to inflation. It's basically a government bond that also charges retail customers.</p>
+                <p>They have a legal monopoly. People literally cannot stop paying their water bills. There's no competition. The regulatory asset base is indexed to inflation. It's basically a government bond that also charges retail customers.</p>
 
                 <p>So I set Claude up to the task and created frameworks to research the financial statements.</p>
 
@@ -793,36 +1044,46 @@
                 <p>And now, creditors have just agreed to inject £1 billion to keep the lights on for another six months.</p>
 
                 <p class="big-quote">"This wasn't an accident. Every piece of this structure was deliberate."</p>
-                
-                <h3>A Key Note: AI’s Help in Crafting Brilliant Articles</h3>
-                <p>I’ve been able to learn a lot more through completing an analysis like this, whereby I had some prior knowledge of the Thames Water issues but not the core issues. Crafting this research made me much more informed on a deeper level. I chose this subject because I have no experience in the industry and wanted to elevate my skills and challenge myself. Additional skills such as **prompt engineering & context engineering** (Improved from my previous article Microsoft OpenAI $13B Accounting Crisis Analysis | Luke Thinks).</p>
-                <p>I am seeing my token use come down (More efficient) whilst I am allowing myself to effectively be a better prompter and improve the quality of articles. All the while experimenting through failure and success. My biggest inspiration is through those who work for the great journalistic outlets such as FT, BBC and more. This in itself is the biggest takeaway of the article; it’s allowed me to grow and develop where I didn’t think were previously possible, whilst allowing me to fail and explore.</p>
-                <p>The journey is just beginning.</p>
+
+                <h3>A Key Note: AI's Help in Crafting Brilliant Articles</h3>
+
+                <p>I've been able to learn a lot more through completing an analysis like this, whereby I had some prior knowledge of the Thames Water issues but not the core issues. Crafting this research made me much more informed on a deeper level. I chose this subject because I have no experience in the industry and wanted to elevate my skills and challenge myself.</p>
+
+                <p>Additional skills such as <strong>prompt engineering & context engineering</strong> (Improved from my previous article Microsoft OpenAI $13B Accounting Crisis Analysis | Luke Thinks).</p>
+
+                <p>I am seeing my token use come down (More efficient) whilst I am allowing myself to effectively be a better prompter and improve the quality of articles. All the while experimenting through failure and success. My biggest inspiration is through those who work for the great journalistic outlets such as FT, BBC and more.</p>
+
+                <p>This in itself is the biggest takeaway of the article; it's allowed me to grow and develop where I didn't think were previously possible, whilst allowing me to fail and explore. The journey is just beginning.</p>
             </section>
 
             <hr>
 
-            <section id="intro">
-                <h2><span class="section-number">1</span> How We Got Here—The 1989 Setup</h2>
+            <section id="setup">
+                <h2><span class="section-number">2</span> How We Got Here—The 1989 Setup</h2>
 
                 <h3>The Blank Slate Handoff</h3>
 
-                <!-- REVAMPED TIMELINE 1: Horizontal grid flow -->
+                <p>On December 1, 1989, the UK government did something remarkable: they gave away ten regional water monopolies.</p>
+
+                <p>Not sold. <strong>Gave away.</strong></p>
+
+                <p>The government wrote off £5 billion in existing debt and provided another £1.5 billion as a "green dowry" to help the new companies meet environmental standards. The water companies started their private lives with <strong>completely unleveraged balance sheets</strong>—a blank slate that subsequent owners would exploit to the maximum.</p>
+
                 <div class="horizontal-timeline-grid">
                     <div class="timeline-card">
                         <span class="year">Dec 1, 1989</span>
                         <h4>UK Water Privatised</h4>
-                        <p>Ten regional water monopolies were **given away**, not sold, to private companies.</p>
+                        <p>Ten regional water monopolies were given away to private companies.</p>
                     </div>
                     <div class="timeline-card">
                         <span class="year">Financial Clean Slate</span>
                         <h4>Debt Written Off</h4>
-                        <p>£5 billion in existing government debt was cancelled for the new private companies.</p>
+                        <p>£5 billion in existing government debt was cancelled.</p>
                     </div>
                     <div class="timeline-card">
                         <span class="year">Environmental Fund</span>
                         <h4>Green Dowry Provided</h4>
-                        <p>£1.5 billion in cash provided to help companies meet initial environmental standards.</p>
+                        <p>£1.5 billion in cash provided for environmental standards.</p>
                     </div>
                 </div>
 
@@ -841,18 +1102,19 @@
                 <p>A utility with 50-100 year assets (pipes and treatment plants) and stable, inflation-linked regulated cash flows has <strong>enormous natural capacity for debt</strong>. By handing new owners a completely deleveraged balance sheet, the government created a massive financial arbitrage opportunity.</p>
 
                 <p>Rational financial actors would inevitably ask: "Why use expensive equity when we can borrow against guaranteed cash flows?"</p>
+
+                <p>And that's exactly what happened. But first, they needed a regulatory framework that would protect lenders.</p>
             </section>
 
             <hr>
 
             <section id="rab">
-                <h2><span class="section-number">2</span> The Regulatory Machine—How Ofwat Created Perfect Collateral</h2>
+                <h2><span class="section-number">3</span> The Regulatory Machine—How Ofwat Created Perfect Collateral</h2>
 
                 <h3>The RAB: A Government-Backed Promise</h3>
 
-                <p>The cornerstone of UK water regulation is the <strong><span class="glossary-term" data-definition="Running total of infrastructure investment, adjusted for inflation">Regulatory Asset Base (RAB)</span></strong>. Think of it as a running total of everything the company has invested in infrastructure, adjusted for inflation.</p>
+                <p>The cornerstone of UK water regulation is something called the <strong>Regulatory Asset Base (RAB)</strong>. Think of it as a running total of everything the company has invested in infrastructure, adjusted for inflation.</p>
 
-                <!-- REVAMPED TIMELINE 2: Horizontal steps flow -->
                 <div class="horizontal-timeline-grid">
                     <div class="timeline-card">
                         <span class="year">Step 1: CapEx</span>
@@ -862,22 +1124,22 @@
                     <div class="timeline-card">
                         <span class="year">Step 2: Add to RAB</span>
                         <h4>Asset Base Grows</h4>
-                        <p>Ofwat verifies and adds the £100M investment to the company's Regulatory Asset Base (RAB).</p>
+                        <p>Ofwat verifies and adds the £100M to the company's RAB.</p>
                     </div>
                     <div class="timeline-card">
                         <span class="year">Step 3: Indexation</span>
                         <h4>Inflation Protection</h4>
-                        <p>The RAB value is indexed to inflation (typically RPI or CPIH) yearly.</p>
+                        <p>The RAB value is indexed to inflation yearly.</p>
                     </div>
                     <div class="timeline-card">
                         <span class="year">Step 4: Regulated Return</span>
                         <h4>Guaranteed Profit</h4>
-                        <p>Earn a regulated return (3.5-4.5% real) on the inflated RAB value.</p>
+                        <p>Earn a regulated return (3.5-4.5% real) on the inflated RAB.</p>
                     </div>
                     <div class="timeline-card">
                         <span class="year">Step 5: Customer Bills</span>
                         <h4>Cost Recouped</h4>
-                        <p>Pass the costs of investment and returns to customers through water bills.</p>
+                        <p>Pass costs through to customers via water bills.</p>
                     </div>
                 </div>
 
@@ -891,56 +1153,46 @@
             <hr>
 
             <section id="wbs">
-                <h2><span class="section-number">3</span> The Financial Weapon—How Ring-Fencing Became a Loophole</h2>
+                <h2><span class="section-number">4</span> The Financial Weapon—How Ring-Fencing Became a Loophole</h2>
 
                 <h3>What Is Whole Business Securitization?</h3>
 
-                <p>In 2001, Welsh Water pioneered something called <strong><span class="glossary-term" data-definition="Financial structure ring-fencing the regulated utility and issuing secured bonds">Whole Business Securitization (WBS)</span></strong>. Thames Water adopted it in 2006-2007 after Macquarie bought the company.</p>
+                <p>In 2001, Welsh Water pioneered something called <strong>Whole Business Securitization (WBS)</strong>. Thames Water adopted it in 2006-2007 after Macquarie bought the company.</p>
 
                 <div class="chart-section">
-                    <p class="chart-description">
-                        The WBS structure creates a complex multi-layered architecture designed to achieve credit enhancement 
-                        and maximize leverage. Understanding this structure is crucial to comprehending how value extraction 
-                        occurred and why the ring-fence failed to protect operational performance.
-                    </p>
+                    <p class="chart-description">The WBS structure creates a multi-layered architecture designed to achieve credit enhancement and maximize leverage.</p>
                     <div class="structure-diagram">
                         <div class="layer layer1">
                             <h3>Layer 1: Operating Company (OpCo) - Thames Water Utilities Limited</h3>
                             <div class="layer-details">
-                                <strong>Function:</strong> Holds Ofwat license, owns infrastructure, employs workforce, serves 16 million customers
-                                <br><strong>Revenue:</strong> ~£2 billion annually from customer bills
-                                <br><strong>Risk:</strong> Subject to regulatory intervention and Special Administration if covenant breach occurs
+                                <strong>Function:</strong> Holds Ofwat license, owns infrastructure, serves 16 million customers<br>
+                                <strong>Revenue:</strong> ~£2 billion annually from customer bills
                             </div>
                         </div>
-                        
+
                         <div class="layer layer2">
                             <h3>Layer 2: Financing Vehicles - Thames Water Utilities Finance plc</h3>
                             <div class="layer-details">
-                                <strong>Function:</strong> Issues WBS bonds (Class A and Class B debt) to capital markets
-                                <br><strong>Debt Outstanding:</strong> ~£16 billion (March 2024)
-                                <br><strong>Structure:</strong> Dedicated financing vehicle creating legal separation between operational and financial risk
-                                <br><strong>Credit Enhancement:</strong> Achieves A/A- ratings through robust security packages and covenants
+                                <strong>Function:</strong> Issues WBS bonds (Class A and Class B debt)<br>
+                                <strong>Debt Outstanding:</strong> ~£16 billion (March 2024)
                             </div>
                         </div>
-                        
+
                         <div class="layer layer3">
-                            <h3>Layer 3: Holding Company Cascade - Kemble Water Holdings Limited</h3>
+                            <h3>Layer 3: Holding Company - Kemble Water Holdings Limited</h3>
                             <div class="layer-details">
-                                <strong>Function:</strong> Multiple holding companies holding subordinated debt and equity
-                                <br><strong>Ownership:</strong> Pension funds (OMERS, Abu Dhabi Investment Authority, China Investment Corporation)
-                                <br><strong>Value Extraction:</strong> Dividends flow upward when covenants permit; holding companies service their own debt
-                                <br><strong>One-Way Valve:</strong> Cash flows up (as dividends) but rarely down (as equity injections)
+                                <strong>Function:</strong> Holds subordinated debt and equity<br>
+                                <strong>Ownership:</strong> Pension funds and institutional investors
                             </div>
                         </div>
-                    </div>
-                    <div class="insight-box"> 
-                        <strong>Key Insight:</strong> The ring-fence protects senior creditors, not the operating company or customers. 
-                        When covenant limits are breached, the lock-up prevents dividends but also prevents equity injections, 
-                        creating a death spiral for holding companies while leaving the OpCo financially stranded.
                     </div>
                 </div>
 
-                <p>The regulated utility (TWUL) is legally isolated from parent companies through a "special purpose vehicle" structure. <strong>Everything</strong> the company owns—pipes, treatment works, reservoirs, licenses, customer relationships—is pledged as security for bonds.</p>
+                <div class="insight-box">
+                    <p><strong>Key Insight:</strong> The ring-fence protects senior creditors, not the operating company. When covenants are breached, dividends lock up but equity injections also become impossible, creating a death spiral.</p>
+                </div>
+
+                <p>The regulated utility (TWUL) is legally isolated from parent companies. <strong>Everything</strong> the company owns is pledged as security for bonds.</p>
 
                 <h3>The Cash Waterfall</h3>
 
@@ -970,18 +1222,12 @@
                 <div class="insight-box">
                     <p><strong>Here's the key insight:</strong> This structure was sold as protecting bondholders, but it actually enabled extraction. The ring-fence meant bonds could achieve A/A- ratings despite the parent company loading up with additional debt.</p>
                 </div>
-
-                <p>From 2006-2017, Thames Water's WBS bonds maintained investment-grade ratings even as total group leverage climbed toward 80%.</p>
-
-                <p><strong>Why?</strong> Because rating agencies looked at the operating company in isolation and saw stable cash flows, ring-fence protection, and regulatory oversight.</p>
-
-                <p>What they missed was happening one level up: <strong>parent companies were loading the entire structure with junior debt, secured by dividends paid up from TWUL.</strong></p>
             </section>
 
             <hr>
 
             <section id="macquarie">
-                <h2><span class="section-number">4</span> The Macquarie Era—Financial Engineering at Scale</h2>
+                <h2><span class="section-number">5</span> The Macquarie Era—Financial Engineering at Scale</h2>
 
                 <h3>How to Extract £2.8 Billion in 11 Years</h3>
 
@@ -989,78 +1235,40 @@
 
                 <h4>The Debt Explosion</h4>
 
-                <div class="chart-section">
-                    <p class="chart-description">
-                        Under Macquarie's ownership (2006-2017), Thames Water's debt tripled from £3.2 billion to £10.5 billion 
-                        while paying £2.8 billion in dividends. Post-Macquarie, debt continued rising but dividend extraction 
-                        became more constrained.
-                    </p>
-                    <div class="chart-container tall">
-                        <canvas id="debtEvolutionChart"></canvas>
-                    </div>
-                    <div class="insight-box"> 
-                        <strong>Key Insight:</strong> The £7 billion debt increase during Macquarie's tenure funded £11 billion 
-                        in investment but also £2.8 billion in dividends and interest payments. Customers are effectively financing 
-                        both the investment and the shareholder returns through higher bills servicing the debt. The debt 
-                        accumulation accelerated dramatically post-2021 due to RPI-indexed debt growing faster than the CPIH-indexed 
-                        RAB, creating an automatic divergence that tightened gearing even without new borrowing.
-                    </div>
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Net Debt</th>
+                                <th>RCV</th>
+                                <th>Gearing</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2006</td>
+                                <td>£3.2bn</td>
+                                <td>£6.5bn</td>
+                                <td>49%</td>
+                            </tr>
+                            <tr>
+                                <td>2010</td>
+                                <td>~£8.5bn</td>
+                                <td>~£10bn</td>
+                                <td>~85%</td>
+                            </tr>
+                            <tr>
+                                <td>2017</td>
+                                <td>£10.5bn</td>
+                                <td>£12.6bn</td>
+                                <td>~83%</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <p>Net debt more than <strong>tripled</strong> in the first four years. By 2017, when Macquarie exited, gearing had reached 83%—far above the 55-60% Ofwat assumed in its financial models.</p>
-
-                <h3>The Dividend Extraction</h3>
-
-                <p>The numbers here get complicated because of inter-company loans and financial arrangements. But here's what I found:</p>
-
-                <ul>
-                    <li><strong>Macquarie's stated figure:</strong> £1.1 billion total (£879m dividends + £277m interest on shareholder loans)</li>
-                    <li><strong>Independent analyses:</strong> Up to £2.8 billion when including all inter-company transfers and loan arrangements</li>
-                </ul>
-
-                <p>For context, during this same period:</p>
-                <ul>
-                    <li>Capital expenditure: ~£11 billion</li>
-                    <li><strong>But</strong> approximately £57 of every £100 spent on CapEx was matched by £57 spent on finance costs (interest and dividends)</li>
-                </ul>
-                
-                <div class="chart-section">
-                    <p class="chart-description">
-                        This chart quantifies value extraction across different ownership models. The stark outlier is Welsh Water 
-                        at precisely £0 (by constitutional design), while WBS-structured companies extracted billions.
-                    </p>
-                    <div class="chart-container">
-                        <canvas id="dividendChart"></canvas>
-                    </div>
-                    <div class="insight-box"> 
-                        <strong>Key Insight:</strong> Anglian Water extracted £12.6 billion (the most), followed by Yorkshire (£7.6 
-                        billion) and Thames (£7.2 billion). Thames's lower per-customer dividend (£450) versus Anglian (£1,800) 
-                        reflects its much larger customer base (16 million vs. 7 million), not restraint—in absolute terms, Thames 
-                        paid £7.2 billion to shareholders.
-                    </div>
-                </div>
-
-                <p class="big-quote">"Was this investment, or just financial engineering?"</p>
-
-                <h3>How the Numbers Worked</h3>
-
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <strong>Step 1:</strong> Make capital investments (build new infrastructure)
-                    </div>
-                    <div class="timeline-item">
-                        <strong>Step 2:</strong> Those investments get added to the RAB
-                    </div>
-                    <div class="timeline-item">
-                        <strong>Step 3:</strong> The inflated RAB generates higher allowed revenues
-                    </div>
-                    <div class="timeline-item">
-                        <strong>Step 4:</strong> Borrow against the higher RAB to fund dividends
-                    </div>
-                    <div class="timeline-item">
-                        <strong>Step 5:</strong> Repeat
-                    </div>
-                </div>
+                <p>Net debt more than <strong>doubled (2.65x)</strong> in the first four years. By 2017, when Macquarie exited, gearing had reached 83%—far above the 55-60% Ofwat assumed.</p>
 
                 <h3>What Was Actually Happening to the Infrastructure</h3>
 
@@ -1071,70 +1279,20 @@
                 <p>But after 2017—right after Macquarie's exit—performance deteriorated sharply:</p>
 
                 <ul>
-                    <li><strong>Pollution incidents surged:</strong> 470 incidents in 2023-24, dramatically higher than peers</li>
-                    <li><strong>Asset health declined:</strong> Years of deferred maintenance created a backlog requiring urgent, costly reactive repairs</li>
-                    <li><strong>Service quality dropped:</strong> The company slipped toward crisis, culminating in their 1-star EPA rating (the lowest possible)</li>
+                    <li><strong>Pollution incidents surged:</strong> 470 incidents in 2023-24</li>
+                    <li><strong>Asset health declined:</strong> Years of deferred maintenance created costly backlogs</li>
+                    <li><strong>Service quality dropped:</strong> The company slipped to 1-star EPA rating (lowest possible)</li>
                 </ul>
 
                 <div class="insight-box">
-                    <p>This timing suggests that maintenance and operational resilience were deferred during the period when cash flow was tight but the financial engineering had served its purpose. The problems emerged only after the financial engineers had extracted value and exited.</p>
+                    <p>This timing suggests maintenance was deferred during the financial engineering period. Problems emerged only after value extraction and the equity exit.</p>
                 </div>
-
-                <!-- START: Charts for Infrastructure Performance -->
-                <div class="chart-section">
-                    <p class="chart-description">
-                        The Environment Agency's annual assessment reveals a striking correlation: the two worst environmental 
-                        performers (Thames and Southern) are both WBS-structured companies that underwent aggressive financial 
-                        engineering under Macquarie ownership.
-                    </p>
-                    <div class="chart-container">
-                        <canvas id="environmentalChart"></canvas>
-                    </div>
-                    <div class="insight-box"> 
-                        <strong>Key Insight:</strong> Only Severn Trent achieved the "Industry Leading" 4-star rating. The only 
-                        "Poor" performers are highly-leveraged WBS companies. This suggests systematic underinvestment in 
-                        operational maintenance driven by financial pressure to maximize cash extraction.
-                    </div>
-                </div>
-                
-                <div class="chart-section">
-                    <p class="chart-description">
-                        Thames Water's pollution incidents more than doubled from 14 serious incidents in 2022-23 to 33 in 2023-24—a 
-                        systemic operational collapse reflecting chronic underinvestment in maintenance and asset renewal.
-                    </p>
-                    <div class="chart-container">
-                        <canvas id="pollutionChart"></canvas>
-                    </div>
-                    <div class="insight-box"> 
-                        <strong>Key Insight:</strong> While absolute incident counts must be contextualized by service area size, 
-                        Thames's doubling of serious pollution incidents in a single year evidences operational collapse. Anglian 
-                        Water (437 incidents) serves a similar-sized area yet maintains more consistent performance, suggesting 
-                        Thames's problems are company-specific, not purely a function of scale.
-                    </div>
-                </div>
-                
-                <div class="chart-section">
-                    <p class="chart-description">
-                        Ofwat set ambitious leakage reduction targets for AMP7 (2020-2025). Performance against these targets 
-                        reveals which companies prioritized operational excellence versus financial engineering.
-                    </p>
-                    <div class="chart-container">
-                        <canvas id="leakageChart"></canvas>
-                    </div>
-                    <div class="insight-box"> 
-                        <strong>Key Insight:</strong> Thames Water missed its leakage target by 5.4 percentage points (worst in 
-                        sector), while Yorkshire Water and Severn Trent exceeded targets. Welsh Water's increasing leakage despite 
-                        no dividend pressure suggests operational excellence requires effective management, not just removal of 
-                        profit motive.
-                    </div>
-                </div>
-                <!-- END: Charts for Infrastructure Performance -->
             </section>
 
             <hr>
 
             <section id="ofwat">
-                <h2><span class="section-number">5</span> The Regulatory Failure—Why Ofwat Let This Happen</h2>
+                <h2><span class="section-number">6</span> The Regulatory Failure—Why Ofwat Let This Happen</h2>
 
                 <h3>The Notional Company Fiction</h3>
 
@@ -1148,9 +1306,7 @@
 
                 <p>But here's the problem: <strong>This is purely theoretical.</strong> Companies can choose whatever capital structure they want. If Thames operates at 80% gearing while Ofwat prices for 55%, Thames can keep the difference.</p>
 
-                <p>More efficient, right? That's how it was sold.</p>
-
-                <p>Except when things go wrong, the notional 55% company would be fine while the actual 80% company faces insolvency.</p>
+                <p>More efficient, right? That's how it was sold. Except when things go wrong, the notional 55% company would be fine while the actual 80% company faces insolvency.</p>
 
                 <h3>The 15-Year Blind Spot</h3>
 
@@ -1158,102 +1314,45 @@
 
                 <p><strong>This proved completely wrong.</strong></p>
 
-                <p>Three failures of market discipline became apparent:</p>
-
-                <!-- REVAMPED TIMELINE 3: Detailed vertical flow with content boxes -->
-                <div class="chart-section">
-                    <p class="chart-description">
-                        The consistent pattern shows regulatory interventions arrived years after 
-                        problems became acute, allowing financial engineering to run ahead of oversight.
-                    </p>
-                    <div class="viz-timeline">
-                        <div class="viz-timeline-item">
-                            <span class="viz-timeline-date">1989-2004</span>
-                            <div class="viz-timeline-content">
-                                <h4>Phase 1: Light-Touch Regulation</h4>
-                                <p>Ofwat allowed companies discretion over capital structure. Gearing rapidly increased from near-zero to 60%+.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="viz-timeline-item">
-                            <span class="viz-timeline-date">2005-2014</span>
-                            <div class="viz-timeline-content">
-                                <h4>Phase 2: Financial Engineering Emerges</h4>
-                                <p>Private equity (Macquarie) acquires utilities. **Whole Business Securitization (WBS)** structures proliferate, allowing high debt loads.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="viz-timeline-item">
-                            <span class="viz-timeline-date">2014</span>
-                            <div class="viz-timeline-content">
-                                <h4>PR14: First Signs of Concern</h4>
-                                <p>Ofwat acknowledges Thames Water's **"unsustainable financial position"** but determination still permits continuation of the existing structure.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="viz-timeline-item">
-                            <span class="viz-timeline-date">2019</span>
-                            <div class="viz-timeline-content">
-                                <h4>PR19: Financial Resilience Focus</h4>
-                                <p>Ofwat implements tougher standards and enhanced penalty mechanisms (ODIs), forcing high-geared companies to share outperformance benefits.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="viz-timeline-item">
-                            <span class="viz-timeline-date">2023</span>
-                            <div class="viz-timeline-content">
-                                <h4>Licence Condition P30: Dividend Controls</h4>
-                                <p>Ofwat introduces P30 linking dividends to performance and financial resilience—**after** billions had already been extracted.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="viz-timeline-item">
-                            <span class="viz-timeline-date">2024</span>
-                            <div class="viz-timeline-content">
-                                <h4>Enforcement and Credit Rating Lock-Up</h4>
-                                <p>Thames is fined £18.2M for P30 breach. Credit rating agencies downgrade to **junk status** (BB+/Ba1), triggering automatic regulatory lock-ups.</p>
-                            </div>
+                <div class="viz-timeline">
+                    <div class="viz-timeline-item">
+                        <span class="viz-timeline-date">1989-2004</span>
+                        <div class="viz-timeline-content">
+                            <h4>Phase 1: Light-Touch Regulation</h4>
+                            <p>Ofwat allowed companies discretion over capital structure. Gearing increased rapidly from near-zero to 60%+.</p>
                         </div>
                     </div>
-                    <div class="insight-box"> 
-                        <strong>Key Insight:</strong> The consistent pattern shows regulatory interventions arrived years after 
-                        problems became acute. Gearing mechanisms came after companies had already leveraged to 80%+. Dividend 
-                        controls came after billions were extracted. Financial resilience requirements came after balance sheets 
-                        had deteriorated. This reactive approach enabled the crisis.
-                    </div>
-                </div>
 
-                <h3>When Did Ofwat Wake Up?</h3>
-
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-year">2019</div>
-                        <strong>The Turning Point (PR19 Price Review)</strong>
-                        <p>By the mid-2010s, concern was growing about financial engineering in the sector. Thames Water became the poster child. Following Macquarie's exit in 2017, the company hit a record £20.3 million fine for sewage leaks that had occurred under Macquarie's ownership.</p>
-                        <p>For the first time in PR19, Ofwat conducted detailed assessments of companies' financial structures, warning those with high gearing.</p>
+                    <div class="viz-timeline-item">
+                        <span class="viz-timeline-date">2005-2014</span>
+                        <div class="viz-timeline-content">
+                            <h4>Phase 2: Financial Engineering Emerges</h4>
+                            <p>Private equity acquires utilities. Whole Business Securitization structures proliferate.</p>
+                        </div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">December 2019</div>
-                        <strong>License Condition P30</strong>
-                        <p>Ofwat established principles for dividend payments:</p>
-                        <ul>
-                            <li><strong>Principle 1:</strong> Dividends should reflect company performance</li>
-                            <li><strong>Principle 2:</strong> Decisions should be transparent</li>
-                            <li><strong>Principle 3:</strong> Explain consistency with long-term planning</li>
-                            <li><strong>Principle 4:</strong> Maintain financial resilience</li>
-                        </ul>
-                    </div>
-                </div>
 
-                <div class="insight-box">
-                    <p><strong>But this came after billions had already been extracted.</strong> The tougher approach now squeezed companies that were already fragile from years of aggressive financial management.</p>
+                    <div class="viz-timeline-item">
+                        <span class="viz-timeline-date">2019</span>
+                        <div class="viz-timeline-content">
+                            <h4>PR19: Financial Resilience Focus</h4>
+                            <p>Ofwat implements tougher standards and enhanced penalty mechanisms.</p>
+                        </div>
+                    </div>
+
+                    <div class="viz-timeline-item">
+                        <span class="viz-timeline-date">2023</span>
+                        <div class="viz-timeline-content">
+                            <h4>Licence Condition P30: Dividend Controls</h4>
+                            <p>Ofwat introduces dividend controls—after billions had already been extracted.</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <hr>
 
             <section id="crisis">
-                <h2><span class="section-number">6</span> The Breaking Point—When Everything Stopped Working</h2>
+                <h2><span class="section-number">7</span> The Breaking Point—When Everything Stopped Working</h2>
 
                 <h3>PR24: The Regulatory Squeeze</h3>
 
@@ -1261,29 +1360,19 @@
 
                 <h4>The Investment Gap</h4>
 
-                <p>Ofwat identified <strong>£144 billion</strong> of sector-wide investment needs, with Thames requiring approximately <strong>£19 billion</strong> to meet environmental obligations:</p>
-
-                <ul>
-                    <li>Reducing sewage spills by 29%</li>
-                    <li>Preventing nutrient pollution</li>
-                    <li>Fixing decades of deferred leakage repairs</li>
-                </ul>
+                <p>Ofwat identified <strong>£144 billion</strong> of sector-wide investment needs, with Thames requiring approximately <strong>£19 billion</strong> to meet environmental obligations.</p>
 
                 <h4>The Efficiency Challenge</h4>
 
-                <p>In July 2024, Ofwat's draft determination allowed average household bill increases of 21% over five years. For Thames customers, this meant bills rising by <strong>£152 over five years</strong>, or approximately £17/month initially.</p>
-
-                <p>But then Ofwat did something that shocked Thames: they challenged the company's business plan, imposing a <strong>£4 billion reduction</strong> in expected capital expenditure allowances.</p>
+                <p>In July 2024, Ofwat's draft determination allowed average bill increases of 21% over five years. But then Ofwat challenged Thames's business plan, imposing a <strong>£4 billion reduction</strong> in expected capital expenditure allowances.</p>
 
                 <div class="insight-box">
-                    <p>Ofwat argued the company could deliver required investment more efficiently. Thames countered that the determination was financially unachievable given high inflation, unprecedented infrastructure demands, and the need to service existing debt.</p>
+                    <p>Ofwat argued the company could deliver required investment more efficiently. Thames countered that the determination was financially unachievable given high inflation and existing debt obligations.</p>
                 </div>
 
                 <h3>March 2025: The Covenant Breach</h3>
 
-                <p>Then came the technical trigger that made the crisis official.</p>
-
-                <p>Thames Water's WBS structure includes multiple financial covenants that trigger restrictions if breached. The critical one is the <strong><span class="glossary-term" data-definition="Post-Maintenance Interest Cover Ratio: measures cash generation vs interest obligations">PMICR (Post-Maintenance Interest Cover Ratio)</span></strong>.</p>
+                <p>Thames Water's WBS structure includes financial covenants that trigger restrictions if breached. The critical one is the <strong>PMICR (Post-Maintenance Interest Cover Ratio)</strong>.</p>
 
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -1295,544 +1384,307 @@
                         <div class="stat-label">Actual PMICR (March 2025)</div>
                     </div>
                 </div>
-                
-                <!-- START: Charts for Financial Collapse -->
-                <div class="chart-section">
-                    <p class="chart-description">
-                        This chart illustrates the stark difference in gearing (debt-to-RAB ratio) across UK water companies. 
-                        WBS-structured companies (Thames, Yorkshire, Anglian, Southern) operate at significantly higher leverage 
-                        than listed PLCs (United Utilities, Severn Trent) and the not-for-profit Welsh Water.
-                    </p>
-                    <div class="chart-container">
-                        <canvas id="gearingChart"></canvas>
-                    </div>
-                    <div class="insight-box"> 
-                        <strong>Key Insight:</strong> Thames Water's 81.3% gearing (rising to 84.4% by March 2025) represents 
-                        the highest leverage in the sector, approximately 15-20 percentage points higher than conservatively-financed 
-                        peers. This leaves virtually no cushion for financial shocks.
-                    </div>
-                </div>
-                
-                <div class="chart-section">
-                    <p class="chart-description">
-                        The Adjusted Interest Cover Ratio (AICR) measures how many times a company can cover its interest 
-                        obligations from operating cash flows. A ratio below 1.1x triggers automatic restrictions. Thames Water's 
-                        breach of this covenant in March 2025 signaled operational insolvency.
-                    </p>
-                    <div class="chart-container">
-                        <canvas id="interestCoverChart"></canvas>
-                    </div>
-                    <div class="insight-box"> 
-                        <strong>Key Insight:</strong> Thames Water's AICR of 1.09x means operational cash flows barely cover 
-                        interest payments, leaving nothing for maintenance or investment. Welsh Water's exceptionally low ratio 
-                        (0.65x) reflects its not-for-profit structure where minimal interest cover is acceptable since all surpluses 
-                        are retained for investment.
-                    </div>
-                </div>
-                <!-- END: Charts for Financial Collapse -->
 
-                <p>That's a razor-thin 9% margin. Cash generation covered interest by only 9%—a margin providing no cushion for unexpected costs or revenue shortfalls.</p>
+                <p>That's a razor-thin 9% margin. Cash generation covered interest by only 9%—no cushion for unexpected costs.</p>
 
                 <h3>What the Breach Actually Meant</h3>
 
                 <p>When PMICR fell to 1.09x, the securitization covenants automatically prevented distributions from TWUL to parent companies. This protected bondholders but effectively rendered equity worthless.</p>
 
-                <p class="big-quote">"The WBS structure functioned exactly as designed—protecting senior creditors while concentrating losses on equity and junior creditors."</p>
+                <p class="big-quote">"The WBS structure functioned exactly as designed—protecting senior creditors while concentrating losses on equity."</p>
             </section>
 
             <hr>
 
             <section id="impairment">
-                <h2><span class="section-number">7</span> The £4.3 Billion Smoking Gun—What the Impairment Reveals</h2>
+                <h2><span class="section-number">8</span> The £4.3 Billion Smoking Gun</h2>
 
                 <h3>Understanding the Write-Down</h3>
 
                 <p>In March 2024, Thames Water's parent company recognized a <strong>£4.4 billion pre-tax loss</strong>, comprising:</p>
 
                 <ul>
-                    <li><strong>£4.3 billion impairment</strong> of the investment in the operating company (TWUL)</li>
+                    <li><strong>£4.3 billion impairment</strong> of the investment in TWUL</li>
                     <li><strong>Effectively zero equity value</strong> at parent level after impairment</li>
                 </ul>
 
                 <p>This wasn't a trading loss. This was a one-time recognition of structural failure.</p>
 
-                <h3>The Valuation Methodology</h3>
-
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <strong>Expected cash flows</strong> from TWUL operations
-                    </div>
-                    <div class="timeline-item">
-                        <strong>Minus:</strong> Required capital expenditure (~£20-24 billion over next 10 years)
-                    </div>
-                    <div class="timeline-item">
-                        <strong>Minus:</strong> Debt service obligations (£16+ billion debt at ~4-5% average cost)
-                    </div>
-                    <div class="timeline-item">
-                        <strong>Result:</strong> Discounted at appropriate rate
-                    </div>
-                </div>
-
-                <p><strong>The conclusion:</strong> Future cash flows from TWUL, after servicing debt and funding required investment under PR24 allowances, would provide <strong>no residual value to equity holders.</strong></p>
-
-                <h3>When Did Value Actually Disappear?</h3>
-
-                <p><strong>Two theories:</strong></p>
-
-                <p><strong>Gradual Erosion Theory:</strong> Value eroded gradually over 2006-2024 as operational issues accumulated and financial structure became more fragile, but was only recognized in 2024 when PR24 made it impossible to ignore.</p>
-
-                <p><strong>Sudden Collapse Theory:</strong> The equity retained genuine value until PR24's efficiency challenges and regulatory squeeze suddenly rendered the structure unviable, causing rapid collapse.</p>
-
                 <div class="insight-box">
-                    <p>The evidence weight suggests <strong>gradual erosion masked by financial engineering and favorable regulatory periods</strong>, with PR24 as the catalyst exposing what was already a fragile position. The £4.3bn impairment likely represents accumulated value destruction over many years, finally recognized.</p>
+                    <p><strong>Key Insight:</strong> The impairment was triggered by regulatory uncertainty from PR24. Management determined that future cash flows from TWUL, after servicing debt and funding required investment, would provide no residual value to equity holders.</p>
                 </div>
             </section>
 
             <hr>
 
             <section id="comparison">
-                <h2><span class="section-number">8</span> The Comparison That Changes Everything</h2>
+                <h2><span class="section-number">9</span> The Comparison That Changes Everything</h2>
 
                 <h3>International Models</h3>
-                
-                <div class="chart-section">
-                    <p class="chart-description">
-                        Comparing England & Wales to European models reveals that privatization has not delivered superior 
-                        outcomes. Public and hybrid models in France, Germany, and Netherlands achieve equal or better 
-                        performance at comparable or lower costs.
-                    </p>
-                    <div class="comparison-grid">
-                        <div class="comparison-card">
-                            <h3>England & Wales (Privatized)</h3>
-                            <div class="metric">
-                                <span class="metric-label">Drinking Water Quality</span>
-                                <span class="metric-value">>99.7%</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Non-Revenue Water (Leakage)</span>
-                                <span class="metric-value critical">23.4% (poor)</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Cost per Cubic Meter</span>
-                                <span class="metric-value">£4.14</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Investment Since 1990</span>
-                                <span class="metric-value">~£190 billion</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Dividends Paid</span>
-                                <span class="metric-value critical">£72 billion</span>
-                            </div>
+
+                <p>Here's what finally made everything click: I looked at how other countries do this.</p>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h3>England & Wales (Privatized)</h3>
+                        <div class="metric">
+                            <span class="metric-label">Drinking Water Quality</span>
+                            <span class="metric-value">>99.7%</span>
                         </div>
-                        
-                        <div class="comparison-card">
-                            <h3>Netherlands (Public Water Boards)</h3>
-                            <div class="metric">
-                                <span class="metric-label">Drinking Water Quality</span>
-                                <span class="metric-value good">100%</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Non-Revenue Water (Leakage)</span>
-                            <span class="metric-value good">6.0% (world-class)</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Cost per Cubic Meter</span>
-                                <span class="metric-value good">€3.87 (~£3.30)</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Supply Reliability</span>
-                                <span class="metric-value good">99.99%+</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Dividends Paid</span>
-                                <span class="metric-value good">£0 (retained)</span>
-                            </div>
+                        <div class="metric">
+                            <span class="metric-label">Leakage</span>
+                            <span class="metric-value critical">23.4%</span>
                         </div>
-                        
-                        <div class="comparison-card">
-                            <h3>Germany (Municipal Stadtwerke)</h3>
-                            <div class="metric">
-                                <span class="metric-label">Drinking Water Quality</span>
-                                <span class="metric-value good">>99.7%</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Non-Revenue Water (Leakage)</span>
-                                <span class="metric-value good">7.2% (excellent)</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Cost per Cubic Meter</span>
-                                <span class="metric-value">€4.66 (~£3.98)</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Infrastructure Age</span>
-                                <span class="metric-value">60%+ pre-1990</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Ownership</span>
-                                <span class="metric-value good">~90% public</span>
-                            </div>
+                        <div class="metric">
+                            <span class="metric-label">Cost per m³</span>
+                            <span class="metric-value">£4.14</span>
                         </div>
-                        
-                        <div class="comparison-card">
-                            <h3>France (Public-Private Partnership)</h3>
-                            <div class="metric">
-                                <span class="metric-label">Drinking Water Quality</span>
-                                <span class="metric-value">99.5%</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Non-Revenue Water (Leakage)</span>
-                                <span class="metric-value">21.3% (moderate)</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Cost per Cubic Meter</span>
-                                <span class="metric-value good">€3.48 (~£2.97)</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Model</span>
-                                <span class="metric-value">Concession contracts</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Asset Ownership</span>
-                                <span class="metric-value good">Public (municipalities)</span>
-                            </div>
+                        <div class="metric">
+                            <span class="metric-label">Dividends Paid</span>
+                            <span class="metric-value critical">£72 billion</span>
                         </div>
                     </div>
-                    <div class="insight-box"> 
-                        <strong>Key Insight:</strong> The Netherlands and Germany achieve superior leakage performance (6-7% vs. 
-                        23.4%) under public ownership. France's concession model separates asset ownership (public) from operations 
-                        (private), preventing the leverage/extraction dynamics seen in the UK. Germany's higher costs reflect labor 
-                        costs and geography, not inefficiency. The data contradicts claims that only privatization can deliver 
-                        efficiency.
+
+                    <div class="comparison-card">
+                        <h3>Netherlands (Public)</h3>
+                        <div class="metric">
+                            <span class="metric-label">Drinking Water Quality</span>
+                            <span class="metric-value good">100%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Leakage</span>
+                            <span class="metric-value good">6.0%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Cost per m³</span>
+                            <span class="metric-value good">€3.87</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Dividends Paid</span>
+                            <span class="metric-value good">£0</span>
+                        </div>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h3>Germany (Municipal)</h3>
+                        <div class="metric">
+                            <span class="metric-label">Drinking Water Quality</span>
+                            <span class="metric-value">>99.7%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Leakage</span>
+                            <span class="metric-value good">7.2%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Cost per m³</span>
+                            <span class="metric-value">€4.66</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Public Ownership</span>
+                            <span class="metric-value good">~90%</span>
+                        </div>
+                    </div>
+
+                    <div class="comparison-card">
+                        <h3>France (Public-Private)</h3>
+                        <div class="metric">
+                            <span class="metric-label">Drinking Water Quality</span>
+                            <span class="metric-value">99.5%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Leakage</span>
+                            <span class="metric-value">21.3%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Cost per m³</span>
+                            <span class="metric-value good">€3.48</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Asset Ownership</span>
+                            <span class="metric-value good">Public</span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="insight-box">
-                    <p><strong>The stat that haunts me:</strong> German and Dutch leakage rates (6-7%) vs. England's (23%). It demolishes the claim that "only privatization drives efficiency." Public ownership doesn't inherently mean inefficiency—it's about governance, incentives, and long-term thinking.</p>
+                    <p><strong>Key Insight:</strong> The Netherlands and Germany achieve superior leakage performance (6-7% vs. 23.4%) under public ownership. This demolishes claims that only privatization drives efficiency.</p>
                 </div>
             </section>
 
             <hr>
 
             <section id="watch">
-                <h2><span class="section-number">9</span> What We Need To Watch</h2>
+                <h2><span class="section-number">10</span> What We Need To Watch</h2>
 
-                <p>The £1 billion emergency funding changes the immediate picture, but not the fundamental dynamics. Here's what to watch:</p>
+                <p>The £1 billion emergency funding changes the immediate picture, but not the fundamental dynamics. Here's what matters:</p>
 
                 <h3>1. The Terms of the Rescue Deal</h3>
 
-                <p><strong>What We Know:</strong> Creditors are providing over £1 billion in emergency funding to keep Thames alive until May 2026.</p>
-
-                <p><strong>What We Don't Know Yet:</strong></p>
-
                 <ul>
-                    <li><strong>Interest rate</strong> on the emergency funding (likely very expensive—creditors have leverage)</li>
-                    <li><strong>Security arrangements</strong> (does this rank ahead of existing bonds?)</li>
-                    <li><strong>Conditions attached</strong> (operational improvements required? Management changes?)</li>
-                    <li><strong>Conversion rights</strong> (can creditors convert to equity at favorable terms?)</li>
+                    <li><strong>Interest rate</strong> on emergency funding</li>
+                    <li><strong>Security arrangements</strong> (ranking ahead of existing bonds?)</li>
+                    <li><strong>Conditions attached</strong></li>
+                    <li><strong>Conversion rights</strong></li>
                 </ul>
 
                 <div class="insight-box">
-                    <p><strong>Why It Matters:</strong> The terms will reveal how desperate Thames's position really is. High interest rates and super-senior security would indicate higher priced risk.</p>
+                    <p><strong>Why It Matters:</strong> The terms will reveal how desperate Thames's position really is. High interest rates indicate higher priced risk.</p>
                 </div>
 
                 <h3>2. The May 2026 Cliff Edge</h3>
 
-                <p>May 2026 likely coincides with one of two critical events:</p>
+                <p>May 2026 likely coincides with:</p>
 
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-year">Option A</div>
-                        <strong>Ofwat's PR24 Final Determination (Expected April/May 2026)</strong>
-                        <p>This will determine:</p>
-                        <ul>
-                            <li>Final allowed revenues for 2wich will determine:030</li>
-                            <li>Whether Thames gets more generous allowances than July 2024 draft</li>
-                            <li>If the business plan is financially viable or requires restructuring</li>
-                        </ul>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">Option B</div>
-                        <strong>Next Major Debt Maturity</strong>
-                        <p>Thames has bonds maturing throughout 2025-2026. The company needs to either:</p>
-                        <ul>
-                            <li>Refinance at maturity (requires market access = unlikely without restructuring)</li>
-                            <li>Pay down with cash (requires cash they don't have)</li>
-                            <li>Restructure before maturity (most likely path)</li>
-                        </ul>
-                    </div>
-                </div>
+                <ul>
+                    <li><strong>Ofwat's PR24 Final Determination</strong> - determining allowed revenues for 2025-2030</li>
+                    <li><strong>Next Major Debt Maturity</strong> - requiring refinance or restructuring</li>
+                </ul>
 
                 <h3>3. PMICR Trajectory</h3>
 
-                <p><strong>Current Status:</strong> 1.09x in March 2025 (below 1.1x covenant threshold)</p>
-
-                <p><strong>Impact of Rescue Funding:</strong> The £1bn injection should temporarily improve PMICR by providing cash to pay interest and reducing immediate refinancing pressure.</p>
-
-                <p><strong>But:</strong> This is temporary relief. The fundamental problem remains:</p>
                 <ul>
-                    <li>£17bn debt burden hasn't changed</li>
-                    <li>Operational cash generation hasn't improved</li>
-                    <li>Required investment still needed</li>
+                    <li><strong>Current Status:</strong> 1.09x in March 2025 (below 1.1x threshold)</li>
+                    <li><strong>Impact of £1bn:</strong> Should temporarily improve ratio</li>
+                    <li><strong>Fundamental Problem:</strong> £17bn debt hasn't changed</li>
                 </ul>
 
-                <h3>4. Creditor Coordination Signals</h3>
-
-                <p>The rescue deal proves senior creditors are coordinating. This is hugely significant.</p>
-
-                <div class="insight-box">
-                    <p>In complex debt restructurings, the hardest part is often getting creditors to act collectively. The fact they agreed to a coordinated £1bn injection suggests major bondholders have probably formed an informal committee with shared legal and financial advisors.</p>
-                </div>
-
-                <p><strong>What to Watch:</strong></p>
-                <ul>
-                    <li>Announcements of formal creditor committees</li>
-                    <li>Appointment of restructuring advisors (AlixPartners, FTI, PwC, etc.)</li>
-                    <li>Any "lockup agreements" requiring certain % of creditors to support eventual restructuring</li>
-                </ul>
-
-                <h3>5. Regulatory Response</h3>
-
-                <p>Ofwat must balance:</p>
-                <ul>
-                    <li>Consumer protection (not letting bills skyrocket)</li>
-                    <li>Environmental compliance (not letting standards slip)</li>
-                    <li>Financial viability (ensuring essential services continue)</li>
-                    <li>Precedent effects (not encouraging other companies to take excessive risks)</li>
-                </ul>
-
-                <p><strong>I'm betting on regulatory firmness</strong> because:</p>
-                <ul>
-                    <li>Political pressure for toughness on water companies is intense</li>
-                    <li>Labour government historically skeptical of utility privatization</li>
-                    <li>Public anger about sewage pollution makes regulatory "bailout" politically toxic</li>
-                </ul>
-
-                <h3>6. Contagion Watch</h3>
+                <h3>4. Contagion Watch</h3>
 
                 <p><strong>Companies at Elevated Risk:</strong></p>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number">68.9%</div>
-                        <div class="stat-label">Anglian Water Gearing</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">68.6%</div>
-                        <div class="stat-label">Yorkshire Water Gearing</div>
-                    </div>
-                </div>
-
-                <p>If either of these follow Thames into crisis within the next 6-12 months, it validates the structural vulnerability hypothesis and could trigger:</p>
                 <ul>
-                    <li>Sector-wide regulatory intervention</li>
-                    <li>Mandatory gearing caps</li>
-                    <li>Forced conversion to not-for-profit models</li>
-                    <li>Comprehensive review of privatization model</li>
+                    <li><strong>Anglian Water:</strong> 68.9% gearing</li>
+                    <li><strong>Yorkshire Water:</strong> 68.6% gearing (prior capital injection)</li>
                 </ul>
 
-                <h3>7. Political Developments</h3>
-                <p>The current government has expressed openness to public ownership for failing utilities. Watch for:</p>
-                <ul>
-                    <li>Statements from: Defra (Steve Reed, Environment Secretary): Policy direction on water sector; HM Treasury: Willingness to provide public funds; Prime Minister's Office: Political appetite for nationalization</li>
-                    <li>Key Signal: Any softening of "no bailouts for private failure" rhetoric = increased probability of temporary nationalization if restructuring fails</li>
-                    <li>Conversely: Strong statements about "private sector must solve private sector problems" = forcing creditor-led solution</li>
-                </ul>
+                <p>If either follows Thames into crisis, it validates sector-wide vulnerability and could trigger comprehensive reform.</p>
             </section>
 
             <hr>
 
             <section id="rescue">
-                <h2><span class="section-number">10</span> What the Rescue Deal Actually Means</h2>
-
-                <p>The £1 billion emergency funding doesn't resolve Thames's problems—it buys time to resolve them. Here's how this plays out:</p>
+                <h2><span class="section-number">11</span> What the Rescue Deal Actually Means</h2>
 
                 <h3>Revised Probability Assessment Post-Rescue</h3>
 
-                <h4>Scenario 1: Creditor-Led Restructuring (60-70%)</h4>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">60-70%</div>
+                        <div class="stat-label">Creditor-Led Restructuring</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">25-30%</div>
+                        <div class="stat-label">Special Administration</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number"><5%</div>
+                        <div class="stat-label">Full Nationalization</div>
+                    </div>
+                </div>
+
+                <h3>Scenario 1: Creditor-Led Restructuring (60-70%)</h3>
 
                 <p>What we're seeing is <strong>Act One of a multi-act restructuring</strong>:</p>
 
-                <!-- REVAMPED TIMELINE 4: Future 3-act flow -->
                 <div class="horizontal-timeline-grid">
                     <div class="timeline-card">
                         <span class="year">Act 1: Oct 2025</span>
                         <h4>Emergency Funding</h4>
-                        <p>£1bn injection buys runway until May 2026, demonstrating creditor willingness to engage in restructuring.</p>
+                        <p>£1bn injection buys runway until May 2026, proving creditor commitment to restructuring.</p>
                     </div>
                     <div class="timeline-card">
                         <span class="year">Act 2: Nov 2025 - Apr 2026</span>
                         <h4>Negotiations & Planning</h4>
-                        <p>Creditors, company, and Ofwat negotiate a comprehensive debt-for-equity swap and future investment plan.</p>
+                        <p>Creditors negotiate comprehensive debt-for-equity swap and future investment plan.</p>
                     </div>
                     <div class="timeline-card">
                         <span class="year">Act 3: May - Dec 2026</span>
-                        <h4>Implementation & Debt Swap</h4>
-                        <p>Full debt restructuring executed. Existing shareholders wiped out, new capital structure implemented with sustainable gearing (60-65%).</p>
+                        <h4>Implementation</h4>
+                        <p>Full debt restructuring executed with sustainable gearing (60-65%).</p>
                     </div>
                 </div>
 
-                <h4>What Creditors Will Demand</h4>
+                <h3>What Creditors Will Demand</h3>
 
                 <ol>
-                    <li><strong>Significant Debt Write-Down:</strong> £4-6bn debt forgiveness (bringing total from £17bn to £11-13bn)</li>
-                    <li><strong>Equity Upside:</strong> Debt-for-equity conversion giving creditors majority control and participation in future value creation</li>
-                    <li><strong>Higher Bill Increases:</strong> Beyond PR24 draft determination, potentially £20-25/month for customers</li>
-                    <li><strong>Environmental Concessions:</strong> Permission to operate below full compliance for transition period while infrastructure improved</li>
-                    <li><strong>Management Changes:</strong> New executive team with restructuring/infrastructure expertise</li>
-                    <li><strong>Regulatory Forbearance:</strong> Ofwat agreement not to impose penalties during restructuring period</li>
+                    <li><strong>Significant Debt Write-Down:</strong> £4-6bn forgiveness</li>
+                    <li><strong>Equity Upside:</strong> Debt-for-equity conversion giving control</li>
+                    <li><strong>Higher Bill Increases:</strong> Potentially £20-25/month</li>
+                    <li><strong>Environmental Concessions:</strong> Temporary compliance relief during transition</li>
+                    <li><strong>Management Changes:</strong> New restructuring-focused executive team</li>
+                    <li><strong>Regulatory Forbearance:</strong> Ofwat agreement on enforcement during transition</li>
                 </ol>
-
-                <div class="insight-box">
-                    <p><strong>Why Probability Increased:</strong> The coordinated creditor action proves they're willing to work together rather than fragmented individual approaches. This is the hardest hurdle in restructuring—once overcome, path to resolution becomes clearer.</p>
-                </div>
-
-                <h4>Scenario 2: Special Administration Regime (25-30%)</h4>
-
-                <p><em>Previously 35-45%, decreased because creditor coordination reduces SAR probability</em></p>
-
-                <p><strong>How This Could Still Happen:</strong></p>
-
-                <p>If creditor negotiations break down—most likely due to:</p>
-                <ul>
-                    <li><strong>Regulatory Refusal:</strong> Ofwat won't approve bill increases needed to make restructuring viable</li>
-                    <li><strong>Bondholder Disagreement:</strong> Different creditor classes can't agree on loss allocation</li>
-                    <li><strong>Insufficient New Capital:</strong> Can't attract £3-5bn new equity injection even with debt write-down</li>
-                </ul>
-
-                <p><strong>Then:</strong> Government places Thames into Special Administration</p>
-
-                <h4>Scenario 3: Not-for-Profit Conversion (10-15%)</h4>
-
-                <p>Thames could be converted to Welsh Water-style model as part of restructuring:</p>
-                <ul>
-                    <li>Debt significantly written down (£7-9bn forgiveness)</li>
-                    <li>No equity shareholders going forward</li>
-                    <li>All future surpluses reinvested or used to reduce customer bills</li>
-                    <li>Maintains WBS structure but eliminates extraction incentive</li>
-                </ul>
-
-                <p><strong>Advantages:</strong></p>
-                <ul>
-                    <li>Addresses public anger about profiteering</li>
-                    <li>Welsh Water proves model works</li>
-                    <li>Can be done within current regulatory framework (no legislation needed)</li>
-                    <li>Politically palatable</li>
-                </ul>
-
-                <h4>Scenario 4: Full Nationalization (&lt;5%)</h4>
-
-                <p><strong>Cost:</strong> £10-20bn for Thames alone (acquiring, restructuring, capital investment backlog)</p>
-
-                <p><strong>Why Very Low Probability:</strong> The rescue deal shows private sector is taking responsibility. Government would only step in if this fails catastrophically.</p>
             </section>
 
             <hr>
 
             <section id="impact">
-                <h2><span class="section-number">11</span> What This Means For...</h2>
+                <h2><span class="section-number">12</span> What This Means For...</h2>
 
                 <h3>If You're a Thames Customer</h3>
 
                 <p><strong>Short-term (Next 6 Months):</strong></p>
+
                 <ul>
                     <li>Service continues normally</li>
-                    <li>No immediate bill changes beyond what's already announced</li>
+                    <li>No immediate bill changes</li>
                     <li>Emergency funding ensures water keeps flowing</li>
                 </ul>
 
                 <p><strong>Medium-term (2026-2027):</strong></p>
+
                 <ul>
                     <li><strong>Expect significant bill increases</strong> (£20-25/month likely)</li>
-                    <li>These increases will be sold as "essential to fund investment and fix decades of underinvestment"</li>
-                    <li>Environmental performance may worsen before it improves</li>
+                    <li>Environmental performance may worsen before improving</li>
                 </ul>
 
                 <div class="insight-box">
-                    <p><strong>The Bottom Line:</strong> You're paying for this crisis one way or another. The question is whether you're funding: (A) Past shareholder extraction through higher bills, (B) Future creditor returns through higher bills, or (C) Public ownership transition through taxes/bills. None of these options is painless.</p>
+                    <p><strong>The Bottom Line:</strong> You're paying for this crisis one way or another. The question is whether you're funding past shareholder extraction, future creditor returns, or public ownership transition.</p>
                 </div>
 
                 <h3>If You're a UK Taxpayer</h3>
 
-                <p><strong>Best Case:</strong> No direct taxpayer exposure—private creditors and customers bear all costs</p>
+                <p><strong>Current Probability:</strong></p>
 
-                <p><strong>Realistic Case:</strong> Some indirect exposure through:</p>
                 <ul>
-                    <li>Regulatory forbearance (allowing environmental non-compliance = public health risk)</li>
-                    <li>Potential government bridge financing if restructuring needs public capital</li>
-                    <li>SAR costs if situation deteriorates</li>
+                    <li>70% no direct taxpayer costs</li>
+                    <li>25% modest exposure (£1-3bn)</li>
+                    <li>5% major exposure (£10-20bn)</li>
                 </ul>
-
-                <p><strong>Current Probability:</strong> 70% no direct taxpayer costs, 25% modest exposure (£1-3bn), 5% major exposure (£10-20bn)</p>
 
                 <h3>If You're a Policymaker</h3>
 
                 <p>The rescue deal doesn't resolve the fundamental tension—it just delays the reckoning.</p>
 
-                <h4>Three Critical Questions:</h4>
+                <p><strong>Three Critical Questions:</strong></p>
 
-                <p><strong>1. Should Ofwat Provide Regulatory Relief?</strong></p>
-
-                <p><strong>Arguments For:</strong> Essential services must continue, complete collapse would be catastrophic, some bill increases necessary for legitimate infrastructure needs.</p>
-
-                <p><strong>Arguments Against:</strong> Rewarding excessive leverage creates moral hazard, customers shouldn't bail out past shareholder extraction, other companies need to see consequences.</p>
-
-                <div class="insight-box">
-                    <p><strong>My View:</strong> Provide limited relief explicitly tied to infrastructure investment, but require significant creditor losses. Message: "We'll help fund future investment, but past financial engineering must be unwound at creditor expense."</p>
-                </div>
-
-                <p><strong>2. Is This Crisis Thames-Specific or Sector-Wide?</strong></p>
-
-                <p>The evidence (Anglian at 68.9% gearing, Yorkshire at 68.6% with prior capital injection) suggests <strong>cluster vulnerability, not isolated failure</strong>. This implies sector-wide issues requiring comprehensive reform.</p>
-
-                <p><strong>3. What's the Long-Term Future of Water Privatization?</strong></p>
-
-                <p><strong>Options:</strong></p>
-
-                <ul>
-                    <li><strong>A. Reformed Privatization:</strong> Hard gearing caps (60% maximum), simplified ownership structures, performance-linked dividend controls</li>
-                    <li><strong>B. Mixed Model:</strong> Some companies private (well-run), failing companies converted to not-for-profit or temporary public ownership</li>
-                    <li><strong>C. Full Renationalization:</strong> Return entire sector to public ownership</li>
-                </ul>
+                <ol>
+                    <li><strong>Should Ofwat Provide Regulatory Relief?</strong> Provide limited relief explicitly tied to infrastructure investment, but require creditor losses.</li>
+                    <li><strong>Is This Thames-Specific or Sector-Wide?</strong> Evidence suggests cluster vulnerability—Anglian and Yorkshire are also at risk.</li>
+                    <li><strong>What's the Long-Term Future?</strong> Option B (mixed model) is most pragmatic: preserve well-run private companies, convert failing ones to not-for-profit.</li>
+                </ol>
 
                 <div class="insight-box">
-                    <p><strong>My View:</strong> Option B (mixed model) is most pragmatic. It preserves what works, fixes what doesn't, avoids ideological extremes, and uses Welsh Water as blueprint.</p>
+                    <p><strong>Key Insight:</strong> The question isn't "public or private?"—it's "how do we align incentives with 50-100 year infrastructure needs?"</p>
                 </div>
             </section>
 
             <hr>
 
             <section id="conclusion">
-                <h2><span class="section-number">📊</span> Conclusion: The £1 Billion Bridge to Somewhere</h2>
+                <h2><span class="section-number">✓</span> Conclusion: The £1 Billion Bridge</h2>
 
                 <p>Thames Water's emergency rescue is <strong>not a happy ending—it's the end of Act One in a multi-year drama</strong>.</p>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number">60-70%</div>
-                        <div class="stat-label">Creditor Restructuring Probability</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">25-30%</div>
-                        <div class="stat-label">Special Administration Probability</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">&lt;5%</div>
-                        <div class="stat-label">Full Nationalization Probability</div>
-                    </div>
-                </div>
-
                 <h3>What I've Learned</h3>
 
-                <p><strong>The Invisibility of Gradual Erosion:</strong> Value was destroyed slowly from 2006-2024, masked by financial engineering. The £4.3bn impairment didn't reflect sudden collapse—it acknowledged what had been true for years.</p>
+                <p><strong>The Invisibility of Gradual Erosion:</strong> Value was destroyed slowly from 2006-2024, masked by financial engineering. The £4.3bn impairment acknowledged what had been true for years but was invisible on balance sheets.</p>
 
-                <p><strong>The Power of Incentives:</strong> Welsh Water and Thames had similar tools but radically different incentives. <strong>WBS + no dividends = sustainable. WBS + aggressive extraction = crisis.</strong></p>
+                <p><strong>The Power of Incentives:</strong> Welsh Water and Thames had similar tools (WBS, efficient debt financing) but radically different incentives. <strong>WBS + no dividends = sustainable. WBS + aggressive extraction = crisis.</strong></p>
 
-                <p><strong>AI's Help in Crafting This Analysis:</strong> I've improved my prompt engineering and context engineering significantly. Token efficiency is up while quality improves through experimentation. The journey is just beginning.</p>
+                <p><strong>The International Counterfactual:</strong> German and Dutch leakage rates (6-7%) vs. England's (23%) demolish claims that "only privatization drives efficiency."</p>
 
-                <div class="big-quote">
-                    "The question isn't 'public or private?'—it's 'how do we align incentives with 50-100 year infrastructure needs?'"
-                </div>
+                <p class="big-quote">"The question isn't 'public or private?'—it's 'how do we align incentives with 50-100 year infrastructure needs?'"</p>
             </section>
 
             <hr>
@@ -1844,34 +1696,32 @@
 
                 <p><strong>This is not:</strong> Financial advice, legal opinion, engineering assessment, or prediction of specific outcomes.</p>
 
-                <p>I used AI assistance (Claude) to help organize research, provide calculations, and improve clarity. All prompting, interpretation, and conclusions are my own.</p>
+                <p>I used AI assistance (Claude) to help organize research and improve clarity. All interpretation and conclusions are my own.</p>
 
-                <p><strong>If you're making important decisions about Thames Water bonds, water sector investments, or policy, please consult actual experts and do your own due diligence.</strong></p>
+                <p><strong>If you're making important decisions, please consult actual experts and do your own due diligence.</strong></p>
             </section>
         </article>
     </div>
 
     <!-- Mobile TOC Toggle -->
-    <button class="toc-toggle" id="tocToggle" aria-label="Toggle table of contents">
-        📑
-    </button>
+    <button class="toc-toggle" id="tocToggle" aria-label="Toggle table of contents">📑</button>
 
     <!-- Mobile TOC -->
     <div class="mobile-toc" id="mobileToc">
         <h3>📚 Contents</h3>
         <ol class="toc-list">
-            <li><a href="#thought-process" onclick="closeMobileToc()"><span class="toc-number">💭</span> Thought Process</a></li>
-            <li><a href="#intro" onclick="closeMobileToc()"><span class="toc-number">1</span> The Setup (1989)</a></li>
-            <li><a href="#rab" onclick="closeMobileToc()"><span class="toc-number">2</span> The RAB System</a></li>
-            <li><a href="#wbs" onclick="closeMobileToc()"><span class="toc-number">3</span> Ring-Fencing</a></li>
-            <li><a href="#macquarie" onclick="closeMobileToc()"><span class="toc-number">4</span> Macquarie Era</a></li>
-            <li><a href="#ofwat" onclick="closeMobileToc()"><span class="toc-number">5</span> Regulatory Failure</a></li>
-            <li><a href="#crisis" onclick="closeMobileToc()"><span class="toc-number">6</span> The Breaking Point</a></li>
-            <li><a href="#impairment" onclick="closeMobileToc()"><span class="toc-number">7</span> £4.3B Impairment</a></li>
-            <li><a href="#comparison" onclick="closeMobileToc()"><span class="toc-number">8</span> International Models</a></li>
-            <li><a href="#watch" onclick="closeMobileToc()"><span class="toc-number">9</span> What to Watch</a></li>
-            <li><a href="#rescue" onclick="closeMobileToc()"><span class="toc-number">10</span> The Rescue Deal</a></li>
-            <li><a href="#impact" onclick="closeMobileToc()"><span class="toc-number">11</span> Who Pays?</a></li>
+            <li><a href="#intro" onclick="closeMobileToc()">Thought Process</a></li>
+            <li><a href="#setup" onclick="closeMobileToc()">1989 Setup</a></li>
+            <li><a href="#rab" onclick="closeMobileToc()">RAB System</a></li>
+            <li><a href="#wbs" onclick="closeMobileToc()">Ring-Fencing</a></li>
+            <li><a href="#macquarie" onclick="closeMobileToc()">Macquarie Era</a></li>
+            <li><a href="#ofwat" onclick="closeMobileToc()">Regulatory Failure</a></li>
+            <li><a href="#crisis" onclick="closeMobileToc()">The Breaking Point</a></li>
+            <li><a href="#impairment" onclick="closeMobileToc()">Impairment</a></li>
+            <li><a href="#comparison" onclick="closeMobileToc()">International Models</a></li>
+            <li><a href="#watch" onclick="closeMobileToc()">What to Watch</a></li>
+            <li><a href="#rescue" onclick="closeMobileToc()">Rescue Deal</a></li>
+            <li><a href="#impact" onclick="closeMobileToc()">Who Pays?</a></li>
         </ol>
     </div>
 
@@ -1893,7 +1743,6 @@
         </div>
     </footer>
 
-    <!-- START: CHART.JS INITIALIZATION SCRIPT -->
     <script>
         // Reading Progress Bar
         function updateProgressBar() {
@@ -1902,7 +1751,6 @@
             const scrolled = (winScroll / height) * 100;
             document.getElementById('progressBar').style.width = scrolled + '%';
         }
-
         window.addEventListener('scroll', updateProgressBar);
 
         // Active TOC highlighting
@@ -1913,7 +1761,6 @@
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
                 if (window.pageYOffset >= sectionTop - 150) {
                     current = section.getAttribute('id');
                 }
@@ -1931,7 +1778,6 @@
 
         // Back to top button
         const backToTop = document.getElementById('backToTop');
-
         window.addEventListener('scroll', () => {
             if (window.pageYOffset > 300) {
                 backToTop.classList.add('visible');
@@ -1957,14 +1803,13 @@
             mobileToc.classList.remove('active');
         }
 
-        // Close mobile TOC when clicking outside
         mobileToc.addEventListener('click', (e) => {
             if (e.target === mobileToc) {
                 closeMobileToc();
             }
         });
 
-        // Smooth scrolling for anchor links
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -1977,462 +1822,6 @@
                 }
             });
         });
-
-        // --- CHART.JS INITIALIZATION ---
-        
-        Chart.defaults.font.family = "'Inter', sans-serif";
-        Chart.defaults.font.size = 12;
-
-        // Theme Colors (Derived from article's visual style)
-        const PRIMARY_BROWN = 'rgba(146, 64, 14, 0.8)'; // Darker Brown
-        const ACCENT_AMBER = 'rgba(217, 119, 6, 0.8)';  // Orange/Amber
-        const CRISIS_RED = 'rgba(220, 53, 69, 0.9)';   // Highlighting Thames/Failure
-        const SUCCESS_GREEN = 'rgba(40, 167, 69, 0.9)'; // Highlighting Success/Welsh
-        const NEUTRAL_GREY = 'rgba(108, 117, 125, 0.7)'; // General comparison/low-risk
-
-        // 1. Gearing Comparison Chart
-        const gearingCtx = document.getElementById('gearingChart').getContext('2d');
-        new Chart(gearingCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Thames Water', 'Yorkshire Water', 'Anglian Water', 'Southern Water', 
-                         'United Utilities', 'Severn Trent', 'South West Water', 'Welsh Water'],
-                datasets: [{
-                    label: 'Gearing (% of RAB) - March 2024',
-                    data: [81.3, 68.6, 68.9, 68.3, 67.0, 61.0, 68.3, 61.1],
-                    backgroundColor: [
-                        CRISIS_RED,         // Thames - Highlighted as critical
-                        ACCENT_AMBER,       // Yorkshire - High risk WBS
-                        ACCENT_AMBER,       // Anglian - High risk WBS
-                        ACCENT_AMBER,       // Southern - High risk WBS
-                        PRIMARY_BROWN,      // United Utilities - Closer to average/neutral
-                        SUCCESS_GREEN,      // Severn Trent - Low risk/Focal point of success
-                        PRIMARY_BROWN,      // South West - Closer to average/neutral
-                        SUCCESS_GREEN       // Welsh Water - Lowest risk/Focal point of success
-                    ],
-                    borderColor: [
-                        CRISIS_RED.replace('0.9', '1'),
-                        ACCENT_AMBER.replace('0.8', '1'),
-                        ACCENT_AMBER.replace('0.8', '1'),
-                        ACCENT_AMBER.replace('0.8', '1'),
-                        PRIMARY_BROWN.replace('0.8', '1'),
-                        SUCCESS_GREEN.replace('0.9', '1'),
-                        PRIMARY_BROWN.replace('0.8', '1'),
-                        SUCCESS_GREEN.replace('0.9', '1')
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    },
-                    title: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 90,
-                        ticks: {
-                            callback: function(value) {
-                                return value + '%';
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Gearing (Debt as % of RAB)'
-                        }
-                    }
-                }
-            }
-        });
-        
-        // 2. Interest Cover Ratio Chart
-        const interestCoverCtx = document.getElementById('interestCoverChart').getContext('2d');
-        new Chart(interestCoverCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Thames (Mar 24)', 'Thames (Mar 25)', 'Welsh Water', 'South West Water', 
-                         'United Utilities', 'Anglian Water', 'Severn Trent', 'Yorkshire Water'],
-                datasets: [{
-                    label: 'Adjusted Interest Cover Ratio (AICR)',
-                    data: [1.25, 1.09, 0.65, 0.74, 1.30, 1.29, 0.94, 2.47],
-                    backgroundColor: [
-                        ACCENT_AMBER,       // Thames Mar 24 - Pre-breach risk
-                        CRISIS_RED,         // Thames Mar 25 - Breach
-                        SUCCESS_GREEN,      // Welsh Water - Low ratio is acceptable due to structure (Focal)
-                        CRISIS_RED,         // South West - Below threshold/Failure
-                        PRIMARY_BROWN,      // United Utilities - Neutral
-                        PRIMARY_BROWN,      // Anglian - Neutral
-                        PRIMARY_BROWN,      // Severn Trent - Neutral
-                        SUCCESS_GREEN       // Yorkshire - Best ratio (Focal)
-                    ],
-                    borderColor: [
-                        ACCENT_AMBER.replace('0.8', '1'),
-                        CRISIS_RED.replace('0.9', '1'),
-                        SUCCESS_GREEN.replace('0.9', '1'),
-                        CRISIS_RED.replace('0.9', '1'),
-                        PRIMARY_BROWN.replace('0.8', '1'),
-                        PRIMARY_BROWN.replace('0.8', '1'),
-                        PRIMARY_BROWN.replace('0.8', '1'),
-                        SUCCESS_GREEN.replace('0.9', '1')
-                    ],
-                    borderWidth: 2
-                }],
-                plugins: [
-                    Chart.plugins.register(Chart.plugins.annotation), // Ensure annotation plugin is registered
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    },
-                    annotation: {
-                        annotations: {
-                            line1: {
-                                type: 'line',
-                                yMin: 1.1,
-                                yMax: 1.1,
-                                borderColor: CRISIS_RED.replace('0.9', '1'), // Use sharp red for the crisis line
-                                borderWidth: 3,
-                                borderDash: [10, 5],
-                                label: {
-                                    display: true,
-                                    content: 'Minimum Threshold (1.1x)',
-                                    position: 'end'
-                                }
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 3.0,
-                        ticks: {
-                            callback: function(value) {
-                                return value.toFixed(2) + 'x';
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Interest Cover Ratio (times)'
-                        }
-                    }
-                }
-            }
-        });
-        
-        // 3. Environmental Performance Chart
-        const environmentalCtx = document.getElementById('environmentalChart').getContext('2d');
-        new Chart(environmentalCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Severn Trent', 'United Utilities', 'Yorkshire Water', 'Anglian Water', 
-                         'South West Water', 'Thames Water', 'Southern Water'],
-                datasets: [{
-                    label: 'Environment Agency Rating (Stars)',
-                    data: [4, 2, 2, 2, 2, 1, 1],
-                    backgroundColor: [
-                        SUCCESS_GREEN,      // Severn Trent - 4 stars (Focal)
-                        ACCENT_AMBER,       // United Utilities - 2 stars
-                        ACCENT_AMBER,       // Yorkshire - 2 stars
-                        ACCENT_AMBER,       // Anglian - 2 stars
-                        ACCENT_AMBER,       // South West - 2 stars
-                        CRISIS_RED,         // Thames - 1 star (Focal)
-                        CRISIS_RED          // Southern - 1 star (Focal)
-                    ],
-                    borderColor: [
-                        SUCCESS_GREEN.replace('0.9', '1'),
-                        ACCENT_AMBER.replace('0.8', '1'),
-                        ACCENT_AMBER.replace('0.8', '1'),
-                        ACCENT_AMBER.replace('0.8', '1'),
-                        ACCENT_AMBER.replace('0.8', '1'),
-                        CRISIS_RED.replace('0.9', '1'),
-                        CRISIS_RED.replace('0.9', '1')
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 5,
-                        ticks: {
-                            stepSize: 1,
-                            callback: function(value) {
-                                const labels = ['', 'Poor (1★)', 'Requires Improvement (2★)', 
-                                              'Good (3★)', 'Industry Leading (4★)'];
-                                return labels[value] || '';
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Environmental Performance Rating'
-                        }
-                    }
-                }
-            }
-        });
-        
-        // 4. Leakage Performance Chart
-        const leakageCtx = document.getElementById('leakageChart').getContext('2d');
-        new Chart(leakageCtx, {
-            type: 'bar',
-            data: {
-                labels: ['South West Water', 'Yorkshire Water', 'Severn Trent', 'United Utilities', 
-                         'Anglian Water', 'Thames Water', 'Welsh Water'],
-                datasets: [
-                    {
-                        label: 'Target',
-                        data: [-17.4, -11.7, -10.5, -6.6, -12.4, -17.4, 15.9],
-                        backgroundColor: PRIMARY_BROWN.replace('0.8', '0.4'), // Light Brown for Target
-                        borderColor: PRIMARY_BROWN.replace('0.8', '1'),
-                        borderWidth: 2
-                    },
-                    {
-                        label: 'Actual',
-                        data: [-17.4, -12.7, -10.8, -7.1, -6.2, -12.0, 15.9],
-                        backgroundColor: [
-                            SUCCESS_GREEN,      // South West - Met
-                            SUCCESS_GREEN,      // Yorkshire - Exceeded (Focal)
-                            SUCCESS_GREEN,      // Severn Trent - Exceeded (Focal)
-                            ACCENT_AMBER,       // United Utilities - Marginal
-                            CRISIS_RED,         // Anglian - Miss
-                            CRISIS_RED,         // Thames - Significant miss (Focal)
-                            CRISIS_RED          // Welsh Water - Worsening (Focal: operational issue)
-                        ],
-                        borderColor: [
-                            SUCCESS_GREEN.replace('0.9', '1'),
-                            SUCCESS_GREEN.replace('0.9', '1'),
-                            SUCCESS_GREEN.replace('0.9', '1'),
-                            ACCENT_AMBER.replace('0.8', '1'),
-                            CRISIS_RED.replace('0.9', '1'),
-                            CRISIS_RED.replace('0.9', '1'),
-                            CRISIS_RED.replace('0.9', '1')
-                        ],
-                        borderWidth: 2
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    }
-                },
-                scales: {
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Leakage Change (%) - Negative is improvement'
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return value + '%';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        
-        // 5. Dividend Comparison Chart
-        const dividendCtx = document.getElementById('dividendChart').getContext('2d');
-        new Chart(dividendCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Anglian Water', 'Yorkshire Water', 'Thames Water', 'Severn Trent', 'Welsh Water'],
-                datasets: [{
-                    label: 'Total Dividends Paid Since Privatisation (£ billions)',
-                    data: [12.6, 7.6, 7.2, 5.0, 0],
-                    backgroundColor: [
-                        CRISIS_RED,         // Anglian - Highest extraction (Focal)
-                        ACCENT_AMBER,       // Yorkshire - High
-                        ACCENT_AMBER,       // Thames - High (Focal)
-                        PRIMARY_BROWN,      // Severn Trent - Lower/Neutral
-                        SUCCESS_GREEN       // Welsh Water - Zero (Focal)
-                    ],
-                    borderColor: [
-                        CRISIS_RED.replace('0.9', '1'),
-                        ACCENT_AMBER.replace('0.8', '1'),
-                        ACCENT_AMBER.replace('0.8', '1'),
-                        PRIMARY_BROWN.replace('0.8', '1'),
-                        SUCCESS_GREEN.replace('0.9', '1')
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Total Dividends (£ billions)'
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return '£' + value + 'bn';
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        
-        // 6. Debt Evolution Chart
-        const debtEvolutionCtx = document.getElementById('debtEvolutionChart').getContext('2d');
-        new Chart(debtEvolutionCtx, {
-            type: 'line',
-            data: {
-                labels: ['2006', '2008', '2010', '2012', '2014', '2016', '2017', '2019', '2021', '2022', '2023', '2024'],
-                datasets: [
-                    {
-                        label: 'Net Debt (£ billions)',
-                        data: [3.2, 4.5, 6.0, 7.5, 8.8, 9.8, 10.5, 11.2, 12.5, 14.0, 15.5, 18.0],
-                        borderColor: CRISIS_RED.replace('0.9', '1'), // Red for Debt (Crisis)
-                        backgroundColor: CRISIS_RED.replace('0.9', '0.1'),
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Cumulative Dividends Paid (£ billions)',
-                        data: [0, 0.4, 0.9, 1.4, 1.9, 2.4, 2.8, 3.2, 3.5, 3.7, 3.8, 3.8],
-                        borderColor: PRIMARY_BROWN.replace('0.8', '1'), // Brown for Dividends
-                        backgroundColor: PRIMARY_BROWN.replace('0.8', '0.1'),
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    },
-                    annotation: {
-                        annotations: {
-                            box1: {
-                                type: 'box',
-                                xMin: 0,
-                                xMax: 6,
-                                backgroundColor: ACCENT_AMBER.replace('0.8', '0.1'), // Amber highlight for Macquarie Era
-                                borderColor: ACCENT_AMBER.replace('0.8', '0.5'),
-                                borderWidth: 2,
-                                label: {
-                                    display: true,
-                                    content: 'Macquarie Era',
-                                    position: 'start'
-                                }
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Amount (£ billions)'
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return '£' + value + 'bn';
-                            }
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Year'
-                        }
-                    }
-                }
-            }
-        });
-        
-        // 7. Pollution Incidents Chart
-        const pollutionCtx = document.getElementById('pollutionChart').getContext('2d');
-        new Chart(pollutionCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Thames Water', 'Anglian Water', 'South West Water', 'Yorkshire Water'],
-                datasets: [{
-                    label: 'Serious Pollution Incidents (2023-24)',
-                    data: [33, 437, 189, 151],
-                    backgroundColor: [
-                        CRISIS_RED,         // Thames - Focal
-                        ACCENT_AMBER,       // Anglian - High, but not Thames's direct crisis metric
-                        PRIMARY_BROWN,      // South West - Neutral
-                        PRIMARY_BROWN       // Yorkshire - Neutral
-                    ],
-                    borderColor: [
-                        CRISIS_RED.replace('0.9', '1'),
-                        ACCENT_AMBER.replace('0.8', '1'),
-                        PRIMARY_BROWN.replace('0.8', '1'),
-                        PRIMARY_BROWN.replace('0.8', '1')
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Number of Incidents'
-                        }
-                    }
-                }
-            }
-        });
-        
     </script>
-    <!-- END: CHART.JS INITIALIZATION SCRIPT -->
 </body>
 </html>
