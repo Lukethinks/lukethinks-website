@@ -14,6 +14,7 @@
     
     <!-- START: Chart.js for Visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
     <!-- END: Chart.js for Visualizations -->
 
     <style>
@@ -194,18 +195,18 @@
             margin-right: 0.5rem;
         }
 
-        /* Article Layout */
+        /* Article Layout (ADJUSTED FOR WIDTH AND MARGINS) */
         .article-layout {
             display: grid;
             grid-template-columns: 250px 1fr;
-            gap: 3rem;
-            max-width: 1400px;
+            gap: 4rem; /* Increased gap */
+            max-width: 1500px; /* Increased overall max width */
             margin: 0 auto;
-            padding: 2rem 24px;
+            padding: 2rem 40px; /* Increased padding */
         }
 
         .article-content {
-            max-width: 800px;
+            max-width: 900px; /* Increased max width for readability and chart space */
             min-width: 0;
         }
 
@@ -493,9 +494,10 @@
         .layer:hover {
             transform: translateX(10px);
         }
-        .layer1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .layer2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-        .layer3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        /* Adjusted WBS colors to theme */
+        .layer1 { background: linear-gradient(135deg, #92400E 0%, #D97706 100%); } /* Primary Brown / Accent Amber */
+        .layer2 { background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%); } /* Blue for Finance Layer */
+        .layer3 { background: linear-gradient(135deg, #4B5563 0%, #6B7280 100%); } /* Grey for Holding/Equity Layer */
         .layer h3 { margin-bottom: 10px; font-size: 1.3em; }
         .layer-details { font-size: 0.95em; opacity: 0.95; line-height: 1.5; }
 
@@ -1358,7 +1360,7 @@
                             </div>
                             <div class="metric">
                                 <span class="metric-label">Non-Revenue Water (Leakage)</span>
-                                <span class="metric-value good">6.0% (world-class)</span>
+                            <span class="metric-value good">6.0% (world-class)</span>
                             </div>
                             <div class="metric">
                                 <span class="metric-label">Cost per Cubic Meter</span>
@@ -1577,6 +1579,7 @@
                             <li>Keeps lights on until May 2026</li>
                             <li>Gives time for comprehensive restructuring negotiations</li>
                             <li>Demonstrates creditor willingness to engage</li>
+                        <li></li>
                         </ul>
                     </div>
                     <div class="timeline-item">
@@ -1820,6 +1823,7 @@
         </div>
     </footer>
 
+    <!-- START: CHART.JS INITIALIZATION SCRIPT -->
     <script>
         // Reading Progress Bar
         function updateProgressBar() {
@@ -1903,14 +1907,19 @@
                 }
             });
         });
-    </script>
 
-    <!-- START: CHART.JS INITIALIZATION SCRIPT -->
-    <script>
-        // Chart.js default configuration
-        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
-        Chart.defaults.font.size = 12;
+        // --- CHART.JS INITIALIZATION ---
         
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.font.size = 12;
+
+        // Theme Colors (Derived from article's visual style)
+        const PRIMARY_BROWN = 'rgba(146, 64, 14, 0.8)'; // Darker Brown
+        const ACCENT_AMBER = 'rgba(217, 119, 6, 0.8)';  // Orange/Amber
+        const CRISIS_RED = 'rgba(220, 53, 69, 0.9)';   // Highlighting Thames/Failure
+        const SUCCESS_GREEN = 'rgba(40, 167, 69, 0.9)'; // Highlighting Success/Welsh
+        const NEUTRAL_GREY = 'rgba(108, 117, 125, 0.7)'; // General comparison/low-risk
+
         // 1. Gearing Comparison Chart
         const gearingCtx = document.getElementById('gearingChart').getContext('2d');
         new Chart(gearingCtx, {
@@ -1922,24 +1931,24 @@
                     label: 'Gearing (% of RAB) - March 2024',
                     data: [81.3, 68.6, 68.9, 68.3, 67.0, 61.0, 68.3, 61.1],
                     backgroundColor: [
-                        'rgba(220, 53, 69, 0.8)',   // Thames - Red (critical)
-                        'rgba(255, 193, 7, 0.8)',   // Yorkshire - Amber
-                        'rgba(255, 193, 7, 0.8)',   // Anglian - Amber
-                        'rgba(255, 193, 7, 0.8)',   // Southern - Amber
-                        'rgba(40, 167, 69, 0.8)',   // United Utilities - Green
-                        'rgba(40, 167, 69, 0.8)',   // Severn Trent - Green
-                        'rgba(255, 193, 7, 0.8)',   // South West - Amber
-                        'rgba(40, 167, 69, 0.8)'    // Welsh Water - Green
+                        CRISIS_RED,         // Thames - Highlighted as critical
+                        ACCENT_AMBER,       // Yorkshire - High risk WBS
+                        ACCENT_AMBER,       // Anglian - High risk WBS
+                        ACCENT_AMBER,       // Southern - High risk WBS
+                        PRIMARY_BROWN,      // United Utilities - Closer to average/neutral
+                        SUCCESS_GREEN,      // Severn Trent - Low risk/Focal point of success
+                        PRIMARY_BROWN,      // South West - Closer to average/neutral
+                        SUCCESS_GREEN       // Welsh Water - Lowest risk/Focal point of success
                     ],
                     borderColor: [
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(40, 167, 69, 1)'
+                        CRISIS_RED.replace('0.9', '1'),
+                        ACCENT_AMBER.replace('0.8', '1'),
+                        ACCENT_AMBER.replace('0.8', '1'),
+                        ACCENT_AMBER.replace('0.8', '1'),
+                        PRIMARY_BROWN.replace('0.8', '1'),
+                        SUCCESS_GREEN.replace('0.9', '1'),
+                        PRIMARY_BROWN.replace('0.8', '1'),
+                        SUCCESS_GREEN.replace('0.9', '1')
                     ],
                     borderWidth: 2
                 }]
@@ -1985,24 +1994,24 @@
                     label: 'Adjusted Interest Cover Ratio (AICR)',
                     data: [1.25, 1.09, 0.65, 0.74, 1.30, 1.29, 0.94, 2.47],
                     backgroundColor: [
-                        'rgba(255, 193, 7, 0.8)',   // Thames Mar 24 - Amber
-                        'rgba(220, 53, 69, 0.8)',   // Thames Mar 25 - Red (breach)
-                        'rgba(40, 167, 69, 0.8)',   // Welsh Water - Green (not-for-profit)
-                        'rgba(220, 53, 69, 0.8)',   // South West - Red
-                        'rgba(40, 167, 69, 0.8)',   // United Utilities - Green
-                        'rgba(40, 167, 69, 0.8)',   // Anglian - Green
-                        'rgba(255, 193, 7, 0.8)',   // Severn Trent - Amber
-                        'rgba(40, 167, 69, 0.8)'    // Yorkshire - Green
+                        ACCENT_AMBER,       // Thames Mar 24 - Pre-breach risk
+                        CRISIS_RED,         // Thames Mar 25 - Breach
+                        SUCCESS_GREEN,      // Welsh Water - Low ratio is acceptable due to structure (Focal)
+                        CRISIS_RED,         // South West - Below threshold/Failure
+                        PRIMARY_BROWN,      // United Utilities - Neutral
+                        PRIMARY_BROWN,      // Anglian - Neutral
+                        PRIMARY_BROWN,      // Severn Trent - Neutral
+                        SUCCESS_GREEN       // Yorkshire - Best ratio (Focal)
                     ],
                     borderColor: [
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(40, 167, 69, 1)'
+                        ACCENT_AMBER.replace('0.8', '1'),
+                        CRISIS_RED.replace('0.9', '1'),
+                        SUCCESS_GREEN.replace('0.9', '1'),
+                        CRISIS_RED.replace('0.9', '1'),
+                        PRIMARY_BROWN.replace('0.8', '1'),
+                        PRIMARY_BROWN.replace('0.8', '1'),
+                        PRIMARY_BROWN.replace('0.8', '1'),
+                        SUCCESS_GREEN.replace('0.9', '1')
                     ],
                     borderWidth: 2
                 }]
@@ -2021,7 +2030,7 @@
                                 type: 'line',
                                 yMin: 1.1,
                                 yMax: 1.1,
-                                borderColor: 'rgb(220, 53, 69)',
+                                borderColor: CRISIS_RED.replace('0.9', '1'), // Use sharp red for the crisis line
                                 borderWidth: 3,
                                 borderDash: [10, 5],
                                 label: {
@@ -2062,22 +2071,22 @@
                     label: 'Environment Agency Rating (Stars)',
                     data: [4, 2, 2, 2, 2, 1, 1],
                     backgroundColor: [
-                        'rgba(40, 167, 69, 0.8)',   // Severn Trent - 4 stars
-                        'rgba(255, 193, 7, 0.8)',   // United Utilities - 2 stars
-                        'rgba(255, 193, 7, 0.8)',   // Yorkshire - 2 stars
-                        'rgba(255, 193, 7, 0.8)',   // Anglian - 2 stars
-                        'rgba(255, 193, 7, 0.8)',   // South West - 2 stars
-                        'rgba(220, 53, 69, 0.8)',   // Thames - 1 star
-                        'rgba(220, 53, 69, 0.8)'    // Southern - 1 star
+                        SUCCESS_GREEN,      // Severn Trent - 4 stars (Focal)
+                        ACCENT_AMBER,       // United Utilities - 2 stars
+                        ACCENT_AMBER,       // Yorkshire - 2 stars
+                        ACCENT_AMBER,       // Anglian - 2 stars
+                        ACCENT_AMBER,       // South West - 2 stars
+                        CRISIS_RED,         // Thames - 1 star (Focal)
+                        CRISIS_RED          // Southern - 1 star (Focal)
                     ],
                     borderColor: [
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(220, 53, 69, 1)'
+                        SUCCESS_GREEN.replace('0.9', '1'),
+                        ACCENT_AMBER.replace('0.8', '1'),
+                        ACCENT_AMBER.replace('0.8', '1'),
+                        ACCENT_AMBER.replace('0.8', '1'),
+                        ACCENT_AMBER.replace('0.8', '1'),
+                        CRISIS_RED.replace('0.9', '1'),
+                        CRISIS_RED.replace('0.9', '1')
                     ],
                     borderWidth: 2
                 }]
@@ -2123,30 +2132,30 @@
                     {
                         label: 'Target',
                         data: [-17.4, -11.7, -10.5, -6.6, -12.4, -17.4, 15.9],
-                        backgroundColor: 'rgba(102, 126, 234, 0.5)',
-                        borderColor: 'rgba(102, 126, 234, 1)',
+                        backgroundColor: PRIMARY_BROWN.replace('0.8', '0.4'), // Light Brown for Target
+                        borderColor: PRIMARY_BROWN.replace('0.8', '1'),
                         borderWidth: 2
                     },
                     {
                         label: 'Actual',
                         data: [-17.4, -12.7, -10.8, -7.1, -6.2, -12.0, 15.9],
                         backgroundColor: [
-                            'rgba(40, 167, 69, 0.8)',   // South West - Met
-                            'rgba(40, 167, 69, 0.8)',   // Yorkshire - Exceeded
-                            'rgba(40, 167, 69, 0.8)',   // Severn Trent - Exceeded
-                            'rgba(255, 193, 7, 0.8)',   // United Utilities - Marginal
-                            'rgba(220, 53, 69, 0.8)',   // Anglian - Miss
-                            'rgba(220, 53, 69, 0.8)',   // Thames - Significant miss
-                            'rgba(220, 53, 69, 0.8)'    // Welsh Water - Worsening
+                            SUCCESS_GREEN,      // South West - Met
+                            SUCCESS_GREEN,      // Yorkshire - Exceeded (Focal)
+                            SUCCESS_GREEN,      // Severn Trent - Exceeded (Focal)
+                            ACCENT_AMBER,       // United Utilities - Marginal
+                            CRISIS_RED,         // Anglian - Miss
+                            CRISIS_RED,         // Thames - Significant miss (Focal)
+                            CRISIS_RED          // Welsh Water - Worsening (Focal: operational issue)
                         ],
                         borderColor: [
-                            'rgba(40, 167, 69, 1)',
-                            'rgba(40, 167, 69, 1)',
-                            'rgba(40, 167, 69, 1)',
-                            'rgba(255, 193, 7, 1)',
-                            'rgba(220, 53, 69, 1)',
-                            'rgba(220, 53, 69, 1)',
-                            'rgba(220, 53, 69, 1)'
+                            SUCCESS_GREEN.replace('0.9', '1'),
+                            SUCCESS_GREEN.replace('0.9', '1'),
+                            SUCCESS_GREEN.replace('0.9', '1'),
+                            ACCENT_AMBER.replace('0.8', '1'),
+                            CRISIS_RED.replace('0.9', '1'),
+                            CRISIS_RED.replace('0.9', '1'),
+                            CRISIS_RED.replace('0.9', '1')
                         ],
                         borderWidth: 2
                     }
@@ -2187,18 +2196,18 @@
                     label: 'Total Dividends Paid Since Privatisation (£ billions)',
                     data: [12.6, 7.6, 7.2, 5.0, 0],
                     backgroundColor: [
-                        'rgba(220, 53, 69, 0.8)',
-                        'rgba(255, 152, 0, 0.8)',
-                        'rgba(255, 193, 7, 0.8)',
-                        'rgba(102, 126, 234, 0.8)',
-                        'rgba(40, 167, 69, 0.8)'
+                        CRISIS_RED,         // Anglian - Highest extraction (Focal)
+                        ACCENT_AMBER,       // Yorkshire - High
+                        ACCENT_AMBER,       // Thames - High (Focal)
+                        PRIMARY_BROWN,      // Severn Trent - Lower/Neutral
+                        SUCCESS_GREEN       // Welsh Water - Zero (Focal)
                     ],
                     borderColor: [
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(255, 152, 0, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(102, 126, 234, 1)',
-                        'rgba(40, 167, 69, 1)'
+                        CRISIS_RED.replace('0.9', '1'),
+                        ACCENT_AMBER.replace('0.8', '1'),
+                        ACCENT_AMBER.replace('0.8', '1'),
+                        PRIMARY_BROWN.replace('0.8', '1'),
+                        SUCCESS_GREEN.replace('0.9', '1')
                     ],
                     borderWidth: 2
                 }]
@@ -2239,8 +2248,8 @@
                     {
                         label: 'Net Debt (£ billions)',
                         data: [3.2, 4.5, 6.0, 7.5, 8.8, 9.8, 10.5, 11.2, 12.5, 14.0, 15.5, 18.0],
-                        borderColor: 'rgba(220, 53, 69, 1)',
-                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        borderColor: CRISIS_RED.replace('0.9', '1'), // Red for Debt (Crisis)
+                        backgroundColor: CRISIS_RED.replace('0.9', '0.1'),
                         borderWidth: 3,
                         fill: true,
                         tension: 0.4
@@ -2248,8 +2257,8 @@
                     {
                         label: 'Cumulative Dividends Paid (£ billions)',
                         data: [0, 0.4, 0.9, 1.4, 1.9, 2.4, 2.8, 3.2, 3.5, 3.7, 3.8, 3.8],
-                        borderColor: 'rgba(102, 126, 234, 1)',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderColor: PRIMARY_BROWN.replace('0.8', '1'), // Brown for Dividends
+                        backgroundColor: PRIMARY_BROWN.replace('0.8', '0.1'),
                         borderWidth: 3,
                         fill: true,
                         tension: 0.4
@@ -2270,8 +2279,8 @@
                                 type: 'box',
                                 xMin: 0,
                                 xMax: 6,
-                                backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                                borderColor: 'rgba(255, 193, 7, 0.5)',
+                                backgroundColor: ACCENT_AMBER.replace('0.8', '0.1'), // Amber highlight for Macquarie Era
+                                borderColor: ACCENT_AMBER.replace('0.8', '0.5'),
                                 borderWidth: 2,
                                 label: {
                                     display: true,
@@ -2315,16 +2324,16 @@
                     label: 'Serious Pollution Incidents (2023-24)',
                     data: [33, 437, 189, 151],
                     backgroundColor: [
-                        'rgba(220, 53, 69, 0.8)',
-                        'rgba(255, 152, 0, 0.8)',
-                        'rgba(255, 193, 7, 0.8)',
-                        'rgba(102, 126, 234, 0.8)'
+                        CRISIS_RED,         // Thames - Focal
+                        ACCENT_AMBER,       // Anglian - High, but not Thames's direct crisis metric
+                        PRIMARY_BROWN,      // South West - Neutral
+                        PRIMARY_BROWN       // Yorkshire - Neutral
                     ],
                     borderColor: [
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(255, 152, 0, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(102, 126, 234, 1)'
+                        CRISIS_RED.replace('0.9', '1'),
+                        ACCENT_AMBER.replace('0.8', '1'),
+                        PRIMARY_BROWN.replace('0.8', '1'),
+                        PRIMARY_BROWN.replace('0.8', '1')
                     ],
                     borderWidth: 2
                 }]
