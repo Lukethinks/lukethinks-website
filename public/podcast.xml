@@ -55,7 +55,7 @@ This debate analyzes:
       <itunes:explicit>false</itunes:explicit>
       <itunes:episode>2</itunes:episode>
       <itunes:season>1</itunes:season>
-      <enclosure url="https://public.blob.vercel-storage.com/audio/compress-ai-thinking-frameworks-narration_debate.mp3" length="22378715" type="audio/mpeg"/>
+      <enclosure url="https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/compress-ai-thinking-frameworks-narration_debate.mp3" length="22378715" type="audio/mpeg"/>
     </item>
     <item>
       <title>The $50B AI Partnership Bubble: Accounting Crisis in Big Tech</title>
@@ -87,7 +87,7 @@ This executive briefing breaks down:
       <itunes:explicit>false</itunes:explicit>
       <itunes:episode>1</itunes:episode>
       <itunes:season>1</itunes:season>
-      <enclosure url="https://public.blob.vercel-storage.com/audio/ai-thinking-frameworks-narration.mp3" length="2310182" type="audio/mpeg"/>
+      <enclosure url="https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/ai-thinking-frameworks-narration.mp3" length="2310182" type="audio/mpeg"/>
     </item>
   </channel>
 </rss>
