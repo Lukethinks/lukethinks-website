@@ -16,6 +16,18 @@ Any agent that makes a structural choice adds an entry in the same change. Any a
 
 ---
 
+## ADR-0015 — Counters stored in Upstash Redis over HTTP
+**Date:** 2026-09-12 · **Status:** Accepted
+**Context:** Article reader reactions require persistent atomic counters without adding database overhead or client bundle weight.
+**Decision:** Counters are stored in Upstash Redis (provisioned via Vercel Storage as KV), free tier, EU region, over HTTP via @upstash/redis. No other new dependency.
+**Consequences:** Atomic increments without race conditions; fail-soft reads and fail-loud writes; no heavy client drivers or connection pooling needed.
+
+## ADR-0014 — Hybrid on-demand rendering for reactions endpoint and counter display
+**Date:** 2026-09-12 · **Status:** Accepted
+**Context:** lukethinks.nl is fundamentally a static site (ADR-0002), but reactions require real-time counts and cookie verification per visitor.
+**Decision:** Rendering stays static everywhere except a single reactions endpoint and its counter display, which alone use on-demand rendering (Astro's hybrid mode, export const prerender = false on just those routes).
+**Consequences:** Article pages remain completely static and cached at the edge; reactions bar is deferred via server:defer; zero impact on page load performance or static hosting benefits.
+
 ## ADR-0013 — Templates are the class register
 **Date:** 2026-09-07 · **Status:** Accepted
 **Context:** The prose register in `design-system.md` and the golden templates drifted apart on day one (~20 classes in templates were missing from the register).

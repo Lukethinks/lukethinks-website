@@ -40,7 +40,7 @@ const flag = (name, fallback) => {
   return i !== -1 && args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : fallback;
 };
 const CONTENT_DIR = flag('content', 'content');
-const HTML_DIR = flag('html', 'dist');           // built output, not source
+const HTML_DIR = flag('html', existsSync(path.join('dist', 'client')) ? path.join('dist', 'client') : 'dist');           // built output, not source
 const PUBLIC_DIR = flag('public', 'public');
 const STRICT = args.includes('--strict');
 

@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ReactionsBar from '../../components/ReactionsBar.astro';
 import { resolveAudioUrl } from '../../utils/audio';
 
 export async function getStaticPaths() {
@@ -127,6 +128,10 @@ const jsonLd = {
           </ol>
         </>
       )}
+
+      <ReactionsBar slug={article.data.slug} server:defer>
+        <div slot="fallback"></div>
+      </ReactionsBar>
 
       {article.data.related && article.data.related.length > 0 && (
         <nav aria-labelledby="related-title" data-region="related">

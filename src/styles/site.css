@@ -947,3 +947,148 @@ th {
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================================
+   15. Reader Reactions (ADR-0014, ADR-0015)
+   ========================================================================== */
+.reactions-section {
+  margin: 2.5rem 0;
+  padding: 1.75rem 2rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+.reactions-header {
+  margin-bottom: 1.25rem;
+}
+
+.reactions-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin-bottom: 0.25rem;
+}
+
+.reactions-prompt {
+  font-size: 0.925rem;
+  color: var(--light-text);
+  margin: 0;
+}
+
+.reaction-bar {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.reaction-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  background: var(--light-cream);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  color: var(--dark-text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reaction-btn:hover:not(:disabled) {
+  border-color: var(--accent-amber);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px var(--shadow-medium);
+}
+
+.reaction-btn:focus-visible {
+  outline: 2px solid var(--accent-amber);
+  outline-offset: 2px;
+}
+
+.reaction-btn.is-selected {
+  background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+  border-color: transparent;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px var(--shadow-medium);
+}
+
+.reaction-btn:disabled:not(.is-selected) {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+}
+
+.reaction-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 8px;
+  background: rgba(146, 64, 14, 0.1);
+  color: var(--primary-brown);
+}
+
+.reaction-btn.is-selected .reaction-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.reaction-btn.is-loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.reactions-status {
+  width: 100%;
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--light-text);
+}
+
+.reactions-status.is-error {
+  color: var(--primary-brown);
+  font-weight: 500;
+}
+
+.reactions-status.is-success {
+  color: var(--medium-text);
+  font-weight: 500;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reaction-btn {
+    transition: none;
+  }
+
+  .reaction-btn:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .reactions-section {
+    padding: 1.25rem 1rem;
+  }
+
+  .reaction-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reaction-btn {
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+

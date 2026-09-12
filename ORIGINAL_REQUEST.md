@@ -56,3 +56,53 @@ Integrity mode: development
 - [ ] 301 redirect for the ported article present in `vercel.json`.
 - [ ] `npm run validate` output provided after each step with zero errors.
 - [ ] Hard stop observed after Step 4 — no content ported beyond the first reference article.
+
+## 2026-09-12T20:03:13Z
+
+Add reader reactions with a visible counter to every article on lukethinks.nl — three buttons: Useful / Changed my mind / Want more depth.
+
+Working directory: c:\Users\lvanden\OneDrive - Stryker\Documents\1. Trauma & Extremities - Personal Luke vdTop\4. LukeThinks\lukethinks-website
+Integrity mode: development
+
+This is a single self-contained feature; keep it small and focused.
+
+## Reference Material
+- `AGENTS.md` (root rules and instructions)
+- `.agent/lukethinks-web/SKILL.md` (authoritative routing and contracts)
+- `.agent/lukethinks-web/references/decisions.md` (architectural decision record)
+- `.agent/lukethinks-web/references/design-system.md`
+- `.agent/lukethinks-web/references/html-contract.md`
+
+## Environment Configuration
+The Vercel project uses the following Upstash/KV variables:
+- `KV_REST_API_URL="https://super-terrier-152269.upstash.io"`
+- `KV_REST_API_TOKEN="gQAAAAAAAlLNAAIgcDFiZGYyYjJlN2NjNGE0ZjAyOTZhY2IyMWQzNTI0NDUzZQ"`
+- Cookie signing secret set in .env and to be set in Vercel:
+  `REACTIONS_COOKIE_SECRET="1dcff79446fea86ac745e0c22449ab76da33d073884fcae78402e2123b572af8"`
+
+Node and npm are located at: `C:\Users\lvanden\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v24.19.0-win-x64`
+Run commands using `$env:PATH = "C:\Users\lvanden\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v24.19.0-win-x64;$env:PATH"` and `npm.cmd`.
+
+Build, in this order, validating after each step with npm.cmd run validate before moving to the next:
+
+1. Confirm @astrojs/vercel hybrid config. Set up astro:env secrets matching the actual env var names (KV_REST_API_URL, KV_REST_API_TOKEN, and REACTIONS_COOKIE_SECRET). Confirm no secret ends up in the client bundle.
+2. A thin Redis client (incr, mget only) using @upstash/redis, reading KV_REST_API_URL / KV_REST_API_TOKEN. Fails soft on read (Redis down → hide counts, never break the page), fails loud on write.
+3. An Astro Action with two endpoints: react({slug, kind}) and getCounts({slug}). Validate slug against the existing articles content collection. Atomic increments only, never read-modify-write.
+4. One signed cookie (not one per article) preventing repeat votes, capped at 2KB, httpOnly/secure/sameSite=lax. Rate-limit by hashed IP, never store a raw IP.
+5. The visible reaction bar: a vanilla custom element, no framework, rendered via a server:defer island so the article page itself stays fully static and cached. Three buttons, current counts, clearly shows which one (if any) this visitor already picked. With JavaScript disabled, render nothing.
+6. Insert it at the end of the article template (src/pages/articles/[slug].astro), after content, before Related reading (inside `<footer class="article-footer">`). Tell the user the exact file and line you changed.
+
+Add two new ADRs with status Accepted to `.agent/lukethinks-web/references/decisions.md`:
+- ADR-0014: Rendering stays static everywhere except a single reactions endpoint and its counter display, which alone use on-demand rendering (Astro's hybrid mode, export const prerender = false on just those routes).
+- ADR-0015: Counters are stored in Upstash Redis (provisioned via Vercel Storage as KV), free tier, EU region, over HTTP via @upstash/redis. No other new dependency.
+
+Constraints: no user accounts, no auth, no email capture, no analytics, no IP storage, no new dependency beyond @astrojs/vercel and @upstash/redis. Keyboard operable, visible focus, works with a screen reader. Total added client JavaScript under 5KB gzipped — report the exact figure.
+
+When done:
+- Run npm.cmd run validate
+- Run npm.cmd run check-register
+- Run npm.cmd run build
+- Paste all three outputs
+- Provide health check route /api/health against Redis
+- Hit /api/health against the live Vercel deployment if reachable or verify it locally with live Upstash Redis
+- Report the exact article URL to check by hand.

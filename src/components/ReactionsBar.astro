@@ -1,0 +1,194 @@
+---
+export const prerender = false;
+
+import { REACTIONS_COOKIE_SECRET } from 'astro:env/server';
+import { getArticleReactionCounts } from '../utils/redis';
+import { COOKIE_NAME, getVotesFromCookie } from '../utils/reactions-cookie';
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+
+// Fetch visitor's previous reaction from signed cookie
+const cookieValue = Astro.cookies.get(COOKIE_NAME)?.value;
+const votes = getVotesFromCookie(cookieValue, REACTIONS_COOKIE_SECRET);
+const userReaction = votes[slug] || null;
+
+// Fetch current counts (fails soft: returns null if Redis is unreachable)
+const counts = await getArticleReactionCounts(slug);
+
+const buttons = [
+  { kind: 'useful', label: 'Useful', count: counts?.useful ?? null },
+  { kind: 'changed_mind', label: 'Changed my mind', count: counts?.changed_mind ?? null },
+  { kind: 'more_depth', label: 'Want more depth', count: counts?.more_depth ?? null },
+] as const;
+---
+
+<noscript>
+  <style>
+    .reactions-section {
+      display: none !important;
+    }
+  </style>
+</noscript>
+
+<section class="reactions-section" aria-labelledby="reactions-title" data-slug={slug}>
+  <div class="reactions-header">
+    <h2 id="reactions-title" class="reactions-title">Reader reactions</h2>
+    <p class="reactions-prompt">Did this piece change how you think? Leave a reaction below.</p>
+  </div>
+
+  <reaction-bar
+    class="reaction-bar"
+    data-slug={slug}
+    data-user-reaction={userReaction || ''}
+    role="group"
+    aria-label="Article reactions"
+  >
+    {buttons.map((btn) => {
+      const isSelected = userReaction === btn.kind;
+      const countLabel = btn.count !== null ? ` (${btn.count} reaction${btn.count === 1 ? '' : 's'})` : '';
+      return (
+        <button
+          type="button"
+          class:list={['reaction-btn', { 'is-selected': isSelected }]}
+          data-kind={btn.kind}
+          aria-pressed={isSelected ? 'true' : 'false'}
+          aria-label={`${btn.label}${countLabel}`}
+          disabled={userReaction !== null}
+        >
+          <span class="reaction-label">{btn.label}</span>
+          {btn.count !== null && (
+            <span class="reaction-count" data-count={btn.count}>
+              {btn.count}
+            </span>
+          )}
+        </button>
+      );
+    })}
+    <span class="reactions-status sr-only" role="status" aria-live="polite"></span>
+  </reaction-bar>
+</section>
+
+<script>
+  import { actions } from 'astro:actions';
+
+  class ReactionBar extends HTMLElement {
+    private buttons: HTMLButtonElement[] = [];
+    private statusEl: HTMLElement | null = null;
+    private slug: string = '';
+    private hasAttachedListeners = false;
+
+    connectedCallback() {
+      this.slug = this.dataset.slug || '';
+      this.buttons = Array.from(this.querySelectorAll<HTMLButtonElement>('.reaction-btn'));
+      this.statusEl = this.querySelector<HTMLElement>('.reactions-status');
+
+      const userReaction = this.dataset.userReaction;
+      if (userReaction) {
+        this.markSelected(userReaction);
+      }
+
+      if (!this.hasAttachedListeners) {
+        this.hasAttachedListeners = true;
+        this.buttons.forEach((btn) => {
+          btn.addEventListener('click', () => this.handleReact(btn));
+        });
+      }
+    }
+
+    private setStatus(message: string, isError: boolean = false) {
+      if (!this.statusEl) return;
+      this.statusEl.textContent = message;
+      if (message) {
+        this.statusEl.classList.remove('sr-only');
+        if (isError) {
+          this.statusEl.classList.add('is-error');
+          this.statusEl.classList.remove('is-success');
+        } else {
+          this.statusEl.classList.add('is-success');
+          this.statusEl.classList.remove('is-error');
+        }
+      } else {
+        this.statusEl.classList.add('sr-only');
+        this.statusEl.classList.remove('is-error', 'is-success');
+      }
+    }
+
+    private markSelected(kind: string) {
+      this.buttons.forEach((btn) => {
+        const isThis = btn.dataset.kind === kind;
+        btn.setAttribute('aria-pressed', isThis ? 'true' : 'false');
+        if (isThis) {
+          btn.classList.add('is-selected');
+        } else {
+          btn.classList.remove('is-selected');
+        }
+        btn.disabled = true;
+      });
+    }
+
+    private async handleReact(clickedBtn: HTMLButtonElement) {
+      const kind = clickedBtn.dataset.kind;
+      if (!kind || !this.slug) return;
+
+      // Clear any prior status message
+      this.setStatus('');
+
+      // Optimistically disable buttons to prevent double-submissions
+      this.buttons.forEach((b) => (b.disabled = true));
+      clickedBtn.classList.add('is-loading');
+
+      try {
+        const { data, error } = await actions.react({ slug: this.slug, kind });
+
+        if (error) {
+          clickedBtn.classList.remove('is-loading');
+          const isConflict = (error as { code?: string }).code === 'CONFLICT';
+          if (!isConflict) {
+            this.buttons.forEach((b) => (b.disabled = false));
+          }
+          this.setStatus(error.message || 'Could not record reaction. Please try again.', true);
+          return;
+        }
+
+        // Successfully reacted
+        clickedBtn.classList.remove('is-loading');
+        this.dataset.userReaction = kind;
+        this.markSelected(kind);
+
+        // Update count badges
+        if (data?.counts) {
+          this.buttons.forEach((btn) => {
+            const k = btn.dataset.kind as 'useful' | 'changed_mind' | 'more_depth';
+            const countVal = data.counts[k];
+            let countSpan = btn.querySelector<HTMLElement>('.reaction-count');
+            if (countVal !== null && countVal !== undefined) {
+              if (!countSpan) {
+                countSpan = document.createElement('span');
+                countSpan.className = 'reaction-count';
+                btn.appendChild(countSpan);
+              }
+              countSpan.textContent = String(countVal);
+              countSpan.dataset.count = String(countVal);
+              const label = btn.querySelector('.reaction-label')?.textContent || '';
+              btn.setAttribute('aria-label', `${label} (${countVal} reaction${countVal === 1 ? '' : 's'})`);
+            }
+          });
+        }
+
+        this.setStatus('Thank you for your reaction!', false);
+      } catch (err) {
+        this.buttons.forEach((b) => (b.disabled = false));
+        clickedBtn.classList.remove('is-loading');
+        this.setStatus('Network error. Please check your connection and try again.', true);
+      }
+    }
+  }
+
+  if (!customElements.get('reaction-bar')) {
+    customElements.define('reaction-bar', ReactionBar);
+  }
+</script>
