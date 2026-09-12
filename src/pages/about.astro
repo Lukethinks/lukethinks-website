@@ -1,0 +1,563 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../../content/site.json';
+---
+
+<BaseLayout
+  title="About Luke · Analytical Thinker in the Netherlands"
+  description="Finance professional turned analytical thinker, documenting the learning journey in the Netherlands. Bio, background, journey timeline, and CliftonStrengths."
+>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span aria-hidden="true">👋</span>
+        <span>Nice to meet you</span>
+      </div>
+
+      <h1>
+        I'm <span class="hero-highlight">Luke</span>,<br />
+        an analytical thinker<br />
+        in the Netherlands
+      </h1>
+
+      <p class="hero-tagline">
+        Finance professional turned curious learner
+      </p>
+    </div>
+  </section>
+
+  <!-- Profile Card -->
+  <section class="profile-section">
+    <div class="profile-card">
+      <div class="avatar" aria-hidden="true">L</div>
+      <h2 class="profile-name">Luke van den Top</h2>
+      <p class="profile-location">🇳🇱 Amersfoort Region, Netherlands</p>
+
+      <div class="contact-links">
+        <a href="https://linkedin.com/in/lukevandenTop" class="contact-link" target="_blank" rel="noopener noreferrer">
+          <span class="contact-icon" aria-hidden="true">💼</span>
+          <span class="contact-text">LinkedIn Profile</span>
+        </a>
+        <a href="mailto:lukethinks@outlook.com" class="contact-link">
+          <span class="contact-icon" aria-hidden="true">📧</span>
+          <span class="contact-text">Email Me</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bio Section -->
+  <section class="content-section bio-container">
+    <div class="bio-content">
+      <p>
+        I'm a finance professional who moved to the Netherlands six years ago from Essex, England. What began as a career in accounting has evolved into a fascinating journey of analytical thinking and continuous learning—with Dutch language adventures providing ongoing entertainment for locals.
+      </p>
+      <p>
+        My approach to problems is deeply rooted in my CliftonStrengths profile. I'm driven to understand the <strong>"why" behind everything</strong>, whether it's Federal Reserve policy decisions, AI accounting structures, or the mysterious logic of Dutch grammar rules.
+      </p>
+      <p>
+        Currently working in <strong>FP&A with experience across accounting and shared service centers</strong>, I've developed a passion for business frameworks, process optimization, and data storytelling. This learning lab serves as my professional outlet for documenting discoveries, testing hypotheses, and sharing the analytical insights that emerge from my curiosity.
+      </p>
+      <p>
+        When I'm not diving into financial models or experimenting with new productivity methods, you'll find me cycling through the Dutch countryside.
+      </p>
+    </div>
+  </section>
+
+  <!-- Timeline Section -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2 class="section-title">My Journey</h2>
+      <p class="section-subtitle">
+        Key moments that shaped my path from finance to analytical thinking and beyond
+      </p>
+    </div>
+
+    <div class="timeline-container">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-icon" aria-hidden="true">🧠</div>
+          <div class="timeline-card">
+            <time class="timeline-year">2025</time>
+            <h3 class="timeline-heading">Learning Lab Launch</h3>
+            <p class="timeline-desc">Created lukethinks.nl as a space to document experiments, analyses, and learning discoveries.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-icon" aria-hidden="true">📈</div>
+          <div class="timeline-card">
+            <time class="timeline-year">2025</time>
+            <h3 class="timeline-heading">FP&A Analyst Experience</h3>
+            <p class="timeline-desc">Leading financial modeling, budget planning, and strategic variance analysis.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-icon" aria-hidden="true">💽</div>
+          <div class="timeline-card">
+            <time class="timeline-year">2022–2025</time>
+            <h3 class="timeline-heading">Finance Business Intelligence Role</h3>
+            <p class="timeline-desc">Exploring data engineering, financial automation drives, and reporting pipelines.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-icon" aria-hidden="true">💍</div>
+          <div class="timeline-card">
+            <time class="timeline-year">2023</time>
+            <h3 class="timeline-heading">Married the Love of My Life</h3>
+            <p class="timeline-desc">Celebrated our wedding surrounded by friends and family.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-icon" aria-hidden="true">🏠</div>
+          <div class="timeline-card">
+            <time class="timeline-year">2023</time>
+            <h3 class="timeline-heading">Bought First Home</h3>
+            <p class="timeline-desc">Navigated the Dutch housing market and settled down in the Amersfoort region.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-icon" aria-hidden="true">🇳🇱</div>
+          <div class="timeline-card">
+            <time class="timeline-year">2019</time>
+            <h3 class="timeline-heading">Netherlands Adventure Begins</h3>
+            <p class="timeline-desc">Moved from Essex, England to the Netherlands for love and a fresh European chapter.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-icon" aria-hidden="true">📊</div>
+          <div class="timeline-card">
+            <time class="timeline-year">2012</time>
+            <h3 class="timeline-heading">Career in Accounting Began</h3>
+            <p class="timeline-desc">Built foundational expertise in general ledger accounting, statutory reporting, and Excel wizardry.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CliftonStrengths Section -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2 class="section-title">How I Think</h2>
+      <p class="section-subtitle">
+        My CliftonStrengths profile reveals the analytical patterns behind my approach to problems
+      </p>
+    </div>
+
+    <div class="strengths-wrapper">
+      <div class="top-strengths">
+        <div class="strength-card">
+          <span class="strength-rank">#1</span>
+          <div>
+            <h3 class="strength-name">Harmony</h3>
+            <span class="strength-domain">Relationship Building</span>
+          </div>
+        </div>
+
+        <div class="strength-card">
+          <span class="strength-rank">#2</span>
+          <div>
+            <h3 class="strength-name">Context</h3>
+            <span class="strength-domain">Strategic Thinking</span>
+          </div>
+        </div>
+
+        <div class="strength-card">
+          <span class="strength-rank">#3</span>
+          <div>
+            <h3 class="strength-name">Analytical</h3>
+            <span class="strength-domain">Strategic Thinking</span>
+          </div>
+        </div>
+
+        <div class="strength-card">
+          <span class="strength-rank">#4</span>
+          <div>
+            <h3 class="strength-name">Individualization</h3>
+            <span class="strength-domain">Relationship Building</span>
+          </div>
+        </div>
+
+        <div class="strength-card">
+          <span class="strength-rank">#5</span>
+          <div>
+            <h3 class="strength-name">Arranger</h3>
+            <span class="strength-domain">Executing</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="strengths-chart-box">
+        <h3 class="chart-box-title">Top 5 Domain Distribution</h3>
+        <div class="chart-canvas-wrapper">
+          <canvas id="strengthsChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Facts Section -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2 class="section-title">Quick Facts</h2>
+      <p class="section-subtitle">
+        The essential details that make me, well... me
+      </p>
+    </div>
+
+    <div class="facts-grid">
+      <div class="fact-card">
+        <span class="fact-icon" aria-hidden="true">🇳🇱</span>
+        <p class="fact-text">Living in the Netherlands since 2019</p>
+      </div>
+      <div class="fact-card">
+        <span class="fact-icon" aria-hidden="true">📊</span>
+        <p class="fact-text">Finance & FP&A professional with an analytical mindset</p>
+      </div>
+      <div class="fact-card">
+        <span class="fact-icon" aria-hidden="true">🧪</span>
+        <p class="fact-text">Exploring prompt engineering, local LLMs & modern AI workflows</p>
+      </div>
+      <div class="fact-card">
+        <span class="fact-icon" aria-hidden="true">🚲</span>
+        <p class="fact-text">Cycled 66,000+ km — approximately 1.6 times around the globe</p>
+      </div>
+      <div class="fact-card">
+        <span class="fact-icon" aria-hidden="true">☕</span>
+        <p class="fact-text">Strong believer that high quality coffee + clean data = flow state</p>
+      </div>
+      <div class="fact-card">
+        <span class="fact-icon" aria-hidden="true">📖</span>
+        <p class="fact-text">Continuously learning GAAP/IFRS standards, tech economics & system thinking</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import Chart from 'chart.js/auto';
+
+    const canvas = document.getElementById('strengthsChart');
+    if (canvas instanceof HTMLCanvasElement) {
+      new Chart(canvas, {
+        type: 'doughnut',
+        data: {
+          labels: ['Strategic Thinking', 'Relationship Building', 'Executing', 'Influencing'],
+          datasets: [{
+            data: [2, 2, 1, 0],
+            backgroundColor: [
+              '#ea580c',
+              '#92400e',
+              '#fbbf24',
+              '#e2e8f0'
+            ],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: 1.6,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                font: { family: 'Inter', size: 12, weight: 'bold' },
+                color: '#1e293b',
+                padding: 16
+              }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</BaseLayout>
+
+<style>
+  .profile-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .profile-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px var(--shadow-light);
+    border: 1px solid var(--border-light);
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    margin: 0 auto 1.25rem;
+    background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-weight: 800;
+    box-shadow: 0 8px 25px rgba(146, 64, 14, 0.3);
+  }
+
+  .profile-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .profile-location {
+    color: var(--light-text);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.25rem;
+    background: rgba(146, 64, 14, 0.05);
+    border-radius: 12px;
+    color: var(--medium-text);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid var(--border-light);
+    transition: all 0.25s ease;
+  }
+
+  .contact-link:hover {
+    background: var(--primary-brown);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(146, 64, 14, 0.25);
+  }
+
+  .contact-icon {
+    font-size: 1.2rem;
+  }
+
+  .bio-container {
+    max-width: 860px;
+    margin: 0 auto 4rem;
+  }
+
+  .bio-content {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px var(--shadow-light);
+    border: 1px solid var(--border-light);
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  .bio-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Timeline */
+  .timeline-container {
+    max-width: 860px;
+    margin: 0 auto 4rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px var(--shadow-light);
+    border: 1px solid var(--border-light);
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+    border-left: 3px solid var(--accent-amber);
+    margin-left: 1.5rem;
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+  }
+
+  .timeline-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .timeline-icon {
+    position: absolute;
+    left: calc(-2rem - 20px);
+    top: 0;
+    width: 38px;
+    height: 38px;
+    background: #ffffff;
+    border: 2px solid var(--accent-amber);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px var(--shadow-light);
+  }
+
+  .timeline-card {
+    background: #ffffff;
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 2px 8px var(--shadow-light);
+  }
+
+  .timeline-year {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-amber);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .timeline-heading {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 0.35rem;
+  }
+
+  .timeline-desc {
+    font-size: 0.95rem;
+    color: var(--light-text);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Strengths */
+  .strengths-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: 960px;
+    margin: 0 auto 4rem;
+  }
+
+  .top-strengths {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .strength-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 12px var(--shadow-light);
+  }
+
+  .strength-rank {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--accent-amber);
+    min-width: 36px;
+  }
+
+  .strength-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin: 0;
+  }
+
+  .strength-domain {
+    font-size: 0.825rem;
+    color: var(--light-text);
+    font-weight: 600;
+  }
+
+  .strengths-chart-box {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 16px var(--shadow-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chart-box-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .chart-canvas-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  /* Quick Facts */
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 960px;
+    margin: 0 auto 4rem;
+  }
+
+  .fact-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 14px var(--shadow-light);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: transform 0.25s ease;
+  }
+
+  .fact-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px var(--shadow-medium);
+  }
+
+  .fact-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .fact-text {
+    font-size: 0.95rem;
+    color: var(--medium-text);
+    line-height: 1.5;
+    margin: 0;
+    font-weight: 500;
+  }
+</style>

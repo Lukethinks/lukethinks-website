@@ -1,0 +1,247 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../../content/site.json';
+
+const allArticles = await getCollection('articles', ({ data }) => data.status === 'published');
+// Research pieces: ai-partnership-accounting, thames-water-crisis, etc.
+const researchArticles = allArticles
+  .filter(a => a.data.category === 'Financial Analysis' || a.data.category === 'AI Strategy' || a.data.tags.includes('valuation') || a.data.tags.includes('ai'))
+  .sort((a, b) => new Date(b.data.published).getTime() - new Date(a.data.published).getTime());
+---
+
+<BaseLayout
+  title="Research & Financial Analysis"
+  description="Financial analysis, economic modeling, and data-driven insights from Luke's learning lab in the Netherlands."
+>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span aria-hidden="true">📊</span>
+        <span>Financial Analysis & Economic Research</span>
+      </div>
+
+      <h1>
+        <span class="hero-highlight">Research</span> & Analysis
+      </h1>
+
+      <p class="hero-tagline">
+        Deep dives into economics, finance, and business strategy. Interactive data analysis,
+        financial modeling, and evidence-based insights from my analytical learning journey.
+      </p>
+
+      <div class="research-stats">
+        <div class="stat-card">
+          <span class="stat-number" aria-hidden="true">🤖</span>
+          <span class="stat-label">AI & Business Strategy</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" aria-hidden="true">📊</span>
+          <span class="stat-label">Data-Driven Modeling</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" aria-hidden="true">🎯</span>
+          <span class="stat-label">Strategic Frameworks</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Audio Companion Callout Banner -->
+  <section class="audio-banner">
+    <div class="audio-banner-text">
+      <span class="audio-banner-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+          <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+        </svg>
+        <span>Audio Editions Available</span>
+      </span>
+      <h2 class="audio-banner-title">Prefer listening to research topics on the go?</h2>
+      <p class="audio-banner-sub">
+        Stream executive narration briefings & deep debates in the Podcast Studio or on Spotify.
+      </p>
+    </div>
+    <a href="/podcast" class="action-btn">Explore Audio Articles →</a>
+  </section>
+
+  <!-- Featured Analysis Section -->
+  <section class="section-header">
+    <h2 class="section-title">In-Depth Analyses</h2>
+    <p class="section-subtitle">
+      Comprehensive dissections of modern corporate finance, tech investments, and public utility balance sheets
+    </p>
+  </section>
+
+  <div class="topic-grid">
+    {researchArticles.map((article) => (
+      <a href={`/articles/${article.data.slug}`} class="topic-card">
+        <div class="article-meta">
+          <span class="article-category">{article.data.category}</span>
+          <time datetime={new Date(article.data.published).toISOString().slice(0, 10)}>
+            {new Date(article.data.published).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+          </time>
+          {article.data.confidence && (
+            <span class="confidence-badge" data-confidence={article.data.confidence}>
+              {article.data.confidence}
+            </span>
+          )}
+        </div>
+        <h3 class="topic-title">{article.data.title}</h3>
+        <p class="topic-description">{article.data.summary}</p>
+        <span class="topic-count">Read Full Analysis →</span>
+      </a>
+    ))}
+  </div>
+
+  <!-- Research Approach -->
+  <section class="section-header">
+    <h2 class="section-title">Research Approach</h2>
+    <p class="section-subtitle">
+      How I approach complex business and economic questions through structured analysis
+    </p>
+  </section>
+
+  <div class="approach-grid">
+    <div class="approach-card">
+      <span class="approach-icon" aria-hidden="true">🔍</span>
+      <h3 class="approach-title">Question Everything</h3>
+      <p class="approach-desc">
+        Starting with curiosity about how things actually work, not how they're supposed to work. Every analysis begins with "but why?" and "what if?"
+      </p>
+    </div>
+
+    <div class="approach-card">
+      <span class="approach-icon" aria-hidden="true">📊</span>
+      <h3 class="approach-title">Data-First Thinking</h3>
+      <p class="approach-desc">
+        Let the evidence guide the story. I gather financial statements and disclosures first, trace cash flows, and build models before framing opinions.
+      </p>
+    </div>
+
+    <div class="approach-card">
+      <span class="approach-icon" aria-hidden="true">🧠</span>
+      <h3 class="approach-title">Show the Work</h3>
+      <p class="approach-desc">
+        Transparent methodology and honest uncertainty. I document the thinking process, assumptions, and counter-arguments, not just conclusions.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .research-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 2.5rem auto 1rem;
+  }
+
+  .stat-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 12px var(--shadow-light);
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    color: var(--light-text);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .audio-banner {
+    margin: 2rem auto 4rem;
+    max-width: 1040px;
+    background: linear-gradient(135deg, rgba(254, 247, 240, 0.95), rgba(255, 255, 255, 0.95));
+    border: 1px solid rgba(234, 88, 12, 0.3);
+    border-radius: 20px;
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .audio-banner-text {
+    flex: 1 1 500px;
+  }
+
+  .audio-banner-pill {
+    background: rgba(234, 88, 12, 0.12);
+    color: var(--accent-amber);
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 0.75rem;
+  }
+
+  .audio-banner-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin-bottom: 0.35rem;
+  }
+
+  .audio-banner-sub {
+    color: var(--light-text);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .approach-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1040px;
+    margin: 0 auto 4rem;
+  }
+
+  .approach-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 14px var(--shadow-light);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .approach-icon {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .approach-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .approach-desc {
+    color: var(--light-text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

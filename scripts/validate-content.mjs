@@ -291,7 +291,7 @@ for (const file of htmlFiles) {
   }
 
   // modifier convention (ADR-0009)
-  if (/class="[^"]*\bactive\b/.test(body))
+  if (/class="[^"]*(?<!is-)\bactive\b/.test(body))
     warn(file, 'Legacy `.active` modifier — use `.is-active` (ADR-0009).');
 
   // nav labelling

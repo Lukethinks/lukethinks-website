@@ -1,0 +1,767 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import site from '../../../content/site.json';
+---
+
+<BaseLayout
+  title="Cycling Clothing Guide: What to Wear for Any Weather | Interactive Tool"
+  description="Free interactive cycling clothing calculator. Get personalized kit recommendations based on temperature, wind, rain, and ride intensity."
+  canonical="https://lukethinks.nl/experiments/cycling-clothing-guide"
+>
+  <nav aria-label="Breadcrumb" class="breadcrumbs">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/experiments">Experiments</a></li>
+      <li aria-current="page">Cycling Clothing Guide</li>
+    </ol>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span aria-hidden="true">🚴</span>
+        <span>Interactive Cycling Tool</span>
+      </div>
+
+      <h1>
+        <span class="hero-highlight">Cycling Clothing Guide</span><br />
+        What to Wear for Any Weather
+      </h1>
+
+      <p class="hero-tagline">
+        Get personalized kit recommendations based on temperature, wind, rain, and ride intensity.
+        Calibrated for year-round Dutch cycling conditions.
+      </p>
+    </div>
+  </section>
+
+  <div class="app-container" id="app">
+    <!-- Controls Panel -->
+    <div class="controls-panel">
+      <!-- Temperature Control -->
+      <div class="control-group">
+        <div class="control-label-row">
+          <label for="temp-slider" class="control-label">
+            <span aria-hidden="true">🌡️</span> Temperature: <strong id="temp-display">15°C</strong>
+          </label>
+          <div class="unit-toggle" role="group" aria-label="Temperature unit toggle">
+            <button type="button" class="unit-btn is-active" data-unit="C">°C</button>
+            <button type="button" class="unit-btn" data-unit="F">°F</button>
+          </div>
+        </div>
+        <input type="range" class="slider" id="temp-slider" min="-10" max="32" value="15" aria-label="Adjust temperature" />
+        <div class="slider-labels">
+          <span id="min-temp">-10°C</span>
+          <span id="max-temp">32°C</span>
+        </div>
+      </div>
+
+      <!-- Mudguards Toggle -->
+      <div class="control-group">
+        <label class="control-label">Equipment Options</label>
+        <button type="button" class="toggle-btn" id="mudguards-toggle" aria-pressed="false">
+          <span>🛡️ Mudguards</span>
+          <span id="mudguards-check"></span>
+        </button>
+      </div>
+
+      <!-- Conditions Grid -->
+      <div class="conditions-grid">
+        <!-- Wind -->
+        <div class="control-group">
+          <span class="control-label"><span aria-hidden="true">💨</span> Wind</span>
+          <div class="button-group" role="group" aria-label="Wind condition">
+            <button type="button" class="btn is-active" data-wind="none">None</button>
+            <button type="button" class="btn" data-wind="light">Light</button>
+            <button type="button" class="btn" data-wind="strong">Strong</button>
+          </div>
+          <div class="condition-hint" id="wind-hint">Calm: &lt; 5 mph, flags hang limp</div>
+        </div>
+
+        <!-- Rain -->
+        <div class="control-group">
+          <span class="control-label"><span aria-hidden="true">🌧️</span> Rain</span>
+          <div class="button-group" role="group" aria-label="Rain condition">
+            <button type="button" class="btn is-active" data-rain="dry">Dry</button>
+            <button type="button" class="btn" data-rain="light">Light</button>
+            <button type="button" class="btn" data-rain="heavy">Heavy</button>
+          </div>
+          <div class="condition-hint" id="rain-hint">No rain expected</div>
+        </div>
+
+        <!-- Sun -->
+        <div class="control-group">
+          <span class="control-label"><span aria-hidden="true">☀️</span> Sun</span>
+          <div class="button-group" role="group" aria-label="Sun condition">
+            <button type="button" class="btn" data-sun="full">Full</button>
+            <button type="button" class="btn is-active" data-sun="mixed">Mixed</button>
+            <button type="button" class="btn" data-sun="overcast">Overcast</button>
+          </div>
+        </div>
+
+        <!-- Intensity -->
+        <div class="control-group">
+          <span class="control-label"><span aria-hidden="true">🔥</span> Effort</span>
+          <div class="button-group" role="group" aria-label="Ride effort intensity">
+            <button type="button" class="btn" data-effort="easy">Easy</button>
+            <button type="button" class="btn" data-effort="moderate">Moderate</button>
+            <button type="button" class="btn is-active" data-effort="hard">Hard</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kit Diagram / Checklist -->
+    <div class="kit-diagram">
+      <h2 class="diagram-title">Your Kit Checklist</h2>
+      <div class="kit-grid" id="kit-grid">
+        <!-- Injected by JavaScript -->
+      </div>
+      <div class="kit-legend">
+        <div class="legend-item">
+          <div class="legend-dot is-active"></div>
+          <span>Recommended</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot inactive"></div>
+          <span>Optional / Not Needed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Tabs -->
+    <div class="bottom-tabs">
+      <div class="tab-buttons" role="tablist">
+        <button type="button" class="tab-btn is-active" data-tab="warnings" role="tab">⚠️ Warnings</button>
+        <button type="button" class="tab-btn" data-tab="tips" role="tab">💡 Pro Tips</button>
+        <button type="button" class="tab-btn" data-tab="maintenance" role="tab">🔧 Maintenance</button>
+      </div>
+      <div id="tab-content-container" role="tabpanel"></div>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      temperature: 15,
+      unit: 'C',
+      windConditions: 'none',
+      rainConditions: 'dry',
+      sunConditions: 'mixed',
+      intensity: 'hard',
+      hasMudguards: false,
+      activeTab: 'warnings'
+    };
+
+    function toFahrenheit(celsius: number) {
+      return (celsius * 9/5) + 32;
+    }
+
+    function toCelsius(fahrenheit: number) {
+      return (fahrenheit - 32) * 5/9;
+    }
+
+    function getCurrentTemp() {
+      return state.unit === 'C' ? state.temperature : toFahrenheit(state.temperature);
+    }
+
+    function updateTempDisplay() {
+      const temp = Math.round(getCurrentTemp());
+      const displayEl = document.getElementById('temp-display');
+      if (displayEl) displayEl.textContent = `${temp}°${state.unit}`;
+
+      const slider = document.getElementById('temp-slider') as HTMLInputElement | null;
+      const minEl = document.getElementById('min-temp');
+      const maxEl = document.getElementById('max-temp');
+
+      if (slider && minEl && maxEl) {
+        if (state.unit === 'C') {
+          slider.min = '-10';
+          slider.max = '32';
+          slider.value = String(state.temperature);
+          minEl.textContent = '-10°C';
+          maxEl.textContent = '32°C';
+        } else {
+          slider.min = '14';
+          slider.max = '90';
+          slider.value = String(Math.round(toFahrenheit(state.temperature)));
+          minEl.textContent = '14°F';
+          maxEl.textContent = '90°F';
+        }
+      }
+    }
+
+    function getEffectiveTemp() {
+      let temp = state.unit === 'C' ? state.temperature : toCelsius(state.temperature);
+      if (state.windConditions === 'light') temp -= 3;
+      else if (state.windConditions === 'strong') temp -= 7;
+
+      if (state.rainConditions === 'light') temp -= 2;
+      else if (state.rainConditions === 'heavy') temp -= 5;
+
+      if (state.intensity === 'easy') temp -= 3;
+      else if (state.intensity === 'hard') temp += 5;
+
+      return temp;
+    }
+
+    function getRecommendations() {
+      const eff = getEffectiveTemp();
+      return {
+        hasSkullCap: eff < 10,
+        hasNeck: eff < 5,
+        hasGloves: true,
+        hasWinterGloves: eff < 8,
+        hasJacket: eff < 18,
+        hasWinterJacket: eff < 8,
+        hasRainJacket: state.rainConditions !== 'dry',
+        hasGilet: eff >= 10 && eff < 18,
+        hasArmWarmers: eff >= 12 && eff < 20,
+        hasBaselayer: eff < 15,
+        hasThermalBaselayer: eff < 5,
+        hasLegWarmers: eff < 15,
+        hasFeetProtection: eff < 12 || state.rainConditions !== 'dry',
+        hasWinterShoes: eff < 5
+      };
+    }
+
+    function getWarnings() {
+      const eff = getEffectiveTemp();
+      const warnings = [];
+
+      if (eff < 0) {
+        warnings.push({
+          level: 'danger',
+          icon: '🥶',
+          message: 'EXTREME COLD WARNING: Frostbite risk for exposed skin. Cover all extremities completely. Consider shortening ride.'
+        });
+      }
+
+      if (eff < 5 && state.rainConditions !== 'dry') {
+        warnings.push({
+          level: 'danger',
+          icon: '⚠️',
+          message: 'HYPOTHERMIA RISK: Cold + wet conditions are dangerous. Layer properly with waterproof shell and keep bailout options ready.'
+        });
+      }
+
+      if (state.rainConditions !== 'dry' && state.hasMudguards) {
+        warnings.push({
+          level: 'success',
+          icon: '✔',
+          message: state.rainConditions === 'heavy'
+            ? 'Mudguards will significantly reduce road spray, keeping you much drier and warmer.'
+            : 'Mudguards will help keep road spray off your back and legs.'
+        });
+      } else if (state.rainConditions !== 'dry' && !state.hasMudguards) {
+        warnings.push({
+          level: 'warning',
+          icon: '⚠️',
+          message: state.rainConditions === 'heavy'
+            ? 'Without mudguards: Expect HEAVY road spray on back and legs. Your clothing will get wet fast.'
+            : 'Without mudguards: Expect road spray. Consider adding mudguards for wet roads.'
+        });
+      }
+
+      return warnings;
+    }
+
+    const kitItems = [
+      { id: 'helmet', category: 'HEAD', categoryClass: 'head', icon: '⛑️', label: () => 'Helmet', alwaysActive: true },
+      { id: 'skullCap', category: 'HEAD', categoryClass: 'head', icon: '🧢', label: () => 'Skull Cap', check: (r: any) => r.hasSkullCap },
+      { id: 'neck', category: 'HEAD', categoryClass: 'head', icon: '🧣', label: () => 'Neck Gaiter', check: (r: any) => r.hasNeck },
+      { id: 'gloves', category: 'HANDS', categoryClass: 'hands', icon: '🧤', label: (r: any) => r.hasWinterGloves ? 'Winter Gloves' : 'Gloves', alwaysActive: true },
+      { id: 'baselayer', category: 'UPPER', categoryClass: 'upper', icon: '👕', label: (r: any) => r.hasThermalBaselayer ? 'Thermal Base' : 'Base Layer', check: (r: any) => r.hasBaselayer },
+      { id: 'jersey', category: 'UPPER', categoryClass: 'upper', icon: '👔', label: () => 'Jersey', alwaysActive: true },
+      { id: 'armWarmers', category: 'UPPER', categoryClass: 'upper', icon: '💪', label: () => 'Arm Warmers', check: (r: any) => r.hasArmWarmers },
+      { id: 'gilet', category: 'UPPER', categoryClass: 'upper', icon: '🦺', label: () => 'Gilet', check: (r: any) => r.hasGilet },
+      { id: 'jacket', category: 'UPPER', categoryClass: 'upper', icon: '🧥', label: (r: any) => {
+          if (r.hasRainJacket && r.hasWinterJacket) return 'Rain + Winter Jacket';
+          if (r.hasRainJacket) return 'Rain Jacket';
+          if (r.hasWinterJacket) return 'Winter Jacket';
+          return 'Light Jacket';
+        }, check: (r: any) => r.hasJacket || r.hasRainJacket },
+      { id: 'shorts', category: 'LOWER', categoryClass: 'lower', icon: '🩳', label: () => getEffectiveTemp() < 10 ? 'Bib Tights' : 'Bib Shorts', alwaysActive: true },
+      { id: 'legs', category: 'LOWER', categoryClass: 'lower', icon: '🦵', label: () => 'Leg Warmers', check: (r: any) => r.hasLegWarmers },
+      { id: 'socks', category: 'FEET', categoryClass: 'feet', icon: '🧦', label: () => 'Socks', alwaysActive: true },
+      { id: 'shoes', category: 'FEET', categoryClass: 'feet', icon: '👟', label: () => 'Shoes', alwaysActive: true },
+      { id: 'overshoes', category: 'FEET', categoryClass: 'feet', icon: '🥾', label: (r: any) => r.hasWinterShoes ? 'Winter Overshoes' : 'Overshoes', check: (r: any) => r.hasFeetProtection }
+    ];
+
+    function renderKitDiagram() {
+      const rec = getRecommendations();
+      const grid = document.getElementById('kit-grid');
+      if (!grid) return;
+
+      grid.innerHTML = kitItems.map(item => {
+        const isActive = item.alwaysActive || (item.check && item.check(rec));
+        const label = item.label(rec);
+
+        return `
+          <div class="kit-item ${item.categoryClass} ${isActive ? 'is-active' : ''}">
+            <div class="kit-item-category">${item.category}</div>
+            <div class="kit-item-icon" aria-hidden="true">${item.icon}</div>
+            <div class="kit-item-label">${label}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderTabContent() {
+      const container = document.getElementById('tab-content-container');
+      if (!container) return;
+
+      let html = '';
+      if (state.activeTab === 'warnings') {
+        const warnings = getWarnings();
+        if (warnings.length === 0) {
+          html = `
+            <div class="guide-alert guide-alert-success">
+              <span class="alert-icon">✅</span>
+              <div>No weather hazard warnings for current settings. Safe riding!</div>
+            </div>
+          `;
+        } else {
+          html = warnings.map(w => `
+            <div class="guide-alert guide-alert-${w.level}">
+              <span class="alert-icon">${w.icon}</span>
+              <div>${w.message}</div>
+            </div>
+          `).join('');
+        }
+      } else if (state.activeTab === 'tips') {
+        html = `
+          <div class="guide-alert guide-alert-info">
+            <ul>
+              <li><strong>Start slightly cool:</strong> You will warm up naturally after 10–15 minutes of pedaling.</li>
+              <li><strong>Layer with pockets in mind:</strong> Pack arm warmers and gilets into jersey pockets if temperature rises.</li>
+              <li><strong>Extremities first:</strong> Protect feet and hands—they freeze long before your core does.</li>
+              <li><strong>Dutch crosswinds:</strong> When winds exceed 25 km/h, lower tire pressure by 0.3 bar for improved grip and comfort.</li>
+            </ul>
+          </div>
+        `;
+      } else if (state.activeTab === 'maintenance') {
+        html = `
+          <div class="guide-alert guide-alert-info">
+            <h4>Winter Bike Care in the Netherlands</h4>
+            <ul>
+              <li>Rinse your bike with low-pressure water after wet rides to wash away salt brine.</li>
+              <li>Use high-viscosity wet lube on chains throughout November to March.</li>
+              <li>Degrease disc brake rotors with isopropyl alcohol to prevent wet brake squeal.</li>
+            </ul>
+          </div>
+        `;
+      }
+
+      container.innerHTML = `<div class="guide-tab-pane">${html}</div>`;
+    }
+
+    function updateConditionHints() {
+      const windHints: Record<string, string> = {
+        'none': 'Calm: < 5 mph, flags hang limp',
+        'light': 'Light: 5-15 mph, feel wind on face',
+        'strong': 'Strong: > 15 mph, hard to ride straight'
+      };
+      const rainHints: Record<string, string> = {
+        'dry': 'No rain expected',
+        'light': 'Light: Drizzle, occasional drops',
+        'heavy': 'Heavy: Steady rain, puddles on roads'
+      };
+
+      const wh = document.getElementById('wind-hint');
+      if (wh) wh.textContent = windHints[state.windConditions] || '';
+
+      const rh = document.getElementById('rain-hint');
+      if (rh) rh.textContent = rainHints[state.rainConditions] || '';
+    }
+
+    function updateUI() {
+      updateTempDisplay();
+      updateConditionHints();
+      renderKitDiagram();
+      renderTabContent();
+
+      const check = document.getElementById('mudguards-check');
+      if (check) check.textContent = state.hasMudguards ? '✔' : '';
+    }
+
+    // Bind event listeners
+    document.querySelectorAll('.unit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const u = btn.getAttribute('data-unit') || 'C';
+        if (u !== state.unit) {
+          if (u === 'F') state.temperature = Math.round(toFahrenheit(state.temperature));
+          else state.temperature = Math.round(toCelsius(state.temperature));
+          state.unit = u;
+          document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          updateUI();
+        }
+      });
+    });
+
+    const slider = document.getElementById('temp-slider');
+    if (slider) {
+      slider.addEventListener('input', (e) => {
+        state.temperature = Number((e.target as HTMLInputElement).value);
+        updateUI();
+      });
+    }
+
+    const mudToggle = document.getElementById('mudguards-toggle');
+    if (mudToggle) {
+      mudToggle.addEventListener('click', () => {
+        state.hasMudguards = !state.hasMudguards;
+        mudToggle.classList.toggle('is-active');
+        mudToggle.setAttribute('aria-pressed', String(state.hasMudguards));
+        updateUI();
+      });
+    }
+
+    document.querySelectorAll('[data-wind]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.windConditions = btn.getAttribute('data-wind') || 'none';
+        document.querySelectorAll('[data-wind]').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        updateUI();
+      });
+    });
+
+    document.querySelectorAll('[data-rain]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.rainConditions = btn.getAttribute('data-rain') || 'dry';
+        document.querySelectorAll('[data-rain]').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        updateUI();
+      });
+    });
+
+    document.querySelectorAll('[data-sun]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.sunConditions = btn.getAttribute('data-sun') || 'mixed';
+        document.querySelectorAll('[data-sun]').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        updateUI();
+      });
+    });
+
+    document.querySelectorAll('[data-effort]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.intensity = btn.getAttribute('data-effort') || 'hard';
+        document.querySelectorAll('[data-effort]').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        updateUI();
+      });
+    });
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.activeTab = btn.getAttribute('data-tab') || 'warnings';
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        renderTabContent();
+      });
+    });
+
+    updateUI();
+  </script>
+</BaseLayout>
+
+<style>
+  .app-container {
+    max-width: 1040px;
+    margin: 0 auto 4rem;
+  }
+
+  .controls-panel {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 20px;
+    padding: 2.25rem;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 20px var(--shadow-light);
+    margin-bottom: 2.5rem;
+  }
+
+  .control-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .control-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .control-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .control-label {
+    font-weight: 700;
+    color: var(--dark-text);
+    font-size: 1.05rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .unit-toggle {
+    display: flex;
+    gap: 4px;
+    background: #f1f5f9;
+    padding: 3px;
+    border-radius: 8px;
+  }
+
+  .unit-btn {
+    border: none;
+    background: transparent;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--light-text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .unit-btn.is-active {
+    background: #ffffff;
+    color: var(--accent-amber);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: #e2e8f0;
+    outline: none;
+    accent-color: var(--accent-amber);
+  }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--light-text);
+    margin-top: 0.4rem;
+  }
+
+  .toggle-btn {
+    padding: 0.65rem 1.25rem;
+    border: 1px solid var(--border-light);
+    background: #ffffff;
+    border-radius: 12px;
+    font-weight: 600;
+    color: var(--medium-text);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .toggle-btn.is-active {
+    border-color: #059669;
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+  }
+
+  .conditions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 6px;
+  }
+
+  .button-group .btn {
+    flex: 1;
+    padding: 0.55rem 0.5rem;
+    border: 1px solid var(--border-light);
+    background: #ffffff;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--light-text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .button-group .btn.is-active {
+    background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+    color: #ffffff;
+    border-color: transparent;
+  }
+
+  .condition-hint {
+    font-size: 0.75rem;
+    color: var(--light-text);
+    margin-top: 0.35rem;
+  }
+
+  /* Kit Diagram */
+  .kit-diagram {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 20px;
+    padding: 2.25rem;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 20px var(--shadow-light);
+    margin-bottom: 2.5rem;
+  }
+
+  .diagram-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .kit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  :global(.kit-item) {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1rem 0.5rem;
+    text-align: center;
+    opacity: 0.45;
+    transition: all 0.25s ease;
+  }
+
+  :global(.kit-item.is-active) {
+    opacity: 1;
+    border-color: var(--accent-amber);
+    box-shadow: 0 4px 12px rgba(234, 88, 12, 0.15);
+    transform: translateY(-2px);
+  }
+
+  :global(.kit-item-category) {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--very-light-text);
+    margin-bottom: 0.35rem;
+  }
+
+  :global(.kit-item-icon) {
+    font-size: 1.85rem;
+    margin-bottom: 0.35rem;
+  }
+
+  :global(.kit-item-label) {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--dark-text);
+  }
+
+  .kit-legend {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+    font-size: 0.85rem;
+    color: var(--light-text);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #e2e8f0;
+  }
+
+  .legend-dot.is-active {
+    background: var(--accent-amber);
+    border-color: var(--accent-amber);
+  }
+
+  /* Bottom Tabs */
+  .bottom-tabs {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 20px var(--shadow-light);
+  }
+
+  .tab-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tab-btn {
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-light);
+    background: #ffffff;
+    border-radius: 12px;
+    font-weight: 700;
+    color: var(--light-text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.is-active {
+    background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(146, 64, 14, 0.25);
+  }
+
+  :global(.guide-alert) {
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  :global(.guide-alert-success) {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: #065f46;
+  }
+
+  :global(.guide-alert-warning) {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    color: #92400e;
+  }
+
+  :global(.guide-alert-danger) {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: #991b1b;
+  }
+
+  :global(.guide-alert-info) {
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #1e3a8a;
+  }
+
+  :global(.guide-alert ul) {
+    margin-left: 1.25rem;
+    line-height: 1.7;
+  }
+</style>

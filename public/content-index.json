@@ -2,10 +2,11 @@
   "_generated": "scripts/build-index.mjs — do not edit",
   "counts": {
     "article": 3,
-    "tag:accounting": 3,
-    "tag:valuation": 3,
+    "tag:accounting": 5,
+    "tag:valuation": 5,
     "tag:fpa": 1,
-    "tag:ai": 1
+    "episode": 2,
+    "tag:ai": 3
   },
   "items": [
     {
@@ -37,6 +38,60 @@
       "seriesPart": null,
       "hasAudio": false,
       "file": "content\\articles\\thames-water-crisis.md"
+    },
+    {
+      "slug": "big-tech-ai-investments-the-great-accounting-debate",
+      "type": "episode",
+      "title": "Big Tech AI Investments: The Great Accounting Debate",
+      "summary": "An in-depth 15-minute debate dissecting both sides of the AI investment thesis. Is Microsoft's $13B OpenAI commitment an ingenious infrastructure land-grab, or a precarious house of cards vulnerable to sudden regulatory intervention and efficiency gains?",
+      "url": "/podcast/big-tech-ai-investments-the-great-accounting-debate",
+      "published": "2025-10-26",
+      "updated": null,
+      "lang": "en",
+      "tags": [
+        "ai",
+        "accounting",
+        "valuation"
+      ],
+      "category": null,
+      "confidence": "medium",
+      "state": null,
+      "outcome": null,
+      "readingMinutes": null,
+      "durationSeconds": 920,
+      "episode": 2,
+      "related": [],
+      "series": null,
+      "seriesPart": null,
+      "hasAudio": true,
+      "file": "content\\episodes\\big-tech-ai-investments-the-great-accounting-debate.md"
+    },
+    {
+      "slug": "the-50b-ai-partnership-bubble",
+      "type": "episode",
+      "title": "The $50B AI Partnership Bubble: Accounting Crisis in Big Tech",
+      "summary": "Tech giants have deployed over $50 billion into generative AI startups through structured equity and compute-credit partnerships. But standard GAAP rules were never designed for investments where cash immediately loops back as cloud hosting revenue.",
+      "url": "/podcast/the-50b-ai-partnership-bubble",
+      "published": "2025-10-12",
+      "updated": null,
+      "lang": "en",
+      "tags": [
+        "ai",
+        "accounting",
+        "valuation"
+      ],
+      "category": null,
+      "confidence": "high",
+      "state": null,
+      "outcome": null,
+      "readingMinutes": null,
+      "durationSeconds": 255,
+      "episode": 1,
+      "related": [],
+      "series": null,
+      "seriesPart": null,
+      "hasAudio": true,
+      "file": "content\\episodes\\the-50b-ai-partnership-bubble.md"
     },
     {
       "slug": "ai-partnership-accounting",

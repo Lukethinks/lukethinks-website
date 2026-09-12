@@ -6,8 +6,15 @@
     { "source": "/thames-water-crisis.html", "destination": "/articles/thames-water-crisis", "permanent": true },
     { "source": "/research.html", "destination": "/research", "permanent": true },
     { "source": "/experiments.html", "destination": "/experiments", "permanent": true },
-    { "source": "/learning-landing.html", "destination": "/learning", "permanent": true },
     { "source": "/about.html", "destination": "/about", "permanent": true },
+    { "source": "/podcast.html", "destination": "/podcast", "permanent": true },
+    { "source": "/cycling-clothing-guide.html", "destination": "/experiments/cycling-clothing-guide", "permanent": true },
+    { "source": "/cycling-clothing-guide", "destination": "/experiments/cycling-clothing-guide", "permanent": true },
+    { "source": "/running-clothing-guide.html", "destination": "/experiments/running-clothing-guide", "permanent": true },
+    { "source": "/running-clothing-guide", "destination": "/experiments/running-clothing-guide", "permanent": true },
+    { "source": "/aai-article.html", "destination": "/articles/ai-partnership-accounting", "permanent": true },
+    { "source": "/learning-landing.html", "destination": "/learning", "permanent": true },
+    { "source": "/learning-landing", "destination": "/learning", "permanent": true },
     { "source": "/:slug.html", "destination": "/articles/:slug", "permanent": true }
   ]
 }

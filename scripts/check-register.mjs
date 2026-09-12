@@ -26,7 +26,7 @@ async function walk(dir, exts) {
   }
   return out;
 }
-const classesIn = (s) => [...s.matchAll(/class(?:Name|:list)?=["'{]([^"'}]*)/g)].flatMap((m) => m[1].split(/\s+/)).filter(Boolean);
+const classesIn = (s) => [...s.matchAll(/class(?:Name|:list)?=["'{]([^"'}]*)/g)].flatMap((m) => m[1].replace(/[`'"[\]{}()]/g, ' ').split(/\s+/)).filter(Boolean);
 
 const register = new Set();
 for (const f of [...(await walk(TPL, ['.html', '.md'])), ...(await walk(SRC, ['.astro', '.tsx', '.jsx']))])

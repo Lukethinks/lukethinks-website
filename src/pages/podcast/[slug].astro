@@ -1,0 +1,129 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import site from '../../../content/site.json';
+
+export async function getStaticPaths() {
+  const episodes = await getCollection('episodes', ({ data }) => data.status === 'published');
+  return episodes.map((episode) => ({
+    params: { slug: episode.data.slug },
+    props: { episode },
+  }));
+}
+
+const { episode } = Astro.props;
+const { data } = episode;
+const { Content } = await render(episode);
+
+const durationMinutes = Math.ceil(data.audio.durationSeconds / 60);
+const publishedDate = new Date(data.published);
+const formattedDate = publishedDate.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+});
+---
+
+<BaseLayout
+  title={`${data.title} · Episode ${data.episode}`}
+  description={data.summary}
+  ogType="article"
+  publishedTime={publishedDate.toISOString()}
+>
+  <nav aria-label="Breadcrumb" class="breadcrumbs">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/podcast">Podcast</a></li>
+      <li aria-current="page">Episode {data.episode}</li>
+    </ol>
+  </nav>
+
+  <article data-content-type="episode" data-slug={data.slug} data-episode={data.episode}>
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-category">Episode {data.episode}</span>
+        <time datetime={publishedDate.toISOString().slice(0, 10)}>{formattedDate}</time>
+        <span>{durationMinutes} min</span>
+      </div>
+
+      <h1 class="article-title">{data.title}</h1>
+      <p class="article-subtitle">{data.summary}</p>
+    </header>
+
+    <div class="audio-player-container">
+      <h2 class="audio-title" id="audio-episode">Listen to Episode {data.episode}</h2>
+      <audio
+        class="custom-audio-player"
+        controls
+        preload="none"
+        aria-labelledby="audio-episode"
+        src={data.audio.src}
+      >
+        <p>
+          Your browser does not support audio playback.
+          <a href={data.audio.src}>Download the MP3</a>.
+        </p>
+      </audio>
+
+      {data.production?.aiDisclosed && (
+        <p class="audio-disclosure">Audio produced with AI voices. Written, directed and edited by Luke.</p>
+      )}
+
+      <p class="audio-subscribe">
+        Subscribe: <a href="https://open.spotify.com/search/Luke%20Thinks" target="_blank" rel="noopener noreferrer">Spotify</a> ·
+        <a href="/podcast.xml">RSS Feed</a>
+      </p>
+    </div>
+
+    <section class="article-content" aria-label="Show notes and breakdown">
+      <Content />
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .audio-player-container {
+    background: linear-gradient(135deg, rgba(254, 247, 240, 0.95), rgba(255, 255, 255, 0.95));
+    border: 1px solid rgba(234, 88, 12, 0.3);
+    border-radius: 20px;
+    padding: 2.25rem;
+    margin: 2.5rem auto 3.5rem;
+    max-width: 860px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    text-align: center;
+  }
+
+  .audio-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin-bottom: 1.25rem;
+  }
+
+  .custom-audio-player {
+    width: 100%;
+    max-width: 600px;
+    height: 48px;
+    margin: 0 auto 1.25rem;
+    display: block;
+  }
+
+  .audio-disclosure {
+    font-size: 0.85rem;
+    color: var(--light-text);
+    margin-bottom: 0.75rem;
+    font-style: italic;
+  }
+
+  .audio-subscribe {
+    font-size: 0.9rem;
+    color: var(--medium-text);
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .audio-subscribe a {
+    color: var(--accent-amber);
+    text-decoration: underline;
+  }
+</style>

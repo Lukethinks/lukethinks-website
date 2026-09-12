@@ -1,0 +1,235 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../../content/site.json';
+
+const articles = await getCollection('articles', ({ data }) => data.status === 'published');
+const sortedArticles = articles.sort((a, b) => new Date(b.data.published).getTime() - new Date(a.data.published).getTime());
+
+const categories = ['All', ...new Set(articles.map(a => a.data.category))];
+---
+
+<BaseLayout
+  title="Learning Journal & Technical Walkthroughs"
+  description="Structured essays, technical accounting walkthroughs, and financial analysis frameworks from Luke's learning lab."
+>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span aria-hidden="true">📖</span>
+        <span>Articles, Frameworks & Deep Dives</span>
+      </div>
+
+      <h1>
+        Learning <span class="hero-highlight">Journal</span>
+      </h1>
+
+      <p class="hero-tagline">
+        Writing is how I verify understanding. Deep technical explorations of accounting standards,
+        tech strategy, and financial mechanisms.
+      </p>
+    </div>
+  </section>
+
+  <!-- Filter & Search Controls -->
+  <section class="controls-bar" aria-label="Article filter and search">
+    <div class="search-box">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input
+        id="article-search"
+        type="search"
+        placeholder="Search articles by title, tag, or keyword..."
+        aria-label="Search articles"
+      />
+    </div>
+
+    <div class="category-pills" id="category-filters" role="group" aria-label="Filter by category">
+      {categories.map((cat, idx) => (
+        <button
+          type="button"
+          class={`filter-pill ${idx === 0 ? 'is-active' : ''}`}
+          data-category={cat}
+        >
+          {cat === 'All' ? 'All Articles' : cat}
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <!-- Articles Grid -->
+  <div class="topic-grid" id="articles-grid">
+    {sortedArticles.map((article) => (
+      <a
+        href={`/articles/${article.data.slug}`}
+        class="topic-card article-card-item"
+        data-category={article.data.category}
+        data-title={article.data.title.toLowerCase()}
+        data-summary={article.data.summary.toLowerCase()}
+        data-tags={article.data.tags.join(' ').toLowerCase()}
+      >
+        <div class="article-meta">
+          <span class="article-category">{article.data.category}</span>
+          <time datetime={new Date(article.data.published).toISOString().slice(0, 10)}>
+            {new Date(article.data.published).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+          </time>
+          {article.data.confidence && (
+            <span class="confidence-badge" data-confidence={article.data.confidence}>
+              {article.data.confidence}
+            </span>
+          )}
+        </div>
+        <h2 class="topic-title">{article.data.title}</h2>
+        <p class="topic-description">{article.data.summary}</p>
+        <span class="topic-count">Read Entry →</span>
+      </a>
+    ))}
+  </div>
+
+  <!-- Empty state -->
+  <div id="no-results" class="empty-state sr-only" aria-live="polite">
+    <p>No articles match your search or category filter. Try clearing your query.</p>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('article-search');
+    const filterButtons = document.querySelectorAll('.filter-pill');
+    const cards = document.querySelectorAll('.article-card-item');
+    const noResults = document.getElementById('no-results');
+
+    let activeCategory = 'All';
+    let searchQuery = '';
+
+    function applyFilters() {
+      let visibleCount = 0;
+      cards.forEach((card) => {
+        if (!(card instanceof HTMLElement)) return;
+        const cat = card.dataset.category || '';
+        const title = card.dataset.title || '';
+        const summary = card.dataset.summary || '';
+        const tags = card.dataset.tags || '';
+
+        const matchesCat = activeCategory === 'All' || cat === activeCategory;
+        const matchesQuery = !searchQuery ||
+          title.includes(searchQuery) ||
+          summary.includes(searchQuery) ||
+          tags.includes(searchQuery);
+
+        if (matchesCat && matchesQuery) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (noResults) {
+        if (visibleCount === 0) {
+          noResults.classList.remove('sr-only');
+        } else {
+          noResults.classList.add('sr-only');
+        }
+      }
+    }
+
+    if (searchInput instanceof HTMLInputElement) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = (e.target as HTMLInputElement).value.toLowerCase().trim();
+        applyFilters();
+      });
+    }
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        activeCategory = btn.getAttribute('data-category') || 'All';
+        applyFilters();
+      });
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  .controls-bar {
+    max-width: 1040px;
+    margin: 0 auto 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .search-box {
+    position: relative;
+    flex: 1 1 320px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.95rem;
+    pointer-events: none;
+    color: var(--light-text);
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 0.85rem 1rem 0.85rem 2.75rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    background: #ffffff;
+    font-size: 0.95rem;
+    color: var(--dark-text);
+    font-family: inherit;
+    box-shadow: 0 2px 8px var(--shadow-light);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--accent-amber);
+    box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+  }
+
+  .category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .filter-pill {
+    padding: 0.6rem 1.15rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border-light);
+    background: #ffffff;
+    color: var(--light-text);
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .filter-pill:hover {
+    color: var(--dark-text);
+    border-color: var(--accent-amber);
+  }
+
+  .filter-pill.is-active {
+    background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(146, 64, 14, 0.25);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--light-text);
+    font-size: 1.1rem;
+  }
+</style>

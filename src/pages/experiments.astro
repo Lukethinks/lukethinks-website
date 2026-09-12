@@ -1,0 +1,276 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../../content/site.json';
+---
+
+<BaseLayout
+  title="Experiments & Interactive Tools"
+  description="Personal experiments in productivity, weather algorithms, and analytical thinking — active interactive tools and research labs."
+>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span aria-hidden="true">🧪</span>
+        <span>Interactive Tools & Computational Models</span>
+      </div>
+
+      <h1>
+        Applied Experiments & <span class="hero-highlight">Live Tools</span>
+      </h1>
+
+      <p class="hero-tagline">
+        Building interactive algorithms, weather decision matrices, and systematic workflows.
+        Open to test, inspect, and iterate on.
+      </p>
+    </div>
+  </section>
+
+  <!-- Section 1: Live Interactive Tools -->
+  <section class="section-header">
+    <h2 class="section-title">Featured Interactive Tools</h2>
+    <p class="section-subtitle">Ready-to-use computational tools running directly in the browser</p>
+  </section>
+
+  <div class="tools-grid">
+    <!-- Cycling Clothing Guide -->
+    <a href="/experiments/cycling-clothing-guide" class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-icon" aria-hidden="true">🚴</div>
+        <span class="tool-status-badge">Active Tool</span>
+      </div>
+
+      <h3 class="tool-title">Cycling Kit Matrix & Weather Engine</h3>
+      <p class="tool-desc">
+        Dynamic clothing recommendations calculated from real-time temperature, wind chill, precipitation probability, and planned workout intensity. Built for year-round Dutch cycling conditions.
+      </p>
+
+      <div class="tool-footer">
+        <span class="tool-algo">Algorithm: Multi-variable heat loss</span>
+        <span class="tool-action">Open Guide →</span>
+      </div>
+    </a>
+
+    <!-- Running Clothing Guide -->
+    <a href="/experiments/running-clothing-guide" class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-icon" aria-hidden="true">🏃</div>
+        <span class="tool-status-badge">Active Tool</span>
+      </div>
+
+      <h3 class="tool-title">Running Gear & Layering Calculator</h3>
+      <p class="tool-desc">
+        Precise runner's layering logic accounting for personal pacing, thermal build-up after kilometer 3, wind speed, and rain resistance to avoid overheating or hypothermia.
+      </p>
+
+      <div class="tool-footer">
+        <span class="tool-algo">Algorithm: Metabolic thermo-regulation</span>
+        <span class="tool-action">Open Guide →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Section 2: Research & Experimentation Labs -->
+  <section class="section-header">
+    <h2 class="section-title">Research & Experimentation Labs</h2>
+    <p class="section-subtitle">Systematic studies and methodologies currently undergoing iterative testing</p>
+  </section>
+
+  <div class="labs-grid">
+    <div class="lab-card">
+      <div class="lab-icon" aria-hidden="true">⏱️</div>
+      <h3 class="lab-title">Productivity & Flow Systems</h3>
+      <p class="lab-desc">
+        Testing structured time-blocking architectures, cognitive energy matching, and measurable output velocity across strategic projects.
+      </p>
+      <div class="lab-footer">
+        <span class="lab-meta-label">Phase</span>
+        <span class="lab-phase-pill amber">Data Collection</span>
+      </div>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-icon" aria-hidden="true">🧠</div>
+      <h3 class="lab-title">Learning Retention & Recall</h3>
+      <p class="lab-desc">
+        Comparing algorithmic spaced repetition and synthesis frameworks for retaining complex GAAP standards and corporate finance valuations.
+      </p>
+      <div class="lab-footer">
+        <span class="lab-meta-label">Phase</span>
+        <span class="lab-phase-pill cyan">Model Testing</span>
+      </div>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-icon" aria-hidden="true">🌲</div>
+      <h3 class="lab-title">Analytical Decision Engines</h3>
+      <p class="lab-desc">
+        Translating business strategy frameworks into modular decision trees and interactive models for executive reasoning.
+      </p>
+      <div class="lab-footer">
+        <span class="lab-meta-label">Phase</span>
+        <span class="lab-phase-pill emerald">Design Phase</span>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 2rem;
+    max-width: 1040px;
+    margin: 0 auto 4.5rem;
+  }
+
+  .tool-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 20px;
+    padding: 2.25rem;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 20px var(--shadow-light);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+  }
+
+  .tool-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 36px var(--shadow-medium);
+    border-color: var(--accent-amber);
+  }
+
+  .tool-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .tool-icon {
+    font-size: 2.5rem;
+  }
+
+  .tool-status-badge {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tool-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .tool-desc {
+    color: var(--light-text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
+    flex-grow: 1;
+  }
+
+  .tool-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-light);
+    font-size: 0.85rem;
+  }
+
+  .tool-algo {
+    color: var(--light-text);
+    font-weight: 500;
+  }
+
+  .tool-action {
+    color: var(--accent-amber);
+    font-weight: 700;
+  }
+
+  .labs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.75rem;
+    max-width: 1040px;
+    margin: 0 auto 4rem;
+  }
+
+  .lab-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 14px var(--shadow-light);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lab-icon {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .lab-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .lab-desc {
+    color: var(--light-text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+  }
+
+  .lab-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+    font-size: 0.85rem;
+  }
+
+  .lab-meta-label {
+    color: var(--light-text);
+    font-weight: 600;
+  }
+
+  .lab-phase-pill {
+    padding: 0.25rem 0.65rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .lab-phase-pill.amber {
+    background: rgba(245, 158, 11, 0.12);
+    color: #d97706;
+  }
+
+  .lab-phase-pill.cyan {
+    background: rgba(6, 182, 212, 0.12);
+    color: #0891b2;
+  }
+
+  .lab-phase-pill.emerald {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+  }
+</style>
