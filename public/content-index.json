@@ -1,5 +1,38 @@
 {
   "_generated": "scripts/build-index.mjs — do not edit",
-  "counts": {},
-  "items": []
+  "counts": {
+    "article": 1,
+    "tag:accounting": 1,
+    "tag:ai": 1,
+    "tag:valuation": 1
+  },
+  "items": [
+    {
+      "slug": "ai-partnership-accounting",
+      "type": "article",
+      "title": "When Billion-Dollar AI Partnerships Meet Reality: A $50B Accounting Crisis in the Making",
+      "summary": "What happens when cutting-edge technology moves faster than the accounting rules designed to measure it?",
+      "url": "/articles/ai-partnership-accounting",
+      "published": "2025-10-04",
+      "updated": null,
+      "lang": "en",
+      "tags": [
+        "accounting",
+        "ai",
+        "valuation"
+      ],
+      "category": "Financial Analysis",
+      "confidence": "medium",
+      "state": null,
+      "outcome": null,
+      "readingMinutes": 8,
+      "durationSeconds": null,
+      "episode": null,
+      "related": [],
+      "series": null,
+      "seriesPart": null,
+      "hasAudio": false,
+      "file": "content\\articles\\ai-partnership-accounting.md"
+    }
+  ]
 }

@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experiments & Interactive Tools - Luke Thinks</title>
+  <meta name="description" content="Personal experiments in productivity, weather algorithms, and analytical thinkingâ€”active interactive tools and research labs.">
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#090a0f',
+            card: '#12141c',
+            surface: '#181b26',
+            border: '#232736',
+            'border-hover': '#383e56',
+            foreground: '#f1f5f9',
+            muted: '#94a3b8',
+            accent: {
+              DEFAULT: '#f97316',
+              hover: '#ea580c',
+              glow: 'rgba(249, 115, 22, 0.25)'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: #090a0f;
+      color: #f1f5f9;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    .grid-pattern {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-background text-foreground flex flex-col antialiased selection:bg-accent/30 selection:text-white">
+  <!-- Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+
+  <!-- Sticky Navbar -->
+  <header class="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border transition-all duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-bold text-white shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform">
+          L
+        </div>
+        <div class="flex flex-col">
+          <span class="font-extrabold text-base tracking-tight text-foreground group-hover:text-amber-500 transition-colors">Luke Thinks</span>
+          <span class="text-[10px] font-mono tracking-widest text-amber-500 font-semibold uppercase">Learning Lab</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-1">
+        <a href="/" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface transition-colors">Home</a>
+        <a href="/research.html" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface transition-colors">Research</a>
+        <a href="/podcast.html" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface transition-colors flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-accent" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+          </svg>
+          Podcasts
+        </a>
+        <a href="/experiments.html" class="px-3.5 py-1.5 rounded-lg text-sm font-semibold bg-surface border border-border text-foreground">Experiments</a>
+        <a href="/learning-landing.html" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface transition-colors">Learning</a>
+        <a href="/about.html" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface transition-colors">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden pt-16 pb-12 border-b border-border/50">
+    <div class="absolute inset-0 grid-pattern pointer-events-none opacity-40"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-mono font-medium mb-4">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+        </svg>
+        <span>Interactive Tools & Computational Models</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground max-w-3xl leading-tight mb-4">
+        Applied Experiments & <span class="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">Live Tools</span>
+      </h1>
+      <p class="text-base sm:text-lg text-muted max-w-2xl leading-relaxed">
+        Building interactive algorithms, weather decision matrices, and systematic workflows. Open to test, inspect, and iterate on.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-16">
+
+    <!-- Section 1: Live Interactive Tools -->
+    <section>
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-2xl font-bold text-foreground">Featured Interactive Tools</h2>
+          <p class="text-sm text-muted">Ready-to-use computational tools running in the browser</p>
+        </div>
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          2 Live Tools
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Cycling Clothing Guide -->
+        <a href="/cycling-clothing-guide.html" class="group relative flex flex-col bg-card/60 backdrop-blur border border-border rounded-2xl p-6 hover:border-accent/50 hover:shadow-2xl hover:shadow-accent/5 transition-all duration-300">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="5.5" cy="17.5" r="3.5" stroke-width="2"/>
+                <circle cx="18.5" cy="17.5" r="3.5" stroke-width="2"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 6a1 1 0 100-2 1 1 0 000 2zm-3 11.5l3.5-7 3.5 7M5.5 17.5l6-6h3.5"/>
+              </svg>
+            </div>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              Active Tool
+            </span>
+          </div>
+
+          <h3 class="text-xl font-bold text-foreground group-hover:text-accent transition-colors mb-2">
+            Cycling Kit Matrix & Weather Engine
+          </h3>
+          <p class="text-sm text-muted leading-relaxed mb-6 flex-1">
+            Dynamic clothing recommendations calculated from real-time temperature, wind chill, precipitation probability, and planned workout intensity. Built for year-round Dutch cycling conditions.
+          </p>
+
+          <div class="pt-4 border-t border-border flex items-center justify-between text-xs font-mono text-muted">
+            <span>Algorithm: Multi-variable heat loss</span>
+            <span class="text-accent group-hover:translate-x-1 transition-transform flex items-center gap-1 font-semibold">
+              Open Guide â†’
+            </span>
+          </div>
+        </a>
+
+        <!-- Running Clothing Guide -->
+        <a href="/running-clothing-guide.html" class="group relative flex flex-col bg-card/60 backdrop-blur border border-border rounded-2xl p-6 hover:border-accent/50 hover:shadow-2xl hover:shadow-accent/5 transition-all duration-300">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              Active Tool
+            </span>
+          </div>
+
+          <h3 class="text-xl font-bold text-foreground group-hover:text-accent transition-colors mb-2">
+            Running Gear & Layering Calculator
+          </h3>
+          <p class="text-sm text-muted leading-relaxed mb-6 flex-1">
+            Precise runner's layering logic accounting for personal pacing, thermal build-up after kilometer 3, wind speed, and rain resistance to avoid overheating or hypothermia.
+          </p>
+
+          <div class="pt-4 border-t border-border flex items-center justify-between text-xs font-mono text-muted">
+            <span>Algorithm: Metabolic thermo-regulation</span>
+            <span class="text-accent group-hover:translate-x-1 transition-transform flex items-center gap-1 font-semibold">
+              Open Guide â†’
+            </span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Section 2: Research & Experimentation Labs -->
+    <section>
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-2xl font-bold text-foreground">Research & Experimentation Labs</h2>
+          <p class="text-sm text-muted">Systematic studies and methodologies currently undergoing iterative testing</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Lab 1 -->
+        <div class="bg-card/40 border border-border rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-surface border border-border flex items-center justify-center text-accent mb-4">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">Productivity & Flow Systems</h3>
+            <p class="text-sm text-muted leading-relaxed mb-4">
+              Testing structured time-blocking architectures, cognitive energy matching, and measurable output velocity across strategic projects.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-border flex items-center justify-between text-xs font-mono">
+            <span class="text-muted">Phase</span>
+            <span class="px-2 py-0.5 rounded bg-surface text-amber-400 border border-amber-400/20">Data Collection</span>
+          </div>
+        </div>
+
+        <!-- Lab 2 -->
+        <div class="bg-card/40 border border-border rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-surface border border-border flex items-center justify-center text-accent mb-4">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">Learning Retention & Recall</h3>
+            <p class="text-sm text-muted leading-relaxed mb-4">
+              Comparing algorithmic spaced repetition and synthesis frameworks for retaining complex GAAP standards and corporate finance valuations.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-border flex items-center justify-between text-xs font-mono">
+            <span class="text-muted">Phase</span>
+            <span class="px-2 py-0.5 rounded bg-surface text-cyan-400 border border-cyan-400/20">Model Testing</span>
+          </div>
+        </div>
+
+        <!-- Lab 3 -->
+        <div class="bg-card/40 border border-border rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-surface border border-border flex items-center justify-center text-accent mb-4">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">Analytical Decision Engines</h3>
+            <p class="text-sm text-muted leading-relaxed mb-4">
+              Translating business strategy frameworks into modular decision trees and interactive models for executive reasoning.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-border flex items-center justify-between text-xs font-mono">
+            <span class="text-muted">Phase</span>
+            <span class="px-2 py-0.5 rounded bg-surface text-purple-400 border border-purple-400/20">Architecting</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Connect / Feedback Banner -->
+    <section class="bg-gradient-to-br from-surface via-card to-background border border-border rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="space-y-2 text-center sm:text-left">
+        <h3 class="text-xl font-bold text-foreground">Have an experiment or tool suggestion?</h3>
+        <p class="text-sm text-muted max-w-xl">
+          I build open computational models for analytical thinking, finance, and performance. Feel free to reach out to collaborate.
+        </p>
+      </div>
+      <a href="mailto:lukethinks@outlook.com?subject=Experiments Collaboration" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent text-white font-semibold text-sm hover:bg-accent-hover transition-colors shadow-lg shadow-accent/20 flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+        <span>Get in Touch</span>
+      </a>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-border bg-card/40 py-10 mt-16 text-sm text-muted">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-lg bg-accent/20 text-accent flex items-center justify-center font-bold text-xs">L</div>
+        <span>&copy; 2025 Luke van den Top &bull; Netherlands</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="/" class="hover:text-foreground transition-colors">Home</a>
+        <a href="/research.html" class="hover:text-foreground transition-colors">Research</a>
+        <a href="/podcast.html" class="hover:text-foreground transition-colors">Podcasts</a>
+        <a href="/experiments.html" class="hover:text-foreground transition-colors">Experiments</a>
+        <a href="/learning-landing.html" class="hover:text-foreground transition-colors">Learning</a>
+        <a href="/about.html" class="hover:text-foreground transition-colors">About</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Journal & Articles - Luke Thinks</title>
+  <meta name="description" content="Structured essays, technical accounting walkthroughs, and financial analysis frameworks.">
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#090a0f',
+            card: '#12141c',
+            surface: '#181b26',
+            border: '#232736',
+            'border-hover': '#383e56',
+            foreground: '#f1f5f9',
+            muted: '#94a3b8',
+            accent: {
+              DEFAULT: '#f97316',
+              hover: '#ea580c',
+              glow: 'rgba(249, 115, 22, 0.25)'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: #090a0f;
+      color: #f1f5f9;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    .grid-pattern {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-background text-foreground flex flex-col antialiased selection:bg-accent/30 selection:text-white">
+  <!-- Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border transition-all duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-bold text-white shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform">
+          L
+        </div>
+        <div class="flex flex-col">
+          <span class="font-extrabold text-base tracking-tight text-foreground group-hover:text-amber-500 transition-colors">Luke Thinks</span>
+          <span class="text-[10px] font-mono tracking-widest text-amber-500 font-semibold uppercase">Learning Lab</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-1">
+        <a href="/" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface transition-colors">Home</a>
+        <a href="/research.html" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface transition-colors">Research</a>
+        <a href="/podcast.html" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface transition-colors flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-accent" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+          </svg>
+          Podcasts
+        </a>
+        <a href="/experiments.html" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface transition-colors">Experiments</a>
+        <a href="/learning-landing.html" class="px-3.5 py-1.5 rounded-lg text-sm font-semibold bg-surface border border-border text-foreground">Learning</a>
+        <a href="/about.html" class="px-3.5 py-1.5 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface transition-colors">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden pt-16 pb-12 border-b border-border/50">
+    <div class="absolute inset-0 grid-pattern pointer-events-none opacity-40"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-mono font-medium mb-4">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+        <span>Articles, Frameworks & Deep Dives</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground max-w-3xl leading-tight mb-4">
+        Learning <span class="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">Journal</span>
+      </h1>
+      <p class="text-base sm:text-lg text-muted max-w-2xl leading-relaxed">
+        Writing is how I verify understanding. Deep technical explorations of accounting standards, tech strategy, and financial mechanisms.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Container with Search & Filter Controls -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full space-y-8">
+    
+    <!-- Controls Bar -->
+    <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      <!-- Search Input -->
+      <div class="relative flex-1 max-w-md">
+        <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input 
+          id="post-search" 
+          type="search" 
+          placeholder="Search articles by title, tag, or topic..." 
+          class="w-full pl-10 pr-4 py-2.5 bg-surface border border-border rounded-xl text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
+        >
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none" id="category-filters">
+        <button data-category="All" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-accent text-white transition-colors">
+          All Articles
+        </button>
+        <button data-category="Accounting" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-surface hover:bg-surface/80 text-muted hover:text-foreground border border-border transition-colors">
+          Accounting
+        </button>
+        <button data-category="AI Strategy" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-surface hover:bg-surface/80 text-muted hover:text-foreground border border-border transition-colors">
+          AI Strategy
+        </button>
+        <button data-category="Financial Analysis" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-surface hover:bg-surface/80 text-muted hover:text-foreground border border-border transition-colors">
+          Financial Analysis
+        </button>
+      </div>
+    </div>
+
+    <!-- Posts Grid -->
+    <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Injected by JavaScript -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="posts-empty" class="hidden py-16 text-center">
+      <div class="w-12 h-12 mx-auto rounded-full bg-surface border border-border flex items-center justify-center text-muted mb-3">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h3 class="text-base font-semibold text-foreground">No articles match your search</h3>
+      <p class="text-sm text-muted mt-1">Try clearing your search query or selecting another category.</p>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-border bg-card/40 py-10 mt-16 text-sm text-muted">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-lg bg-accent/20 text-accent flex items-center justify-center font-bold text-xs">L</div>
+        <span>&copy; 2025 Luke van den Top &bull; Netherlands</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="/" class="hover:text-foreground transition-colors">Home</a>
+        <a href="/research.html" class="hover:text-foreground transition-colors">Research</a>
+        <a href="/podcast.html" class="hover:text-foreground transition-colors">Podcasts</a>
+        <a href="/experiments.html" class="hover:text-foreground transition-colors">Experiments</a>
+        <a href="/learning-landing.html" class="hover:text-foreground transition-colors">Learning</a>
+        <a href="/about.html" class="hover:text-foreground transition-colors">About</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Data & Logic Scripts -->
+  <script src="/data/learning-posts.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      const posts = window.LUKETHINKS_POSTS || [];
+      let activeCategory = 'All';
+      let searchQuery = '';
+
+      const searchInput = document.getElementById('post-search');
+      const categoryButtons = document.querySelectorAll('.cat-filter-btn');
+      const grid = document.getElementById('posts-grid');
+      const emptyState = document.getElementById('posts-empty');
+
+      function filterPosts() {
+        return posts.filter(post => {
+          const matchCat = activeCategory === 'All' || post.category === activeCategory;
+          const q = searchQuery.toLowerCase().trim();
+          const matchQuery = !q ||
+            post.title.toLowerCase().includes(q) ||
+            post.summary.toLowerCase().includes(q) ||
+            post.category.toLowerCase().includes(q) ||
+            (post.tags && post.tags.some(t => t.toLowerCase().includes(q)));
+          return matchCat && matchQuery;
+        });
+      }
+
+      function renderPosts() {
+        const filtered = filterPosts();
+        grid.innerHTML = '';
+
+        if (filtered.length === 0) {
+          grid.classList.add('hidden');
+          emptyState.classList.remove('hidden');
+          return;
+        }
+
+        grid.classList.remove('hidden');
+        emptyState.classList.add('hidden');
+
+        filtered.forEach(post => {
+          const card = document.createElement('article');
+          card.className = 'group flex flex-col bg-card/60 backdrop-blur border border-border rounded-2xl p-6 hover:border-accent/40 hover:shadow-2xl transition-all duration-300';
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between mb-4">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-surface border border-border text-foreground">
+                ${post.category}
+              </span>
+              <span class="text-xs font-mono text-muted">
+                ${post.readTime}
+              </span>
+            </div>
+
+            <h3 class="text-lg font-bold text-foreground group-hover:text-accent transition-colors leading-snug mb-3">
+              <a href="${post.url}">${post.title}</a>
+            </h3>
+
+            <p class="text-sm text-muted line-clamp-3 mb-6 leading-relaxed flex-1">
+              ${post.summary}
+            </p>
+
+            <div class="pt-4 border-t border-border flex items-center justify-between mt-auto">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                ${(post.tags || []).slice(0, 2).map(tag => `
+                  <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-muted">#${tag}</span>
+                `).join('')}
+              </div>
+              <a href="${post.url}" class="text-xs font-semibold text-accent group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                Read Article â†’
+              </a>
+            </div>
+          `;
+
+          grid.appendChild(card);
+        });
+      }
+
+      // Listeners
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          searchQuery = e.target.value;
+          renderPosts();
+        });
+      }
+
+      categoryButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          categoryButtons.forEach(b => {
+            b.classList.remove('bg-accent', 'text-white');
+            b.classList.add('bg-surface', 'text-muted');
+          });
+          btn.classList.add('bg-accent', 'text-white');
+          btn.classList.remove('bg-surface', 'text-muted');
+
+          activeCategory = btn.dataset.category;
+          renderPosts();
+        });
+      });
+
+      renderPosts();
+    })();
+  </script>
+</body>
+</html>

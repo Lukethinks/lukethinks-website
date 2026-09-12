@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    { "source": "/ai-article.html", "destination": "/articles/ai-partnership-accounting", "permanent": true },
+    { "source": "/research.html", "destination": "/research", "permanent": true },
+    { "source": "/experiments.html", "destination": "/experiments", "permanent": true },
+    { "source": "/learning-landing.html", "destination": "/learning", "permanent": true },
+    { "source": "/about.html", "destination": "/about", "permanent": true },
+    { "source": "/:slug.html", "destination": "/articles/:slug", "permanent": true }
+  ]
+}

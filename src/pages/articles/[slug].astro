@@ -1,0 +1,141 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map((article) => ({
+    params: { slug: article.data.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content, headings } = await render(article);
+
+const publishedDate = new Date(article.data.published);
+const publishedIso = publishedDate.toISOString().slice(0, 10);
+const publishedHuman = publishedDate.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+// Calculate reading time from body text (220 wpm house standard)
+const words = (article.body?.match(/\S+/g) ?? []).length;
+const readingMinutes = Math.max(1, Math.round(words / 220));
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: article.data.title,
+  description: article.data.summary,
+  datePublished: publishedIso,
+  dateModified: article.data.updated ? new Date(article.data.updated).toISOString().slice(0, 10) : publishedIso,
+  author: {
+    "@type": "Person",
+    name: "Luke",
+    url: "https://lukethinks.nl/about",
+  },
+  mainEntityOfPage: `https://lukethinks.nl/articles/${article.data.slug}`,
+  keywords: article.data.tags,
+};
+---
+
+<BaseLayout
+  title={article.data.title}
+  description={article.data.summary}
+  canonical={`https://lukethinks.nl/articles/${article.data.slug}`}
+  ogType="article"
+  ogImage={`/assets/og/${article.data.slug}.png`}
+  publishedTime={publishedIso}
+  modifiedTime={article.data.updated ? new Date(article.data.updated).toISOString().slice(0, 10) : undefined}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
+  <nav aria-label="Breadcrumb" class="breadcrumbs" slot="breadcrumbs">
+    <div class="container">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/research">{article.data.category}</a></li>
+        <li aria-current="page">{article.data.title}</li>
+      </ol>
+    </div>
+  </nav>
+
+  <article data-content-type="article" data-slug={article.data.slug} data-published={publishedIso}>
+    <header class="article-header">
+      <p class="article-meta">
+        <span class="article-category">{article.data.category}</span>
+        <time datetime={publishedIso}>{publishedHuman}</time>
+        <span>{readingMinutes} min read</span>
+        {article.data.confidence && (
+          <span class="confidence-badge" data-confidence={article.data.confidence}>
+            Confidence: {article.data.confidence}
+          </span>
+        )}
+      </p>
+      <h1 class="article-title">{article.data.title}</h1>
+      {article.data.subtitle && <p class="article-subtitle">{article.data.subtitle}</p>}
+    </header>
+
+    {article.data.toc && headings.length > 0 && (
+      <nav class="toc-container" aria-labelledby="toc-title" data-region="toc">
+        <h2 class="toc-title" id="toc-title">On this page</h2>
+        <ol class="toc-list">
+          {headings.filter((h) => h.depth === 2).map((h) => (
+            <li><a href={`#${h.slug}`}>{h.text}</a></li>
+          ))}
+        </ol>
+      </nav>
+    )}
+
+    {article.data.audio && article.data.audio.length > 0 && (
+      <div data-region="audio">
+        {article.data.audio.map((a) => (
+          <div class="audio-player-container" data-variant={a.variant}>
+            <h2 class="audio-title" id={`audio-${a.variant}`}>{a.label}</h2>
+            <p class="audio-meta">
+              <span aria-hidden="true">🎧</span>
+              <span>{a.variant} · <time datetime={`PT${Math.round(a.durationSeconds / 60)}M`}>{Math.round(a.durationSeconds / 60)} min</time></span>
+            </p>
+            <audio class="custom-audio-player" controls preload="none" aria-labelledby={`audio-${a.variant}`} src={a.src}>
+              <p>Your browser does not support audio playback. <a href={a.src}>Download the MP3</a>.</p>
+            </audio>
+            {a.production?.aiDisclosed && (
+              <p class="audio-disclosure">Audio generated with AI from the written article.</p>
+            )}
+          </div>
+        ))}
+      </div>
+    )}
+
+    <div class="article-content" data-region="body">
+      <Content />
+    </div>
+
+    <footer class="article-footer">
+      {article.data.sources && article.data.sources.length > 0 && (
+        <>
+          <h2 id="sources">Sources</h2>
+          <ol>
+            {article.data.sources.map((s) => (
+              <li><a href={s.url} target="_blank" rel="noopener noreferrer">{s.title}</a></li>
+            ))}
+          </ol>
+        </>
+      )}
+
+      {article.data.related && article.data.related.length > 0 && (
+        <nav aria-labelledby="related-title" data-region="related">
+          <h2 id="related-title">Related reading</h2>
+          <ul>
+            {article.data.related.map((relSlug) => (
+              <li><a href={`/articles/${relSlug}`}>{relSlug}</a></li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </footer>
+  </article>
+</BaseLayout>

@@ -653,8 +653,9 @@
                 <ul>
                     <li><a href="/" class="active">Home</a></li>
                     <li><a href="/research.html">Research</a></li>
-    <li><a href="/experiments.html">Experiments</a></li>
-<li><a href="/learning-landing.html">Learning</a></li>
+                    <li><a href="/podcast.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -2px; margin-right: 4px;"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg><span>Podcasts</span></a></li>
+                    <li><a href="/experiments.html">Experiments</a></li>
+                    <li><a href="/learning-landing.html">Learning</a></li>
                     <li><a href="/about.html">About</a></li>
                 </ul>
             </nav>
@@ -692,6 +693,18 @@
                         </div>
                     </a>
 
+                    <a href="/podcast.html" class="nav-card">
+                        <span class="nav-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="color: var(--accent-amber);"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg></span>
+                        <div class="nav-card-title">Audio Papers & Podcasts</div>
+                        <div class="nav-card-subtitle">Executive briefings, debates & financial autopsies (Spotify & Web)</div>
+                        <div class="nav-card-stats">
+                            <div class="nav-card-stat">
+                                <span class="stat-number">Audio</span>
+                                <span class="stat-label">Episodes</span>
+                            </div>
+                        </div>
+                    </a>
+
 <a href="/cycling-clothing-guide.html" class="nav-card">
     <span class="nav-card-icon">🚴</span>
     <div class="nav-card-title">Cycling Clothing Guide</div>
@@ -715,10 +728,6 @@
         <a href="mailto:lukethinks@outlook.com" class="inline-link" onclick="event.stopPropagation()">Email</a>.
     </div>
 </div>
-
-                            </div>
-                        </div>
-                    </a>
                 </div>
             </div>
 
@@ -737,17 +746,17 @@
             </div>
 
             <div class="featured-posts">
-<article class="featured-post">
-    <div class="post-meta">
-        <span class="post-category">Accounting Standards</span>
-        <span class="post-date">Oct 4</span>
-    </div>
-    <h3 class="post-title">Understanding ASC 323: Equity Method Accounting</h3>
-    <p class="post-excerpt">
-        Breaking down when and how to use equity method accounting—from the 20% ownership threshold to Microsoft's OpenAI investment challenges.
-    </p>
-</article>
-                <article class="featured-post">
+                <article class="featured-post" onclick="window.location.href='/asc-323-equity-method.html'" style="cursor: pointer;">
+                    <div class="post-meta">
+                        <span class="post-category">Accounting Standards</span>
+                        <span class="post-date">Oct 4</span>
+                    </div>
+                    <h3 class="post-title">Understanding ASC 323: Equity Method Accounting</h3>
+                    <p class="post-excerpt">
+                        Breaking down when and how to use equity method accounting—from the 20% ownership threshold to Microsoft's OpenAI investment challenges.
+                    </p>
+                </article>
+                <article class="featured-post" onclick="window.location.href='/ai-article.html'" style="cursor: pointer;">
                     <div class="post-meta">
                         <span class="post-category">Financial Analysis</span>
                         <span class="post-date">Oct 4</span>
@@ -757,19 +766,37 @@
                         A deep dive into the AI investment ecosystem, exploring how Microsoft, Amazon, and Google's massive partnerships create unprecedented accounting and regulatory challenges.
                     </p>
                 </article>
+                <article class="featured-post" onclick="window.location.href='/podcast.html'" style="cursor: pointer; border: 2px solid rgba(234, 88, 12, 0.35); background: linear-gradient(135deg, rgba(254, 247, 240, 0.95), rgba(255, 255, 255, 0.9));">
+                    <div class="post-meta">
+                        <span class="post-category" style="background: rgba(234, 88, 12, 0.15); color: var(--accent-amber); font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+                            <span>Featured Audio Episode</span>
+                        </span>
+                        <span class="post-date">Listen Now</span>
+                    </div>
+                    <h3 class="post-title">The $50B AI Partnership Bubble: Accounting Crisis in Big Tech</h3>
+                    <p class="post-excerpt">
+                        Executive audio briefing & debate dissecting why traditional GAAP rules fail when tech giants invest billions in AI startups. Listen to the 4-min executive briefing or 15-min deep debate on-demand.
+                    </p>
+                </article>
             </div>
         </section>
     </div>
 
     <footer>
         <div class="footer-content">
-            <p>© 2025 Luke van den Top • A space for thinking out loud</p>
+            <p>© 2025-2026 Luke van den Top • A space for thinking out loud</p>
             <div class="footer-links">
-                <a href="/about">About</a>
-                <a href="mailto:hello@lukethinks.nl">Contact</a>
+                <a href="/">Home</a>
+                <a href="/research.html">Research</a>
+                <a href="/podcast.html">Podcasts</a>
+                <a href="/experiments.html">Experiments</a>
+                <a href="/learning-landing.html">Learning</a>
+                <a href="/about.html">About</a>
+                <a href="mailto:lukethinks@outlook.com">Contact</a>
                 <a href="/rss">RSS</a>
             </div>
-        </footer>
+        </div>
     </footer>
 
     <script>
