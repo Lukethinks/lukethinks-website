@@ -3,43 +3,43 @@ import site from '../../content/site.json';
 /**
  * Resolves an audio URL dynamically:
  *
- * 1. If a valid `audioHost` is defined in `site.json` (not containing 'TODO')
- *    or provided via environment variable `PUBLIC_AUDIO_HOST`:
- *    It ensures the audio file is fetched from the Vercel Blob store.
- *    If `src` is a relative path or local audio URL (or points to the default blob domain),
- *    it prepends the real blob host.
+ * 1. If `src` is already an absolute URL (any https:// origin, including Vercel Blob),
+ *    return it unchanged. The frontmatter is the source of truth for the full path —
+ *    including any subfolder inside the Blob store (e.g. /Podcasts/ vs /audio/).
+ *    Rewriting a fully-qualified Blob URL here would strip the subfolder and produce a 404.
  *
- * 2. If no real `audioHost` is configured yet (still `TODO(luke)`):
- *    It automatically routes to the local `/audio/<filename>` static file.
- *    This ensures that in local development, testing, and staging, audio streaming
- *    works seamlessly without needing an active Vercel Blob token.
+ * 2. If `src` is a relative path and `audioHost` is configured in `site.json`
+ *    (or via the `PUBLIC_AUDIO_HOST` env var), prepend the Blob host.
+ *    This is the escape hatch for future content where the author writes a bare
+ *    filename in frontmatter rather than a full URL.
  *
- * 3. Once Luke uploads his audio files to Vercel Blob:
- *    All he has to do is update `audioHost` in `content/site.json` (or set `PUBLIC_AUDIO_HOST`).
- *    Every audio player across the entire site will instantly switch to the live Blob URL!
+ * 3. Fallback for local development (audioHost still TODO or src is relative):
+ *    Routes to /audio/<filename> which is served from public/audio/ (gitignored).
  */
 export function resolveAudioUrl(src: string): string {
   if (!src) return '';
 
-  // If it's already an external non-blob URL (e.g. external podcast host), preserve it
-  if (/^https?:\/\//i.test(src) && !src.includes('blob.vercel-storage.com')) {
+  // Rule 1: absolute URL — trust it completely, return as-is
+  // This preserves the exact Blob path (including subfolders like /Podcasts/)
+  // that was set in the episode frontmatter.
+  if (/^https?:\/\//i.test(src)) {
     return src;
   }
 
-  // Extract pure filename (e.g. "ai-thinking-frameworks-narration.mp3")
-  const filename = src.split('/').pop()?.split('?')[0] || src;
-
-  // Check if a real audio host is configured in site.json or env
+  // Rule 2: relative path + a real audioHost is configured → prepend host
   const envHost = typeof process !== 'undefined' ? process.env.PUBLIC_AUDIO_HOST : undefined;
   const siteHost = site.audioHost && !site.audioHost.includes('TODO') ? site.audioHost : undefined;
   const host = envHost || siteHost;
 
   if (host) {
     const cleanHost = host.replace(/\/$/, '');
-    return `${cleanHost}/audio/${filename}`;
+    // If src already looks like a path (starts with /), join directly
+    const cleanSrc = src.startsWith('/') ? src : `/audio/${src}`;
+    return `${cleanHost}${cleanSrc}`;
   }
 
-  // Fallback for local development and preview before Blob is configured
+  // Rule 3: local development fallback → /audio/<filename>
+  const filename = src.split('/').pop()?.split('?')[0] || src;
   return `/audio/${filename}`;
 }
 
