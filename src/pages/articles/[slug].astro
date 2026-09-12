@@ -138,4 +138,182 @@ const jsonLd = {
       )}
     </footer>
   </article>
+
+  <!-- Client-side charts bundled locally via Chart.js -->
+  <script>
+    import Chart from 'chart.js/auto';
+
+    function initCharts() {
+      // Pricing Collapse Chart
+      const pricingCanvas = document.getElementById('pricingChart') as HTMLCanvasElement | null;
+      if (pricingCanvas && !pricingCanvas.dataset.rendered) {
+        pricingCanvas.dataset.rendered = 'true';
+        const ctx = pricingCanvas.getContext('2d');
+        if (ctx) {
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ['Mar 2023', 'Jun 2023', 'Sep 2023', 'Dec 2023', 'Mar 2024', 'Jun 2024', 'Aug 2024'],
+              datasets: [
+                {
+                  label: 'GPT-4 Output Tokens ($/Million)',
+                  data: [60, 55, 45, 30, 20, 15, 10],
+                  borderColor: 'rgba(146, 64, 14, 0.9)',
+                  backgroundColor: 'rgba(146, 64, 14, 0.12)',
+                  borderWidth: 3,
+                  fill: true,
+                  tension: 0.4,
+                },
+                {
+                  label: 'Open-Source Equivalent ($/Million)',
+                  data: [null, null, 20, 15, 10, 5, 1],
+                  borderColor: 'rgba(234, 88, 12, 0.9)',
+                  backgroundColor: 'rgba(234, 88, 12, 0.08)',
+                  borderWidth: 3,
+                  fill: true,
+                  tension: 0.4,
+                  borderDash: [5, 5],
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              aspectRatio: 2,
+              plugins: {
+                legend: {
+                  display: true,
+                  position: 'top',
+                  labels: {
+                    font: { family: 'Inter', size: 12, weight: '600' },
+                    color: '#64748b',
+                    usePointStyle: true,
+                    padding: 16,
+                  },
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (ctx) {
+                      return `${ctx.dataset.label}: $${ctx.parsed.y}`;
+                    },
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: { color: 'rgba(146, 64, 14, 0.08)' },
+                  ticks: {
+                    color: '#64748b',
+                    font: { family: 'Inter' },
+                    callback: function (val) {
+                      return '$' + val;
+                    },
+                  },
+                  title: {
+                    display: true,
+                    text: 'Price per Million Tokens ($)',
+                    color: '#64748b',
+                    font: { family: 'Inter', weight: '600' },
+                  },
+                },
+                x: {
+                  grid: { display: false },
+                  ticks: { color: '#64748b', font: { family: 'Inter' } },
+                },
+              },
+            },
+          });
+        }
+      }
+
+      // Market Share Chart
+      const marketShareCanvas = document.getElementById('marketShareChart') as HTMLCanvasElement | null;
+      if (marketShareCanvas && !marketShareCanvas.dataset.rendered) {
+        marketShareCanvas.dataset.rendered = 'true';
+        const ctx = marketShareCanvas.getContext('2d');
+        if (ctx) {
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: ['OpenAI', 'Anthropic', 'Google', 'Open Source'],
+              datasets: [
+                {
+                  label: '2023 Share (%)',
+                  data: [50, 15, 20, 5],
+                  backgroundColor: 'rgba(146, 64, 14, 0.75)',
+                  borderColor: 'rgba(146, 64, 14, 1)',
+                  borderWidth: 2,
+                  borderRadius: 8,
+                },
+                {
+                  label: '2024 Share (%)',
+                  data: [25, 32, 20, 13],
+                  backgroundColor: 'rgba(234, 88, 12, 0.75)',
+                  borderColor: 'rgba(234, 88, 12, 1)',
+                  borderWidth: 2,
+                  borderRadius: 8,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              aspectRatio: 2,
+              plugins: {
+                legend: {
+                  display: true,
+                  position: 'top',
+                  labels: {
+                    font: { family: 'Inter', size: 12, weight: '600' },
+                    color: '#64748b',
+                    usePointStyle: true,
+                    padding: 16,
+                  },
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (ctx) {
+                      return `${ctx.dataset.label}: ${ctx.parsed.y}%`;
+                    },
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 60,
+                  grid: { color: 'rgba(146, 64, 14, 0.08)' },
+                  ticks: {
+                    color: '#64748b',
+                    font: { family: 'Inter' },
+                    callback: function (val) {
+                      return val + '%';
+                    },
+                  },
+                  title: {
+                    display: true,
+                    text: 'Enterprise AI Workload Share (%)',
+                    color: '#64748b',
+                    font: { family: 'Inter', weight: '600' },
+                  },
+                },
+                x: {
+                  grid: { display: false },
+                  ticks: { color: '#64748b', font: { family: 'Inter' } },
+                },
+              },
+            },
+          });
+        }
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCharts);
+    } else {
+      initCharts();
+    }
+    document.addEventListener('astro:page-load', initCharts);
+  </script>
 </BaseLayout>

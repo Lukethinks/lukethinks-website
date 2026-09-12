@@ -283,12 +283,192 @@ nav[aria-label="Primary"] a[aria-current="page"] {
 }
 
 /* ==========================================================================
+   7.5 Hero & Cards (Design System)
+   ========================================================================== */
+.hero {
+  padding: 4rem 0 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(146, 64, 14, 0.1);
+  color: var(--primary-brown);
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(146, 64, 14, 0.2);
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: var(--dark-text);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.hero-highlight {
+  background: linear-gradient(135deg, var(--accent-amber), var(--light-amber));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-size: 1.25rem;
+  color: var(--light-text);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.action-btn {
+  background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
+  color: #ffffff;
+  padding: 0.85rem 1.75rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(146, 64, 14, 0.25);
+}
+
+.action-btn:hover {
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(146, 64, 14, 0.35);
+}
+
+.action-btn.secondary {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--primary-brown);
+  border: 2px solid var(--primary-brown);
+  box-shadow: none;
+}
+
+.action-btn.secondary:hover {
+  background: var(--primary-brown);
+  color: #ffffff;
+}
+
+.section-header {
+  text-align: center;
+  margin: 4rem auto 2.5rem;
+  max-width: 780px;
+}
+
+.section-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--dark-text);
+  margin-bottom: 0.75rem;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--light-text);
+  line-height: 1.5;
+}
+
+.topic-cards,
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.topic-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 16px var(--shadow-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.topic-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px var(--shadow-medium);
+  border-color: var(--accent-amber);
+}
+
+.topic-icon {
+  font-size: 2.75rem;
+  margin-bottom: 1rem;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.topic-card:hover .topic-icon {
+  transform: scale(1.12) rotate(4deg);
+}
+
+.topic-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin-bottom: 0.5rem;
+}
+
+.topic-description {
+  color: var(--light-text);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.topic-count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-amber);
+  background: rgba(234, 88, 12, 0.1);
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+}
+
+/* ==========================================================================
    8. Article Furniture & Content
    ========================================================================== */
 .article-header {
   padding: 2.5rem 0 2rem;
   text-align: center;
-  max-width: 860px;
+  max-width: 1040px;
   margin: 0 auto;
 }
 
@@ -322,7 +502,7 @@ nav[aria-label="Primary"] a[aria-current="page"] {
 }
 
 .article-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   color: var(--light-text);
   line-height: 1.5;
   margin-bottom: 1.5rem;
@@ -331,11 +511,12 @@ nav[aria-label="Primary"] a[aria-current="page"] {
 .article-content {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
   border-radius: 20px;
-  padding: 3rem;
+  padding: 3.5rem 4rem;
   margin: 2rem auto 3rem;
   border: 1px solid var(--border-light);
   box-shadow: 0 4px 20px var(--shadow-light);
-  max-width: 72ch;
+  max-width: 1040px;
+  font-size: 1.075rem;
   line-height: 1.75;
 }
 
@@ -399,7 +580,7 @@ nav[aria-label="Primary"] a[aria-current="page"] {
 }
 
 .article-footer {
-  max-width: 72ch;
+  max-width: 1040px;
   margin: 3rem auto 0;
   padding-top: 2rem;
   border-top: 1px solid var(--border-light);
@@ -421,9 +602,9 @@ nav[aria-label="Primary"] a[aria-current="page"] {
 .toc-container {
   background: rgba(255, 255, 255, 0.85);
   border-radius: 20px;
-  padding: 1.75rem;
+  padding: 1.75rem 2.5rem;
   margin: 2rem auto;
-  max-width: 72ch;
+  max-width: 1040px;
   border: 1px solid var(--border-light);
   box-shadow: 0 4px 16px var(--shadow-light);
 }
@@ -520,24 +701,31 @@ nav[aria-label="Primary"] a[aria-current="page"] {
 
 .chart-figure {
   margin: 2.5rem 0;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  background: #ffffff;
   border-radius: 16px;
   border: 1px solid var(--border-light);
-  box-shadow: 0 4px 16px var(--shadow-light);
+  box-shadow: 0 4px 20px var(--shadow-light);
   text-align: center;
 }
 
 .chart-figure canvas {
+  display: block;
+  width: 100% !important;
   max-width: 100%;
-  height: auto;
   margin: 0 auto;
 }
 
 .chart-figure figcaption {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
   font-size: 0.875rem;
   color: var(--light-text);
+  line-height: 1.5;
+}
+
+.chart-figure figcaption a {
+  color: var(--accent-amber);
+  font-weight: 600;
 }
 
 /* Accessible Table */

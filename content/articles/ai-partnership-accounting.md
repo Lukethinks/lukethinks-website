@@ -90,6 +90,7 @@ While accountants struggle with measurement, the technology itself is evolving i
 </aside>
 
 <figure class="chart-figure">
+  <canvas id="pricingChart" role="img" aria-label="Line chart showing API pricing collapse from March 2023 to August 2024, with GPT-4 output tokens dropping from $60 to $10 per million and open-source equivalents reaching $1 per million"></canvas>
   <figcaption>API Pricing Collapse: Output Token Price Comparison (March 2023 – August 2024). <a href="#pricing-chart-data">See data table below</a>.</figcaption>
 </figure>
 
@@ -177,6 +178,7 @@ Government watchdogs are circling these AI partnerships with increasing concern.
 The competitive dynamics are already shifting in ways that challenge partnership sustainability, driven primarily by a dramatic collapse in the cost of comparable AI performance.
 
 <figure class="chart-figure">
+  <canvas id="marketShareChart" role="img" aria-label="Bar chart comparing 2023 and 2024 enterprise AI market share, showing Anthropic Claude rising to 32% while OpenAI dropped from 50% to 25%"></canvas>
   <figcaption>Enterprise AI Workload Market Share: 2023 vs 2024. <a href="#market-share-data">See data table below</a>.</figcaption>
 </figure>
 
