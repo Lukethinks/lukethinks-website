@@ -12,5 +12,5 @@
     { "label": "Podcast", "href": "/podcast" },
     { "label": "About", "href": "/about" }
   ],
-  "audioHost": "TODO(luke): Vercel Blob hostname, e.g. https://xxxx.public.blob.vercel-storage.com"
+  "audioHost": "https://1fyj7adygjho7vgj.public.blob.vercel-storage.com"
 }

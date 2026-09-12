@@ -12,7 +12,7 @@ tags: ["accounting", "ai", "valuation"]
 confidence: "medium"
 audio:
   - label: "Executive Briefing"
-    src: "https://public.blob.vercel-storage.com/audio/ai-thinking-frameworks-narration.mp3"
+    src: "https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/ai-thinking-frameworks-narration.mp3"
     variant: "narration"
     bytes: 2310182
     durationSeconds: 255
@@ -20,7 +20,7 @@ audio:
       source: "notebooklm"
       aiDisclosed: true
   - label: "Deep Debate: Bear vs Bull"
-    src: "https://public.blob.vercel-storage.com/audio/compress-ai-thinking-frameworks-narration_debate.mp3"
+    src: "https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/compress-ai-thinking-frameworks-narration_debate.mp3"
     variant: "debate"
     bytes: 22378715
     durationSeconds: 920
