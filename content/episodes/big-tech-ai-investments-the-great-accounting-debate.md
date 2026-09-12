@@ -14,7 +14,7 @@ explicit: false
 transcript: false
 confidence: "medium"
 audio:
-  src: "https://public.blob.vercel-storage.com/audio/compress-ai-thinking-frameworks-narration_debate.mp3"
+  src: "https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/compress-ai-thinking-frameworks-narration_debate.mp3"
   bytes: 22378715
   durationSeconds: 920
   mimeType: "audio/mpeg"
