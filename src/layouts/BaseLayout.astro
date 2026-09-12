@@ -1,0 +1,134 @@
+---
+import '../styles/site.css';
+import site from '../../content/site.json';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogType?: 'website' | 'article';
+  ogImage?: string;
+  lang?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+}
+
+const {
+  title,
+  description = `${site.name} — ${site.tagline}`,
+  canonical,
+  ogType = 'website',
+  ogImage,
+  lang = site.lang || 'en',
+  publishedTime,
+  modifiedTime,
+  author = site.author?.name,
+} = Astro.props;
+
+const pageTitle = title
+  ? (title.includes(site.name) ? title : `${title} · ${site.name}`)
+  : `${site.name} · ${site.tagline}`;
+
+// Ensure canonical URL is absolute, extensionless, and has no trailing slash (except root)
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname.replace(/\/$/, '') || '/', site.url).href;
+
+// Ensure OG image is absolute
+const ogImageUrl = ogImage
+  ? (ogImage.startsWith('http://') || ogImage.startsWith('https://') ? ogImage : new URL(ogImage, site.url).href)
+  : new URL('/assets/og/default.png', site.url).href;
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const currentYear = 2026; // ADR-0010: idempotent build, fixed copyright year
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title ?? site.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content={site.name} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title ?? site.name} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link rel="alternate" type="application/rss+xml" title={site.name} href="/feed.xml" />
+
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+    {author && <meta name="author" content={author} />}
+
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link sr-only" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-content">
+        <div class="logo-section">
+          <span class="logo-icon" aria-hidden="true">L</span>
+          <a href="/" class="logo-text">
+            <span class="logo-main">{site.name}</span>
+            <span class="logo-sub">{site.tagline}</span>
+          </a>
+        </div>
+        <nav aria-label="Primary">
+          <ul>
+            {site.nav.map((item) => {
+              const isCurrent = item.href === '/'
+                ? currentPath === '/'
+                : currentPath === item.href || currentPath.startsWith(`${item.href}/`);
+              return (
+                <li>
+                  <a
+                    href={item.href}
+                    class:list={[{ 'is-current': isCurrent }]}
+                    aria-current={isCurrent ? 'page' : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <slot name="breadcrumbs" />
+
+    <main id="main" class="container">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <p>© <span data-year>{currentYear}</span> {site.name}</p>
+        <nav aria-label="Footer" class="footer-links">
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/feed.xml">RSS</a></li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+  </body>
+</html>
