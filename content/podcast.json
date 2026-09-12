@@ -1,0 +1,14 @@
+{
+  "title": "Luke Thinks",
+  "subtitle": "Working through finance, frameworks and the things I get wrong",
+  "description": "A learning lab in audio. Analysis, experiments and half-formed ideas from a finance professional in the Netherlands — the thinking, not just the conclusions.",
+  "feedPath": "/podcast.xml",
+  "language": "en",
+  "author": "Luke",
+  "email": "TODO(luke): owner email — Apple requires a working address",
+  "image": "/assets/podcast-cover.jpg",
+  "category": "Business",
+  "subcategory": "Investing",
+  "explicit": false,
+  "type": "episodic"
+}

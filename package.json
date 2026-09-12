@@ -1,0 +1,19 @@
+{
+  "name": "lukethinks-website",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "audit": "node scripts/self-audit.mjs",
+    "dev": "astro dev",
+    "build:index": "node scripts/build-index.mjs",
+    "build:podcast": "node scripts/build-podcast-rss.mjs --out dist/podcast.xml",
+    "validate": "npm run build:index && node scripts/validate-content.mjs && node scripts/check-register.mjs",
+    "build": "npm run build:index && astro build && npm run build:podcast && node scripts/validate-content.mjs && node scripts/check-register.mjs"
+  },
+  "dependencies": {
+    "astro": "^5",
+    "@astrojs/vercel": "^8",
+    "yaml": "^2.4.0"
+  }
+}

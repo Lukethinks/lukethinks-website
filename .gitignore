@@ -1,0 +1,27 @@
+# Build outputs
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Environment / Local
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel/
+
+# Agent metadata
+.agents/
+
+# Audio files (ADR-0004, ADR-0005: never committed to git, Vercel Blob only)
+audio/
+*.mp3
+*.wav
+*.m4a
+
+# OS / Editor
+.DS_Store
+Thumbs.db
