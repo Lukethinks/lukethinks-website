@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<!--
+  GOLDEN REFERENCE — article / research
+  Agents: match this structure. Diff against it rather than composing from memory.
+  Placeholders are {{mustache}} and map 1:1 to frontmatter fields in content-model.md.
+  If this file is wrong, fix it here first, then regenerate pages.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{{title}} · Luke Thinks</title>
+  <meta name="description" content="{{summary}}">
+  <link rel="canonical" href="https://lukethinks.nl/articles/{{slug}}">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{title}}">
+  <meta property="og:description" content="{{summary}}">
+  <meta property="og:url" content="https://lukethinks.nl/articles/{{slug}}">
+  <meta property="og:image" content="https://lukethinks.nl/assets/og/{{slug}}.png">
+  <meta property="og:site_name" content="Luke Thinks">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="/assets/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="alternate" type="application/rss+xml" title="Luke Thinks" href="/feed.xml">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "{{title}}",
+    "description": "{{summary}}",
+    "datePublished": "{{published}}",
+    "dateModified": "{{updated}}",
+    "author": { "@type": "Person", "name": "Luke", "url": "https://lukethinks.nl/about" },
+    "mainEntityOfPage": "https://lukethinks.nl/articles/{{slug}}",
+    "keywords": ["{{tags}}"]
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link sr-only" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-content">
+      <div class="logo-section">
+        <span class="logo-icon" aria-hidden="true">L</span>
+        <a href="/" class="logo-text">
+          <span class="logo-main">Luke Thinks</span>
+          <span class="logo-sub">Learning Lab</span>
+        </a>
+      </div>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/research" class="is-current" aria-current="page">Research</a></li>
+          <li><a href="/experiments">Experiments</a></li>
+          <li><a href="/learning">Learning</a></li>
+          <li><a href="/podcast">Podcast</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <nav aria-label="Breadcrumb" class="breadcrumbs">
+    <div class="container">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/research">{{category}}</a></li>
+        <li aria-current="page">{{title}}</li>
+      </ol>
+    </div>
+  </nav>
+
+  <main id="main" class="container">
+    <article data-content-type="article" data-slug="{{slug}}" data-published="{{published}}">
+
+      <header class="article-header">
+        <p class="article-meta">
+          <span class="article-category">{{category}}</span>
+          <time datetime="{{published}}">{{publishedHuman}}</time>
+          <span>{{readingMinutes}} min read</span>
+          <span class="confidence-badge" data-confidence="{{confidence}}">Confidence: {{confidence}}</span>
+        </p>
+        <h1 class="article-title">{{title}}</h1>
+        <p class="article-subtitle">{{subtitle}}</p>
+      </header>
+
+      <!-- Companion audio. Repeat per variant; each needs its own heading + aria-labelledby. -->
+      <div data-region="audio">
+        <div class="audio-player-container" data-variant="{{audio.variant}}">
+          <h2 class="audio-title" id="audio-{{audio.variant}}">{{audio.label}}</h2>
+          <p class="audio-meta">
+            <span aria-hidden="true">🎧</span>
+            <span>{{audio.variantLabel}} · <time datetime="PT{{audio.minutes}}M">{{audio.minutes}} min</time></span>
+          </p>
+          <audio class="custom-audio-player" controls preload="none"
+                 aria-labelledby="audio-{{audio.variant}}" src="{{audio.src}}">
+            <p>Your browser does not support audio playback.
+               <a href="{{audio.src}}">Download the MP3</a>.</p>
+          </audio>
+          <p class="audio-disclosure">Audio generated with AI from the written article.</p>
+        </div>
+      </div>
+
+      <nav class="toc-container" aria-labelledby="toc-title" data-region="toc">
+        <h2 class="toc-title" id="toc-title">On this page</h2>
+        <ol class="toc-list">
+          <li><a href="#{{sectionId}}">{{sectionTitle}}</a></li>
+        </ol>
+      </nav>
+
+      <div class="article-content" data-region="body">
+
+        <h2 id="{{sectionId}}">{{sectionTitle}}</h2>
+        <p>{{paragraph}}</p>
+
+        <!-- Figures early: a skimmer should get the scale before the argument. -->
+        <div class="stats-box">
+          <p class="stat-card"><span class="stat-number">{{value}}</span><span class="stat-label">{{label}}</span></p>
+        </div>
+
+        <!-- Uncertainty is visible, not smoothed away. That is the site's premise. -->
+        <aside class="callout" aria-labelledby="callout-1">
+          <h3 class="callout-title" id="callout-1">{{calloutTitle}}</h3>
+          <p>{{calloutBody}}</p>
+        </aside>
+
+        <!-- A canvas is invisible to assistive tech and search. Always pair it. -->
+        <figure class="chart-figure">
+          <canvas id="chart-{{chartId}}" role="img" aria-label="{{chartTakeaway}}"></canvas>
+          <figcaption>{{chartCaption}} <a href="#chart-{{chartId}}-data">See the data</a>.</figcaption>
+        </figure>
+        <details id="chart-{{chartId}}-data">
+          <summary>Chart data as a table</summary>
+          <table>
+            <caption>{{tableCaption}}</caption>
+            <thead><tr><th scope="col">{{colA}}</th><th scope="col">{{colB}}</th></tr></thead>
+            <tbody><tr><th scope="row">{{rowLabel}}</th><td>{{rowValue}}</td></tr></tbody>
+          </table>
+        </details>
+
+      </div>
+
+      <footer class="article-footer">
+        <h2 id="sources">Sources</h2>
+        <ol>
+          <li><a href="{{source.url}}">{{source.title}}</a></li>
+        </ol>
+
+        <nav aria-labelledby="related-title" data-region="related">
+          <h2 id="related-title">Related reading</h2>
+          <ul>
+            <li><a href="/{{related.slug}}.html">{{related.title}}</a></li>
+          </ul>
+        </nav>
+      </footer>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <p>© <span data-year>2026</span> Luke Thinks</p>
+      <nav aria-label="Footer" class="footer-links">
+        <ul>
+          <li><a href="/about">About</a></li>
+          <li><a href="/feed.xml">RSS</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+</body>
+</html>

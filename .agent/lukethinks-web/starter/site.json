@@ -1,0 +1,16 @@
+{
+  "name": "Luke Thinks",
+  "tagline": "Learning Lab",
+  "url": "https://lukethinks.nl",
+  "author": { "name": "Luke", "url": "https://lukethinks.nl/about" },
+  "lang": "en",
+  "nav": [
+    { "label": "Home", "href": "/" },
+    { "label": "Research", "href": "/research" },
+    { "label": "Experiments", "href": "/experiments" },
+    { "label": "Learning", "href": "/learning" },
+    { "label": "Podcast", "href": "/podcast" },
+    { "label": "About", "href": "/about" }
+  ],
+  "audioHost": "TODO(luke): Vercel Blob hostname, e.g. https://xxxx.public.blob.vercel-storage.com"
+}

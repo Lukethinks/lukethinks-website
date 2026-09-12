@@ -1,0 +1,10 @@
+{
+  "tags": [
+    { "id": "accounting", "label": "Accounting Standards", "description": "GAAP/IFRS mechanics" },
+    { "id": "ai", "label": "AI", "description": "AI economics and tooling" },
+    { "id": "fpa", "label": "FP&A", "description": "Planning and analysis practice" },
+    { "id": "valuation", "label": "Valuation", "description": "How things get priced" },
+    { "id": "frameworks", "label": "Thinking Frameworks", "description": "Mental models and methods" },
+    { "id": "experiments", "label": "Experiments", "description": "Things tried, with outcomes" }
+  ]
+}

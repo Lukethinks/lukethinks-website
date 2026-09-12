@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!--
+  GOLDEN REFERENCE — podcast episode page
+  Differences from article.reference.html are deliberate: PodcastEpisode schema,
+  a single primary player, chapters, and a transcript disclosure.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{{title}} · Luke Thinks Podcast</title>
+  <meta name="description" content="{{summary}}">
+  <link rel="canonical" href="https://lukethinks.nl/podcast/{{slug}}">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{title}}">
+  <meta property="og:description" content="{{summary}}">
+  <meta property="og:url" content="https://lukethinks.nl/podcast/{{slug}}">
+  <meta property="og:image" content="https://lukethinks.nl/assets/og/{{slug}}.png">
+  <meta property="og:audio" content="{{audio.src}}">
+
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="alternate" type="application/rss+xml" title="Luke Thinks Podcast" href="/podcast.xml">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "PodcastEpisode",
+    "name": "{{title}}",
+    "description": "{{summary}}",
+    "datePublished": "{{published}}",
+    "episodeNumber": {{episode}},
+    "url": "https://lukethinks.nl/podcast/{{slug}}",
+    "partOfSeries": { "@type": "PodcastSeries", "name": "Luke Thinks", "url": "https://lukethinks.nl/podcast.html" },
+    "associatedMedia": {
+      "@type": "AudioObject",
+      "contentUrl": "{{audio.src}}",
+      "encodingFormat": "audio/mpeg",
+      "duration": "{{audio.iso8601Duration}}"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link sr-only" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-content">
+      <div class="logo-section">
+        <span class="logo-icon" aria-hidden="true">L</span>
+        <a href="/" class="logo-text">
+          <span class="logo-main">Luke Thinks</span>
+          <span class="logo-sub">Learning Lab</span>
+        </a>
+      </div>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/research">Research</a></li>
+          <li><a href="/experiments">Experiments</a></li>
+          <li><a href="/learning">Learning</a></li>
+          <li><a href="/podcast">Podcast</a></li>
+          <li><a href="/podcast" class="is-current" aria-current="page">Podcast</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <nav aria-label="Breadcrumb" class="breadcrumbs">
+    <div class="container">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/podcast">Podcast</a></li>
+        <li aria-current="page">Episode {{episode}}</li>
+      </ol>
+    </div>
+  </nav>
+
+  <main id="main" class="container">
+    <article data-content-type="episode" data-slug="{{slug}}" data-episode="{{episode}}" data-published="{{published}}">
+
+      <header class="article-header">
+        <p class="article-meta">
+          <span class="article-category">Episode {{episode}}</span>
+          <time datetime="{{published}}">{{publishedHuman}}</time>
+          <time datetime="{{audio.iso8601Duration}}">{{audio.minutes}} min</time>
+        </p>
+        <h1 class="article-title">{{title}}</h1>
+        <p class="article-subtitle">{{summary}}</p>
+      </header>
+
+      <div class="audio-player-container" data-region="audio">
+        <h2 class="audio-title" id="audio-episode">Listen to episode {{episode}}</h2>
+        <audio class="custom-audio-player" controls preload="none"
+               aria-labelledby="audio-episode" src="{{audio.src}}">
+          <p>Your browser does not support audio playback.
+             <a href="{{audio.src}}">Download the MP3</a>.</p>
+        </audio>
+        <p class="audio-disclosure">Audio produced with AI voices. Written and edited by Luke.</p>
+        <p class="audio-subscribe">
+          Subscribe: <a href="{{spotifyUrl}}">Spotify</a> ·
+          <a href="{{appleUrl}}">Apple Podcasts</a> ·
+          <a href="/podcast.xml">RSS</a>
+        </p>
+      </div>
+
+      <section aria-labelledby="chapters-title">
+        <h2 id="chapters-title">Chapters</h2>
+        <ol class="chapter-list">
+          <li><time datetime="PT{{chapter.startSeconds}}S">{{chapter.startHuman}}</time> {{chapter.title}}</li>
+        </ol>
+      </section>
+
+      <section class="article-content" data-region="body" aria-labelledby="notes-title">
+        <h2 id="notes-title">Show notes</h2>
+        <p>{{notes}}</p>
+        <!-- Every URL mentioned in the audio belongs here. Listeners cannot click audio. -->
+        <h3 id="mentioned">Mentioned in this episode</h3>
+        <ul><li><a href="{{link.url}}">{{link.title}}</a></li></ul>
+      </section>
+
+      <details class="transcript" data-region="transcript">
+        <summary>Full transcript</summary>
+        <div>{{transcriptHtml}}</div>
+      </details>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <p>© <span data-year>2026</span> Luke Thinks</p>
+      <nav aria-label="Footer" class="footer-links">
+        <ul>
+          <li><a href="/podcast.xml">Podcast RSS</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/_vercel/speed-insights/script.js"></script>
+</body>
+</html>

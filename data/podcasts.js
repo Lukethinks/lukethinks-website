@@ -1,0 +1,111 @@
+﻿/**
+ * ============================================================================
+ * LUKE THINKS - PODCASTS & AUDIO LIBRARY DATA
+ * ============================================================================
+ * 
+ * HOW TO ADD NEW EPISODES (PLUG & PLAY):
+ * 1. Put your .mp3 file into the `/audio/` folder (or link to Spotify).
+ * 2. Add an episode object to the array below:
+ * 
+ *    {
+ *      "id": "ep-3-your-topic",
+ *      "title": "Episode Title",
+ *      "subtitle": "One sentence summary",
+ *      "category": "Corporate Finance & FP&A", // or "AI & Big Tech", "Debates & Strategy"
+ *      "badge": "Audio Briefing",
+ *      "date": "Nov 2025",
+ *      "duration": "12:00",
+ *      "durationSeconds": 720,
+ *      "audioSrc": "/audio/your-file.mp3", // leave "" if hosted on Spotify only
+ *      "hasLocalAudio": true, // set false if Spotify only
+ *      "thumbnail": "/android-chrome-192x192.png", // or custom image path
+ *      "spotifyUrl": "https://open.spotify.com/episode/YOUR_ID",
+ *      "linkedArticle": null, // or { "url": "/your-paper.html", "title": "Read Paper" }
+ *      "tags": ["Tag 1", "Tag 2"],
+ *      "initialHearts": 25,
+ *      "summary": "Brief synopsis...",
+ *      "keyTakeaways": ["Point 1", "Point 2"]
+ *    }
+ * ============================================================================
+ */
+
+window.LUKE_THINKS_CONFIG = {
+  spotifyShowUrl: "https://open.spotify.com",
+  applePodcastUrl: "https://podcasts.apple.com",
+  rssFeedUrl: "/rss"
+};
+
+window.LUKE_THINKS_PODCASTS = [
+  {
+    "id": "ep-1-ai-partnership-narration",
+    "title": "The $50B AI Partnership Bubble: Accounting Crisis in Big Tech",
+    "subtitle": "Part 1: Executive Briefing â€¢ Why traditional accounting standards fail when tech giants invest billions in AI startups",
+    "series": "Series: The $50B AI Bubble â€¢ Part 1 of 2",
+    "seriesId": "series-ai-partnership",
+    "seriesTitle": "The $50B AI Partnership Series",
+    "trackNumber": 1,
+    "totalTracks": 2,
+    "category": "AI & Big Tech",
+    "badge": "Audio Briefing",
+    "date": "Oct 12, 2025",
+    "chronologicalDate": "2025-10-12",
+    "duration": "4:15",
+    "durationSeconds": 255,
+    "audioSrc": "/audio/ai-thinking-frameworks-narration.mp3",
+    "hasLocalAudio": true,
+    "thumbnail": "/android-chrome-192x192.png",
+    "spotifyUrl": "https://open.spotify.com/search/Luke%20Thinks%20AI%20Partnership",
+    "spotifyEmbedUrl": "",
+    "linkedArticle": {
+      "url": "/ai-article.html",
+      "title": "Read Companion Research Paper",
+      "type": "Research Paper"
+    },
+    "tags": ["AI Strategy", "ASC 323", "Corporate Finance", "Big Tech", "Cloud Economics"],
+    "initialHearts": 54,
+    "initialPlays": 218,
+    "summary": "Tech giants have deployed over $50 billion into generative AI startups through structured equity and compute-credit partnerships. But standard GAAP rules were never designed for investments where cash immediately loops back as cloud hosting revenue.",
+    "keyTakeaways": [
+      "Traditional 20% ownership thresholds under ASC 323 fail to capture de facto operational control.",
+      "The Circular Revenue Loophole: Capital injected as equity returns within quarters as non-cancelable cloud compute revenue.",
+      "Regulatory scrutiny from the FTC, CMA, and EU is mounting as authorities treat these deals as stealth mergers.",
+      "FP&A frameworks for evaluating tech investments must normalize for circular bookings."
+    ]
+  },
+  {
+    "id": "ep-2-ai-accounting-debate",
+    "title": "Big Tech AI Investments: The Great Accounting Debate",
+    "subtitle": "Part 2: Deep Debate (15 min) â€¢ Bull vs. Bear perspectives on Capex capitalization, circular cloud bookings, and startup valuations",
+    "series": "Series: The $50B AI Bubble â€¢ Part 2 of 2",
+    "seriesId": "series-ai-partnership",
+    "seriesTitle": "The $50B AI Partnership Series",
+    "trackNumber": 2,
+    "totalTracks": 2,
+    "category": "AI & Big Tech",
+    "badge": "In-Depth Debate",
+    "date": "Oct 26, 2025",
+    "chronologicalDate": "2025-10-26",
+    "duration": "15:20",
+    "durationSeconds": 920,
+    "audioSrc": "/audio/compress-ai-thinking-frameworks-narration_debate.mp3",
+    "hasLocalAudio": true,
+    "thumbnail": "/android-chrome-192x192.png",
+    "spotifyUrl": "https://open.spotify.com/search/Luke%20Thinks%20AI%20Debate",
+    "spotifyEmbedUrl": "",
+    "linkedArticle": {
+      "url": "/ai-article.html",
+      "title": "Read Companion Research Paper",
+      "type": "Research Paper"
+    },
+    "tags": ["Debate", "Accounting Standards", "Capex", "Enterprise AI", "Valuation"],
+    "initialHearts": 78,
+    "initialPlays": 412,
+    "summary": "An in-depth 15-minute debate dissecting both sides of the AI investment thesis. Is Microsoft's $13B OpenAI commitment an ingenious infrastructure land-grab, or a precarious house of cards vulnerable to sudden regulatory intervention and efficiency gains?",
+    "keyTakeaways": [
+      "The Bull Argument: Compute commitments secure long-term cloud customer lock-in and high platform switching costs.",
+      "The Bear Argument: High GPU depreciation cycles and circular revenue artificially inflate top-line cloud growth.",
+      "Antitrust Risk: Why regulatory probes into exclusivity agreements threaten the foundation of these joint ventures.",
+      "What CFOs and FP&A leaders should watch in the next 12 to 24 months."
+    ]
+  }
+];
