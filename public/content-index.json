@@ -1,12 +1,43 @@
 {
   "_generated": "scripts/build-index.mjs — do not edit",
   "counts": {
-    "article": 1,
-    "tag:accounting": 1,
-    "tag:ai": 1,
-    "tag:valuation": 1
+    "article": 3,
+    "tag:accounting": 3,
+    "tag:valuation": 3,
+    "tag:fpa": 1,
+    "tag:ai": 1
   },
   "items": [
+    {
+      "slug": "thames-water-crisis",
+      "type": "article",
+      "title": "How a Company That Sells Water to 16 Million Captive Customers is on the Brink",
+      "summary": "A deep dive into aggressive financial engineering in UK water utilities—and the £1 billion emergency deal that just saved Thames Water from collapse.",
+      "url": "/articles/thames-water-crisis",
+      "published": "2025-10-31",
+      "updated": null,
+      "lang": "en",
+      "tags": [
+        "accounting",
+        "valuation",
+        "fpa"
+      ],
+      "category": "Financial Analysis",
+      "confidence": "medium",
+      "state": null,
+      "outcome": null,
+      "readingMinutes": 5,
+      "durationSeconds": null,
+      "episode": null,
+      "related": [
+        "ai-partnership-accounting",
+        "asc-323-equity-method"
+      ],
+      "series": null,
+      "seriesPart": null,
+      "hasAudio": false,
+      "file": "content\\articles\\thames-water-crisis.md"
+    },
     {
       "slug": "ai-partnership-accounting",
       "type": "article",
@@ -33,6 +64,34 @@
       "seriesPart": null,
       "hasAudio": false,
       "file": "content\\articles\\ai-partnership-accounting.md"
+    },
+    {
+      "slug": "asc-323-equity-method",
+      "type": "article",
+      "title": "Understanding ASC 323: Equity Method Accounting",
+      "summary": "When significant influence meets financial reporting—breaking down the mechanics, thresholds, and real-world challenges of equity method accounting.",
+      "url": "/articles/asc-323-equity-method",
+      "published": "2025-10-04",
+      "updated": null,
+      "lang": "en",
+      "tags": [
+        "accounting",
+        "valuation"
+      ],
+      "category": "Accounting Standards",
+      "confidence": "high",
+      "state": null,
+      "outcome": null,
+      "readingMinutes": 7,
+      "durationSeconds": null,
+      "episode": null,
+      "related": [
+        "ai-partnership-accounting"
+      ],
+      "series": null,
+      "seriesPart": null,
+      "hasAudio": false,
+      "file": "content\\articles\\asc-323-equity-method.md"
     }
   ]
 }

@@ -14,7 +14,7 @@ import path from 'node:path';
 const args = process.argv.slice(2);
 const flag = (n, d) => { const i = args.indexOf(`--${n}`); return i !== -1 && args[i + 1] ? args[i + 1] : d; };
 const DIST = flag('dist', 'dist'), SRC = flag('src', 'src'), TPL = flag('templates', '.agent/lukethinks-web/templates');
-const IGNORE = /^(astro-|is-|has-|sr-only$|chartjs-)/; // Astro scoped hashes, modifiers, vendor
+const IGNORE = /^(astro-|is-|has-|sr-only$|chartjs-|shiki|github-|line$)/; // Astro scoped hashes, modifiers, vendor
 
 async function walk(dir, exts) {
   if (!existsSync(dir)) return [];

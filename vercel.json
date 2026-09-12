@@ -1,6 +1,9 @@
 {
   "redirects": [
     { "source": "/ai-article.html", "destination": "/articles/ai-partnership-accounting", "permanent": true },
+    { "source": "/asc-323-equity-method.html", "destination": "/articles/asc-323-equity-method", "permanent": true },
+    { "source": "/asc-323-equity-method-accounting", "destination": "/articles/asc-323-equity-method", "permanent": true },
+    { "source": "/thames-water-crisis.html", "destination": "/articles/thames-water-crisis", "permanent": true },
     { "source": "/research.html", "destination": "/research", "permanent": true },
     { "source": "/experiments.html", "destination": "/experiments", "permanent": true },
     { "source": "/learning-landing.html", "destination": "/learning", "permanent": true },
