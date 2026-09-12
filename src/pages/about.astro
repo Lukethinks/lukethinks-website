@@ -146,55 +146,62 @@ import site from '../../content/site.json';
     <div class="section-header">
       <h2 class="section-title">How I Think</h2>
       <p class="section-subtitle">
-        My CliftonStrengths profile reveals the analytical patterns behind my approach to problems
+        My CliftonStrengths 34 assessment reveals the analytical patterns behind my approach to problems
       </p>
     </div>
 
     <div class="strengths-wrapper">
       <div class="top-strengths">
+        <h3 class="strengths-column-title">Top 5 Signature Themes</h3>
         <div class="strength-card">
           <span class="strength-rank">#1</span>
           <div>
-            <h3 class="strength-name">Harmony</h3>
-            <span class="strength-domain">Relationship Building</span>
+            <h4 class="strength-name">Harmony</h4>
+            <span class="strength-domain relationship">Relationship Building</span>
           </div>
         </div>
 
         <div class="strength-card">
           <span class="strength-rank">#2</span>
           <div>
-            <h3 class="strength-name">Context</h3>
-            <span class="strength-domain">Strategic Thinking</span>
+            <h4 class="strength-name">Context</h4>
+            <span class="strength-domain strategic">Strategic Thinking</span>
           </div>
         </div>
 
         <div class="strength-card">
           <span class="strength-rank">#3</span>
           <div>
-            <h3 class="strength-name">Analytical</h3>
-            <span class="strength-domain">Strategic Thinking</span>
+            <h4 class="strength-name">Analytical</h4>
+            <span class="strength-domain strategic">Strategic Thinking</span>
           </div>
         </div>
 
         <div class="strength-card">
           <span class="strength-rank">#4</span>
           <div>
-            <h3 class="strength-name">Individualization</h3>
-            <span class="strength-domain">Relationship Building</span>
+            <h4 class="strength-name">Individualization</h4>
+            <span class="strength-domain relationship">Relationship Building</span>
           </div>
         </div>
 
         <div class="strength-card">
           <span class="strength-rank">#5</span>
           <div>
-            <h3 class="strength-name">Arranger</h3>
-            <span class="strength-domain">Executing</span>
+            <h4 class="strength-name">Arranger</h4>
+            <span class="strength-domain executing">Executing</span>
           </div>
         </div>
       </div>
 
       <div class="strengths-chart-box">
-        <h3 class="chart-box-title">Top 5 Domain Distribution</h3>
+        <div class="chart-header-row">
+          <h3 class="chart-box-title" id="chartViewTitle">CliftonStrengths 34 Radar Profile</h3>
+          <button type="button" class="action-btn secondary chart-toggle-btn" id="chartToggle">
+            View: Domain Breakdown
+          </button>
+        </div>
+
         <div class="chart-canvas-wrapper">
           <canvas id="strengthsChart"></canvas>
         </div>
@@ -242,41 +249,217 @@ import site from '../../content/site.json';
   <script>
     import Chart from 'chart.js/auto';
 
-    const canvas = document.getElementById('strengthsChart');
-    if (canvas instanceof HTMLCanvasElement) {
-      new Chart(canvas, {
-        type: 'doughnut',
+    const strengthsData = [
+      { name: "Harmony", rank: 1, domain: "Relationship Building", score: 85 },
+      { name: "Context", rank: 2, domain: "Strategic Thinking", score: 82 },
+      { name: "Analytical", rank: 3, domain: "Strategic Thinking", score: 80 },
+      { name: "Individualization", rank: 4, domain: "Relationship Building", score: 78 },
+      { name: "Arranger", rank: 5, domain: "Executing", score: 76 },
+      { name: "Responsibility", rank: 6, domain: "Executing", score: 74 },
+      { name: "Focus", rank: 7, domain: "Executing", score: 72 },
+      { name: "Intellection", rank: 8, domain: "Strategic Thinking", score: 70 },
+      { name: "Learner", rank: 9, domain: "Strategic Thinking", score: 68 },
+      { name: "Relator", rank: 10, domain: "Relationship Building", score: 66 },
+      { name: "Maximizer", rank: 11, domain: "Influencing", score: 64 },
+      { name: "Input", rank: 12, domain: "Strategic Thinking", score: 62 },
+      { name: "Consistency", rank: 13, domain: "Executing", score: 60 },
+      { name: "Competition", rank: 14, domain: "Influencing", score: 58 },
+      { name: "Activator", rank: 15, domain: "Influencing", score: 56 },
+      { name: "Ideation", rank: 16, domain: "Strategic Thinking", score: 54 },
+      { name: "Command", rank: 17, domain: "Influencing", score: 52 },
+      { name: "Significance", rank: 18, domain: "Influencing", score: 50 },
+      { name: "Empathy", rank: 19, domain: "Relationship Building", score: 48 },
+      { name: "Discipline", rank: 20, domain: "Executing", score: 46 },
+      { name: "Futuristic", rank: 21, domain: "Strategic Thinking", score: 44 },
+      { name: "Self-Assurance", rank: 22, domain: "Influencing", score: 42 },
+      { name: "Restorative", rank: 23, domain: "Executing", score: 40 },
+      { name: "Communication", rank: 24, domain: "Influencing", score: 38 },
+      { name: "Includer", rank: 25, domain: "Relationship Building", score: 36 },
+      { name: "Developer", rank: 26, domain: "Relationship Building", score: 34 },
+      { name: "Deliberative", rank: 27, domain: "Executing", score: 32 },
+      { name: "Connectedness", rank: 28, domain: "Relationship Building", score: 30 },
+      { name: "Belief", rank: 29, domain: "Executing", score: 28 },
+      { name: "Positivity", rank: 30, domain: "Relationship Building", score: 26 },
+      { name: "Achiever", rank: 31, domain: "Executing", score: 24 },
+      { name: "Woo", rank: 32, domain: "Influencing", score: 22 },
+      { name: "Adaptability", rank: 33, domain: "Relationship Building", score: 20 },
+      { name: "Strategic", rank: 34, domain: "Strategic Thinking", score: 18 }
+    ];
+
+    let currentChart: any = null;
+    let currentView = 'radar';
+
+    const canvas = document.getElementById('strengthsChart') as HTMLCanvasElement | null;
+    const toggleBtn = document.getElementById('chartToggle');
+    const viewTitle = document.getElementById('chartViewTitle');
+
+    function createRadarChart() {
+      if (!canvas) return;
+      if (currentChart) currentChart.destroy();
+
+      currentChart = new Chart(canvas, {
+        type: 'radar',
         data: {
-          labels: ['Strategic Thinking', 'Relationship Building', 'Executing', 'Influencing'],
+          labels: strengthsData.map(s => s.name),
           datasets: [{
-            data: [2, 2, 1, 0],
-            backgroundColor: [
-              '#ea580c',
-              '#92400e',
-              '#fbbf24',
-              '#e2e8f0'
-            ],
-            borderWidth: 2,
-            borderColor: '#ffffff'
+            label: 'Strength Score',
+            data: strengthsData.map(s => s.score),
+            backgroundColor: 'rgba(234, 88, 12, 0.15)',
+            borderColor: 'rgba(146, 64, 14, 0.8)',
+            pointBackgroundColor: strengthsData.map(s => {
+              const colors: Record<string, string> = {
+                'Strategic Thinking': '#ea580c',
+                'Relationship Building': '#92400e',
+                'Executing': '#fbbf24',
+                'Influencing': '#c05621'
+              };
+              return colors[s.domain] || '#ea580c';
+            }),
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 1.5,
+            pointRadius: 4,
+            borderWidth: 2
           }]
         },
         options: {
           responsive: true,
-          maintainAspectRatio: true,
-          aspectRatio: 1.6,
+          maintainAspectRatio: false,
           plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                font: { family: 'Inter', size: 12, weight: 'bold' },
-                color: '#1e293b',
-                padding: 16
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: function(context) {
+                  const idx = context[0].dataIndex;
+                  const item = strengthsData[idx];
+                  return `#${item.rank} ${item.name}`;
+                },
+                label: function(context) {
+                  const idx = context.dataIndex;
+                  const item = strengthsData[idx];
+                  return [`Domain: ${item.domain}`, `Score: ${item.score}`];
+                }
+              }
+            }
+          },
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 100,
+              ticks: { display: false },
+              grid: { color: 'rgba(146, 64, 14, 0.15)' },
+              angleLines: { color: 'rgba(146, 64, 14, 0.15)' },
+              pointLabels: {
+                font: { size: 9, family: 'Inter', weight: 'bold' },
+                color: '#64748b',
+                callback: function(label, index) {
+                  return index < 8 ? String(label) : `#${index + 1}`;
+                }
               }
             }
           }
         }
       });
     }
+
+    function createDomainChart() {
+      if (!canvas) return;
+      if (currentChart) currentChart.destroy();
+
+      const domains: Record<string, { total: number; count: number; strengths: typeof strengthsData }> = {};
+      strengthsData.forEach(s => {
+        if (!domains[s.domain]) {
+          domains[s.domain] = { total: 0, count: 0, strengths: [] };
+        }
+        domains[s.domain].total += s.score;
+        domains[s.domain].count += 1;
+        domains[s.domain].strengths.push(s);
+      });
+
+      const domainData = Object.keys(domains).map(domain => ({
+        domain,
+        average: Math.round(domains[domain].total / domains[domain].count),
+        count: domains[domain].count,
+        topStrength: [...domains[domain].strengths].sort((a, b) => a.rank - b.rank)[0]
+      }));
+
+      currentChart = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: domainData.map(d => d.domain),
+          datasets: [{
+            label: 'Average Score',
+            data: domainData.map(d => d.average),
+            backgroundColor: [
+              'rgba(234, 88, 12, 0.85)',
+              'rgba(146, 64, 14, 0.85)',
+              'rgba(251, 191, 36, 0.85)',
+              'rgba(192, 86, 33, 0.85)'
+            ],
+            borderColor: [
+              '#ea580c',
+              '#92400e',
+              '#fbbf24',
+              '#c05621'
+            ],
+            borderWidth: 2,
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                title: function(context) {
+                  return context[0].label;
+                },
+                label: function(context) {
+                  const info = domainData[context.dataIndex];
+                  return [
+                    `Average Score: ${info.average}`,
+                    `${info.count} themes in domain`,
+                    `Top: #${info.topStrength.rank} ${info.topStrength.name}`
+                  ];
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              grid: { color: 'rgba(146, 64, 14, 0.1)' },
+              ticks: { color: '#64748b', font: { family: 'Inter' } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: '#1e293b', font: { family: 'Inter', weight: 'bold', size: 11 } }
+            }
+          }
+        }
+      });
+    }
+
+    if (toggleBtn && viewTitle) {
+      toggleBtn.addEventListener('click', () => {
+        if (currentView === 'radar') {
+          currentView = 'domain';
+          toggleBtn.textContent = 'View: Radar Profile';
+          viewTitle.textContent = 'Domain Average & Concentration';
+          createDomainChart();
+        } else {
+          currentView = 'radar';
+          toggleBtn.textContent = 'View: Domain Breakdown';
+          viewTitle.textContent = 'CliftonStrengths 34 Radar Profile';
+          createRadarChart();
+        }
+      });
+    }
+
+    // Initialize radar chart
+    createRadarChart();
   </script>
 </BaseLayout>
 
@@ -453,10 +636,16 @@ import site from '../../content/site.json';
   /* Strengths */
   .strengths-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: 1fr 1.35fr;
     gap: 2rem;
-    max-width: 960px;
+    max-width: 1040px;
     margin: 0 auto 4rem;
+  }
+
+  @media (max-width: 860px) {
+    .strengths-wrapper {
+      grid-template-columns: 1fr;
+    }
   }
 
   .top-strengths {
@@ -465,12 +654,19 @@ import site from '../../content/site.json';
     gap: 1rem;
   }
 
+  .strengths-column-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin-bottom: 0.5rem;
+  }
+
   .strength-card {
     display: flex;
     align-items: center;
     gap: 1.25rem;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
-    padding: 1rem 1.5rem;
+    padding: 1rem 1.25rem;
     border-radius: 16px;
     border: 1px solid var(--border-light);
     box-shadow: 0 4px 12px var(--shadow-light);
@@ -491,9 +687,27 @@ import site from '../../content/site.json';
   }
 
   .strength-domain {
-    font-size: 0.825rem;
-    color: var(--light-text);
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-block;
+    margin-top: 0.2rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: 12px;
+  }
+
+  .strength-domain.relationship {
+    background: rgba(146, 64, 14, 0.12);
+    color: var(--primary-brown);
+  }
+
+  .strength-domain.strategic {
+    background: rgba(234, 88, 12, 0.12);
+    color: var(--accent-amber);
+  }
+
+  .strength-domain.executing {
+    background: rgba(251, 191, 36, 0.2);
+    color: #b45309;
   }
 
   .strengths-chart-box {
@@ -501,24 +715,38 @@ import site from '../../content/site.json';
     border-radius: 20px;
     padding: 2rem;
     border: 1px solid var(--border-light);
-    box-shadow: 0 4px 16px var(--shadow-light);
+    box-shadow: 0 4px 20px var(--shadow-light);
     display: flex;
     flex-direction: column;
+  }
+
+  .chart-header-row {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
 
   .chart-box-title {
     font-size: 1.15rem;
     font-weight: 700;
     color: var(--dark-text);
-    margin-bottom: 1.5rem;
-    text-align: center;
+    margin: 0;
+  }
+
+  .chart-toggle-btn {
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    cursor: pointer;
   }
 
   .chart-canvas-wrapper {
     position: relative;
     width: 100%;
-    max-width: 320px;
+    height: 380px;
     margin: 0 auto;
   }
 

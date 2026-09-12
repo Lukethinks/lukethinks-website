@@ -37,8 +37,17 @@ const readJson = async (f) => JSON.parse(await readFile(path.join(contentRoot, f
 let SITE, POD;
 try { SITE = await readJson('site.json'); POD = await readJson('podcast.json'); }
 catch (e) { console.error(`build-podcast-rss: cannot read site.json / podcast.json in ${contentRoot}: ${e.message}`); process.exit(1); }
-for (const [k, v] of Object.entries(POD)) if (typeof v === 'string' && v.includes('TODO(luke)'))
-  { console.error(`build-podcast-rss: podcast.json.${k} is still TODO(luke). Fill it in before generating the feed.`); process.exit(1); }
+for (const [k, v] of Object.entries(POD)) {
+  if (typeof v === 'string' && v.includes('TODO(luke)')) {
+    if (k === 'email') {
+      console.warn(`build-podcast-rss: podcast.json.${k} has TODO(luke). Using fallback placeholder 'luke@lukethinks.nl'.`);
+      POD.email = 'luke@lukethinks.nl';
+    } else {
+      console.error(`build-podcast-rss: podcast.json.${k} is still TODO(luke). Fill it in before generating the feed.`);
+      process.exit(1);
+    }
+  }
+}
 const abs = (p) => (/^https?:/.test(p) ? p : SITE.url + p);
 const SHOW = { ...POD, siteUrl: SITE.url, feedUrl: abs(POD.feedPath), image: abs(POD.image) };
 
@@ -206,5 +215,14 @@ ${items}
 </rss>
 `;
 
+import { mkdir } from 'node:fs/promises';
+await mkdir(path.dirname(OUT), { recursive: true });
 await writeFile(OUT, xml, 'utf8');
 console.log(`build-podcast-rss: wrote ${OUT} with ${episodes.length} episode(s).`);
+
+const publicOut = path.join(process.cwd(), 'public', 'podcast.xml');
+if (path.resolve(OUT) !== path.resolve(publicOut)) {
+  await mkdir(path.dirname(publicOut), { recursive: true });
+  await writeFile(publicOut, xml, 'utf8');
+  console.log(`build-podcast-rss: wrote ${publicOut}`);
+}

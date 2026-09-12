@@ -7,9 +7,9 @@
     "audit": "node scripts/self-audit.mjs",
     "dev": "node ./node_modules/astro/astro.js dev",
     "build:index": "node scripts/build-index.mjs",
-    "build:podcast": "node scripts/build-podcast-rss.mjs --out dist/podcast.xml",
-    "validate": "node scripts/build-index.mjs && node scripts/validate-content.mjs && node scripts/check-register.mjs",
-    "build": "node scripts/build-index.mjs && node ./node_modules/astro/astro.js build && node scripts/validate-content.mjs && node scripts/check-register.mjs"
+    "build:podcast": "node scripts/build-podcast-rss.mjs --out public/podcast.xml",
+    "validate": "node scripts/build-index.mjs && node scripts/build-podcast-rss.mjs --out public/podcast.xml && node scripts/validate-content.mjs && node scripts/check-register.mjs",
+    "build": "node scripts/build-index.mjs && node scripts/build-podcast-rss.mjs --out public/podcast.xml && node ./node_modules/astro/astro.js build && node scripts/validate-content.mjs && node scripts/check-register.mjs"
   },
   "dependencies": {
     "@astrojs/vercel": "^8",

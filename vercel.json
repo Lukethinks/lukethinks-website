@@ -15,6 +15,7 @@
     { "source": "/aai-article.html", "destination": "/articles/ai-partnership-accounting", "permanent": true },
     { "source": "/learning-landing.html", "destination": "/learning", "permanent": true },
     { "source": "/learning-landing", "destination": "/learning", "permanent": true },
+    { "source": "/rss", "destination": "/feed.xml", "permanent": true },
     { "source": "/:slug.html", "destination": "/articles/:slug", "permanent": true }
   ]
 }

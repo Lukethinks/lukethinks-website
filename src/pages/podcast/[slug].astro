@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import site from '../../../content/site.json';
+import { resolveAudioUrl } from '../../utils/audio';
 
 export async function getStaticPaths() {
   const episodes = await getCollection('episodes', ({ data }) => data.status === 'published');
@@ -57,11 +58,11 @@ const formattedDate = publishedDate.toLocaleDateString('en-GB', {
         controls
         preload="none"
         aria-labelledby="audio-episode"
-        src={data.audio.src}
       >
+        <source src={resolveAudioUrl(data.audio.src)} type={data.audio.mimeType || 'audio/mpeg'} />
         <p>
           Your browser does not support audio playback.
-          <a href={data.audio.src}>Download the MP3</a>.
+          <a href={resolveAudioUrl(data.audio.src)}>Download the MP3</a>.
         </p>
       </audio>
 

@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import site from '../../content/site.json';
+import { resolveAudioUrl } from '../utils/audio';
 
 const episodes = await getCollection('episodes', ({ data }) => data.status === 'published');
 const sortedEpisodes = episodes.sort((a, b) => b.data.episode - a.data.episode);
@@ -81,8 +82,8 @@ const sortedEpisodes = episodes.sort((a, b) => b.data.episode - a.data.episode);
               controls
               preload="none"
               aria-labelledby={playerTitleId}
-              src={ep.data.audio.src}
             >
+              <source src={resolveAudioUrl(ep.data.audio.src)} type={ep.data.audio.mimeType || 'audio/mpeg'} />
               <p>Your browser does not support audio playback.</p>
             </audio>
           </div>
