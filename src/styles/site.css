@@ -16,7 +16,8 @@
 /* ==========================================================================
    2. Design Tokens (13 Authoritative Tokens)
    ========================================================================== */
-:root {
+:root,
+:root[data-theme="light"] {
   /* Brand / Primary */
   --primary-brown: #92400e;
   --secondary-brown: #c05621;
@@ -43,6 +44,13 @@
   --surface-card: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
   --surface-card-translucent: rgba(255, 255, 255, 0.85);
   --surface-footer: #0f172a;
+
+  /* Semantic Form & Interactive Surfaces */
+  --card-bg: #ffffff;
+  --surface-input: #ffffff;
+  --surface-button: #ffffff;
+  --color-text: var(--dark-text);
+  --color-text-muted: var(--light-text);
 
   color-scheme: light;
 }
@@ -72,6 +80,12 @@
     --surface-card-translucent: rgba(30, 41, 59, 0.75);
     --surface-footer: #080c14;
 
+    --card-bg: #1e293b;
+    --surface-input: #1e293b;
+    --surface-button: #1e293b;
+    --color-text: var(--dark-text);
+    --color-text-muted: var(--light-text);
+
     color-scheme: dark;
   }
 }
@@ -99,6 +113,12 @@
   --surface-card: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.85) 100%);
   --surface-card-translucent: rgba(30, 41, 59, 0.75);
   --surface-footer: #080c14;
+
+  --card-bg: #1e293b;
+  --surface-input: #1e293b;
+  --surface-button: #1e293b;
+  --color-text: var(--dark-text);
+  --color-text-muted: var(--light-text);
 
   color-scheme: dark;
 }
@@ -361,6 +381,14 @@ nav[aria-label="Primary"] a[aria-current="page"] {
 
 :root[data-theme="dark"] .theme-icon-moon {
   display: none;
+}
+
+:root[data-theme="light"] .theme-icon-sun {
+  display: none;
+}
+
+:root[data-theme="light"] .theme-icon-moon {
+  display: block;
 }
 
 /* ==========================================================================
@@ -893,10 +921,10 @@ th {
 .audio-player-container {
   margin: 2rem 0;
   padding: 1.5rem;
-  background: linear-gradient(135deg, var(--cream) 0%, var(--light-cream) 100%);
-  border-radius: 12px;
-  border: 2px solid var(--light-amber);
-  box-shadow: 0 4px 12px var(--shadow-light);
+  background: var(--surface-card);
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 16px var(--shadow-light);
 }
 
 .audio-title {

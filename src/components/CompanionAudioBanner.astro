@@ -1,0 +1,135 @@
+---
+import AudioPlayer from './AudioPlayer.astro';
+
+interface Props {
+  audio: Array<{
+    label: string;
+    src: string;
+    variant: 'narration' | 'debate' | 'summary' | string;
+    durationSeconds: number;
+    mimeType?: string;
+    production?: {
+      source?: string;
+      aiDisclosed?: boolean;
+    };
+  }>;
+  slug: string;
+  articleTitle?: string;
+}
+
+const { audio, slug } = Astro.props;
+---
+
+<aside class="companion-audio-card" aria-labelledby="companion-audio-heading" data-region="audio">
+  <div class="companion-audio-header">
+    <span class="companion-audio-icon" aria-hidden="true">🎙️</span>
+    <div class="companion-audio-info">
+      <h2 class="companion-audio-title" id="companion-audio-heading">
+        Companion Audio & Podcast Available
+      </h2>
+      <p class="companion-audio-desc">
+        Prefer listening on the go? Stream the executive narration and debate teardowns below, or explore the full catalog in the
+        <a href="/podcast">Audio Library & Podcasts →</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="companion-audio-grid">
+    {audio.map((a) => (
+      <AudioPlayer
+        src={a.src}
+        title={a.label}
+        id={`article-${slug}-${a.variant}`}
+        durationSeconds={a.durationSeconds}
+        variant={a.variant}
+        mimeType={a.mimeType}
+        headingLevel="h3"
+        aiDisclosed={a.production?.aiDisclosed}
+        disclosureText="Audio produced with AI voices from the written essay. Fact-checked by Luke."
+        downloadable={true}
+      />
+    ))}
+  </div>
+</aside>
+
+<style>
+  .companion-audio-card {
+    background: var(--surface-card);
+    border: 2px solid rgba(234, 88, 12, 0.3);
+    border-radius: 20px;
+    padding: 2rem 2.25rem;
+    margin: 2.5rem 0 3.5rem;
+    box-shadow: 0 6px 24px var(--shadow-light);
+  }
+
+  .companion-audio-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .companion-audio-icon {
+    font-size: 2.25rem;
+    line-height: 1;
+    background: rgba(146, 64, 14, 0.1);
+    padding: 0.65rem;
+    border-radius: 14px;
+  }
+
+  .companion-audio-info {
+    flex: 1 1 auto;
+  }
+
+  .companion-audio-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin-bottom: 0.35rem;
+    line-height: 1.3;
+  }
+
+  .companion-audio-desc {
+    font-size: 0.95rem;
+    color: var(--light-text);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .companion-audio-desc a {
+    color: var(--accent-amber);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .companion-audio-desc a:hover {
+    color: var(--primary-brown);
+  }
+
+  .companion-audio-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .companion-audio-grid :global(.audio-player-container) {
+    margin: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .companion-audio-card {
+      padding: 1.5rem 1.25rem;
+    }
+
+    .companion-audio-header {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+</style>

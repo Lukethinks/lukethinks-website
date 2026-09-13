@@ -1,0 +1,288 @@
+---
+import { resolveAudioUrl } from '../utils/audio';
+
+interface Props {
+  src: string;
+  title: string;
+  id?: string;
+  durationSeconds?: number;
+  variant?: 'narration' | 'debate' | 'summary' | 'episode' | string;
+  aiDisclosed?: boolean;
+  disclosureText?: string;
+  mimeType?: string;
+  headingLevel?: 'h2' | 'h3' | 'h4';
+  showSubscribe?: boolean;
+  downloadable?: boolean;
+}
+
+const {
+  src,
+  title,
+  id,
+  durationSeconds,
+  variant,
+  aiDisclosed = true,
+  disclosureText = 'Audio produced with AI voices. Written, directed and edited by Luke.',
+  mimeType = 'audio/mpeg',
+  headingLevel = 'h2',
+  showSubscribe = false,
+  downloadable = true,
+} = Astro.props;
+
+const HeadingTag = headingLevel;
+const resolvedSrc = resolveAudioUrl(src);
+const sanitizedId = (id || title || 'audio').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+const playerId = `player-${sanitizedId}`;
+const titleId = `title-${playerId}`;
+const durationMinutes = durationSeconds ? Math.ceil(durationSeconds / 60) : undefined;
+const durationIso = durationSeconds ? `PT${Math.round(durationSeconds / 60)}M` : undefined;
+---
+
+<div class="audio-player-container" data-region="audio" data-variant={variant} id={playerId}>
+  <div class="audio-header-block">
+    <HeadingTag class="audio-title" id={titleId}>{title}</HeadingTag>
+    {(variant || durationMinutes) && (
+      <p class="audio-meta">
+        <span aria-hidden="true">🎧</span>
+        <span>
+          {variant && <span class="audio-variant-label">{variant.charAt(0).toUpperCase() + variant.slice(1)}</span>}
+          {variant && durationMinutes && ' · '}
+          {durationMinutes && <time datetime={durationIso}>{durationMinutes} min</time>}
+        </span>
+      </p>
+    )}
+  </div>
+
+  <audio
+    class="custom-audio-player"
+    controls
+    preload="none"
+    aria-labelledby={titleId}
+    src={resolvedSrc}
+  >
+    <source src={resolvedSrc} type={mimeType} />
+    <p>
+      Your browser does not support audio playback.
+      <a href={resolvedSrc} download>Download the MP3</a>.
+    </p>
+  </audio>
+
+  <div class="audio-controls-row">
+    <div class="audio-speed-selector" role="group" aria-label="Playback speed">
+      <span class="speed-label" aria-hidden="true">Speed:</span>
+      <button type="button" class="speed-btn is-active" data-speed="1" aria-pressed="true">1x</button>
+      <button type="button" class="speed-btn" data-speed="1.25" aria-pressed="false">1.25x</button>
+      <button type="button" class="speed-btn" data-speed="1.5" aria-pressed="false">1.5x</button>
+    </div>
+
+    {downloadable && (
+      <a href={resolvedSrc} class="audio-download-action" download aria-label={`Download MP3 for ${title}`}>
+        <span aria-hidden="true">⬇</span>
+        <span>Download MP3</span>
+      </a>
+    )}
+  </div>
+
+  {aiDisclosed && (
+    <p class="audio-disclosure">{disclosureText}</p>
+  )}
+
+  {showSubscribe && (
+    <p class="audio-subscribe">
+      Subscribe: <a href="https://open.spotify.com/search/Luke%20Thinks" target="_blank" rel="noopener noreferrer">Spotify</a> ·
+      <a href="/podcast.xml">RSS Feed</a>
+    </p>
+  )}
+</div>
+
+<script>
+  function initAudioPlayers() {
+    const containers = document.querySelectorAll<HTMLElement>('.audio-player-container');
+    containers.forEach((container) => {
+      if (container.dataset.initialized === 'true') return;
+      container.dataset.initialized = 'true';
+
+      const audio = container.querySelector<HTMLAudioElement>('audio.custom-audio-player');
+      const speedButtons = container.querySelectorAll<HTMLButtonElement>('.speed-btn');
+
+      if (!audio || !speedButtons.length) return;
+
+      // Exclusive playback: pause other players when this one starts
+      audio.addEventListener('play', () => {
+        document.querySelectorAll<HTMLAudioElement>('audio.custom-audio-player').forEach((otherAudio) => {
+          if (otherAudio !== audio && !otherAudio.paused) {
+            otherAudio.pause();
+          }
+        });
+
+        // Ensure configured speed persists when audio starts or reloads
+        const activeBtn = container.querySelector<HTMLButtonElement>('.speed-btn.is-active');
+        if (activeBtn) {
+          const speed = parseFloat(activeBtn.dataset.speed || '1');
+          audio.playbackRate = speed;
+          audio.defaultPlaybackRate = speed;
+        }
+      });
+
+      speedButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const speed = parseFloat(btn.dataset.speed || '1');
+          audio.playbackRate = speed;
+          audio.defaultPlaybackRate = speed;
+
+          speedButtons.forEach((b) => {
+            b.classList.remove('is-active');
+            b.setAttribute('aria-pressed', 'false');
+          });
+
+          btn.classList.add('is-active');
+          btn.setAttribute('aria-pressed', 'true');
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAudioPlayers);
+  } else {
+    initAudioPlayers();
+  }
+  document.addEventListener('astro:page-load', initAudioPlayers);
+</script>
+
+<style>
+  .audio-player-container {
+    background: var(--surface-card);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 16px var(--shadow-light);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .audio-player-container:hover {
+    border-color: var(--accent-amber);
+    box-shadow: 0 6px 20px var(--shadow-medium);
+  }
+
+  .audio-header-block {
+    margin-bottom: 0.75rem;
+  }
+
+  .audio-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 0.35rem;
+    line-height: 1.3;
+  }
+
+  .audio-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--light-text);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .audio-variant-label {
+    font-weight: 600;
+    color: var(--primary-brown);
+  }
+
+  .custom-audio-player {
+    width: 100%;
+    height: 48px;
+    border-radius: 8px;
+    margin: 0.5rem 0 0.75rem;
+    display: block;
+    color-scheme: inherit;
+  }
+
+  .audio-controls-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-light);
+    font-size: 0.85rem;
+  }
+
+  .audio-speed-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .speed-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--light-text);
+    margin-right: 0.2rem;
+  }
+
+  .speed-btn {
+    padding: 0.25rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--surface-button);
+    border: 1px solid var(--border-light);
+    color: var(--light-text);
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .speed-btn:hover {
+    color: var(--dark-text);
+    border-color: var(--accent-amber);
+  }
+
+  .speed-btn.is-active {
+    background: var(--primary-brown);
+    color: #ffffff;
+    border-color: var(--primary-brown);
+  }
+
+  .audio-download-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--accent-amber);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s ease;
+  }
+
+  .audio-download-action:hover {
+    color: var(--primary-brown);
+    text-decoration: underline;
+  }
+
+  .audio-disclosure {
+    font-size: 0.8rem;
+    color: var(--light-text);
+    font-style: italic;
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+  }
+
+  .audio-subscribe {
+    font-size: 0.875rem;
+    color: var(--medium-text);
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+    font-weight: 500;
+  }
+
+  .audio-subscribe a {
+    color: var(--accent-amber);
+    font-weight: 600;
+  }
+</style>

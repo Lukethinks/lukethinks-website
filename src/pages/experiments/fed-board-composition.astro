@@ -405,7 +405,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   .fed-chart-card,
   .fed-info-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+    background: var(--surface-card);
     border: 1px solid var(--border-light);
     border-radius: 20px;
     padding: 1.75rem;
@@ -425,7 +425,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     font-weight: 700;
     border-radius: 10px;
     border: 1px solid var(--border-light);
-    background: white;
+    background: var(--surface-button);
     color: var(--medium-text);
     cursor: pointer;
     transition: all 0.2s ease;
@@ -498,7 +498,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   }
 
   .gov-card {
-    background: white;
+    background: var(--card-bg);
     border-radius: 12px;
     padding: 0.85rem 1rem;
     border: 1px solid var(--border-light);
@@ -572,7 +572,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   }
 
   .forecast-card {
-    background: white;
+    background: var(--card-bg);
     border-radius: 12px;
     padding: 1rem;
     border: 1px solid var(--border-light);
@@ -602,7 +602,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   }
 
   .key-assumptions-box {
-    background: rgba(248, 250, 252, 0.8);
+    background: var(--surface-card-translucent);
     border-radius: 12px;
     padding: 1rem;
     border: 1px solid var(--border-light);

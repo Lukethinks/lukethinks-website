@@ -25,6 +25,11 @@ Declared once, in `src/styles/site.css`, under `:root`. Never redeclare in a pag
 | `--surface-card` | `linear-gradient(...)` | Card & content panels background |
 | `--surface-card-translucent` | `rgba(255,255,255,0.85)` | Secondary/translucent card surfaces |
 | `--surface-footer` | `#0f172a` | Footer background |
+| `--card-bg` | `#ffffff` / `#1e293b` | Form, control & subcard background across themes |
+| `--surface-input` | `#ffffff` / `#1e293b` | Text and search input background across themes |
+| `--surface-button` | `#ffffff` / `#1e293b` | Interactive pill and control button background across themes |
+| `--color-text` | `var(--dark-text)` | Semantic text color |
+| `--color-text-muted` | `var(--light-text)` | Semantic secondary text color |
 
 Signature gradients: page background `linear-gradient(135deg, var(--cream), var(--light-cream))`; active/primary surfaces `linear-gradient(135deg, var(--primary-brown), var(--accent-amber))`.
 

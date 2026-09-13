@@ -16,6 +16,17 @@ Any agent that makes a structural choice adds an entry in the same change. Any a
 
 ---
 
+## ADR-0017 — Podcast catalog architecture and foundational subscription layer
+**Date:** 2026-09-13 · **Status:** Accepted
+**Context:** Podcast audio was previously rendered as isolated raw HTML audio elements without speed controls or catalog filtering. In addition, the site needed a foundational architecture for commerciality and subscriber briefings.
+**Decision:** 
+1. Created `AudioPlayer.astro` conforming to podcast governance with variable playback speed controls (`1x`, `1.25x`, `1.5x`), fallback MP3 download, and accessible ARIA attributes.
+2. Created `EpisodeCard.astro` following the Construction Disruption horizontal card anatomy (1:1 square badge/art, meta line, bold title, takeaways bullets, player controls, show notes link).
+3. Redesigned `/podcast` into an interactive catalog featuring platform subscribe links (Spotify, Apple Podcasts, RSS), live text search, and category/topic filter pills.
+4. Added bi-directional cross-pollination linking companion audio on technical articles (`CompanionAudioBanner.astro`) with full podcast episodes.
+5. Built `NewsletterCapture.astro` and `/api/subscribe` as a foundational subscription layer introducing free executive briefings alongside upcoming subscriber intelligence tiers.
+**Consequences:** Audio players and episode cards are reusable shared components across all page types; subscribers can join executive briefing lists; the class register (`check-register.mjs`) is preserved with zero drift.
+
 ## ADR-0016 — Dark mode and theme toggle via single-place token redefinition
 **Date:** 2026-09-13 · **Status:** Accepted
 **Context:** The site lacked dark mode support. Readers in low-light environments need a comfortable reading experience, and modern web guidelines recommend supporting both system preferences and explicit manual overrides without layout flashes (FOUC).

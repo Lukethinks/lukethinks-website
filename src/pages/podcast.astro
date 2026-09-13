@@ -1,16 +1,49 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import site from '../../content/site.json';
-import { resolveAudioUrl } from '../utils/audio';
+import EpisodeCard from '../components/EpisodeCard.astro';
 
 const episodes = await getCollection('episodes', ({ data }) => data.status === 'published');
 const sortedEpisodes = episodes.sort((a, b) => b.data.episode - a.data.episode);
+
+// Curated takeaways and companion links for current catalog
+const episodeMetaMap: Record<string, { takeaways: string[]; companionArticle?: { title: string; href: string } }> = {
+  'the-50b-ai-partnership-bubble': {
+    takeaways: [
+      'Governance Nuance: Equity stakes structured at 49% or non-voting rights circumvent mandatory consolidation under ASC 810.',
+      'Round-Tripping Concerns: Multi-billion capital deployed as equity loops back into Azure cloud hosting revenue within quarters.',
+      'Impairment Horizon: Rapid advances in model efficiency risk sudden multi-billion impairment write-downs on proprietary infrastructure.',
+    ],
+    companionArticle: {
+      title: 'When Billion-Dollar AI Partnerships Meet Reality: A $50B Accounting Crisis in the Making',
+      href: '/articles/ai-partnership-accounting',
+    },
+  },
+  'big-tech-ai-investments-the-great-accounting-debate': {
+    takeaways: [
+      'Capex vs. Opex Depreciation: Hyperscalers extending server useful lives from 3 to 6 years to temporarily lower annual depreciation charges.',
+      'Circular Velocity: Compute credits deployed as equity versus direct cash distributions obscuring genuine customer economics.',
+      'Open vs. Closed Models: Open-source model parity compressing inference margins across all hyperscalers.',
+    ],
+    companionArticle: {
+      title: 'When Billion-Dollar AI Partnerships Meet Reality: A $50B Accounting Crisis in the Making',
+      href: '/articles/ai-partnership-accounting',
+    },
+  },
+};
+
+const filterCategories = [
+  { id: 'all', label: 'All Episodes' },
+  { id: 'ai', label: 'AI & Big Tech' },
+  { id: 'accounting', label: 'Accounting & Valuation' },
+  { id: 'briefing', label: 'Briefings' },
+  { id: 'debate', label: 'Debates' },
+];
 ---
 
 <BaseLayout
   title="Audio Library & Podcasts"
-  description="Executive audio briefings, deep debates, and financial analysis by Luke van den Top. Listen directly in your browser or stream on Spotify."
+  description="Executive audio briefings, deep debates, and financial analysis by Luke van den Top. Listen directly in your browser or stream on Spotify and Apple Podcasts."
 >
   <!-- Hero Section -->
   <section class="hero">
@@ -26,15 +59,30 @@ const sortedEpisodes = episodes.sort((a, b) => b.data.episode - a.data.episode);
 
       <p class="hero-tagline">
         Executive briefings, deep analytical debates, and financial autopsies.
-        Designed for listening on the go—stream directly in your browser or follow on Spotify.
+        Designed for listening on the go—stream directly in your browser with speed controls or follow on your favorite podcast app.
       </p>
 
-      <div class="platform-bar">
-        <a href="https://open.spotify.com/search/Luke%20Thinks" class="platform-pill spotify" target="_blank" rel="noopener noreferrer">
+      <!-- Platform Subscribe Bar (Construction Disruption inspired) -->
+      <div class="platform-bar" role="navigation" aria-label="Podcast platforms">
+        <a
+          href="https://open.spotify.com/search/Luke%20Thinks"
+          class="platform-pill spotify"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <span aria-hidden="true">🟢</span>
           <span>Listen on Spotify</span>
         </a>
-        <a href="/podcast.xml" class="platform-pill">
+        <a
+          href="https://podcasts.apple.com"
+          class="platform-pill apple"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span aria-hidden="true">🟣</span>
+          <span>Apple Podcasts</span>
+        </a>
+        <a href="/podcast.xml" class="platform-pill rss">
           <span aria-hidden="true">📡</span>
           <span>RSS Feed</span>
         </a>
@@ -42,62 +90,148 @@ const sortedEpisodes = episodes.sort((a, b) => b.data.episode - a.data.episode);
     </div>
   </section>
 
-  <!-- Episodes List -->
-  <section class="section-header">
-    <h2 class="section-title">All Episodes</h2>
-    <p class="section-subtitle">
-      Narrated summaries, point-counterpoint debates, and case study breakdowns
-    </p>
+  <!-- Filter & Search Controls Bar -->
+  <section class="controls-bar" aria-label="Podcast filter and search">
+    <div class="search-box">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input
+        id="podcast-search"
+        type="search"
+        placeholder="Search episodes by title, topic, or takeaway..."
+        aria-label="Search podcast episodes"
+      />
+    </div>
+
+    <div class="category-pills" id="podcast-filters" role="group" aria-label="Filter episodes by topic">
+      {filterCategories.map((cat, idx) => (
+        <button
+          type="button"
+          class={`filter-pill ${idx === 0 ? 'is-active' : ''}`}
+          data-category={cat.id}
+          aria-pressed={idx === 0 ? 'true' : 'false'}
+        >
+          {cat.label}
+        </button>
+      ))}
+    </div>
   </section>
 
-  <div class="episodes-container">
-    {sortedEpisodes.map((ep) => {
-      const minutes = Math.ceil(ep.data.audio.durationSeconds / 60);
-      const playerTitleId = `player-title-${ep.data.slug}`;
-      const pubDate = new Date(ep.data.published).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
+  <!-- Episodes Catalog Section -->
+  <section class="catalog-section" aria-labelledby="catalog-heading">
+    <div class="section-header">
+      <h2 id="catalog-heading" class="section-title">Episode Catalog</h2>
+      <p class="section-subtitle">
+        Narrated executive summaries, point-counterpoint debates, and forensic accounting teardowns.
+      </p>
+    </div>
+
+    <div class="episodes-container" id="episodes-list">
+      {sortedEpisodes.map((ep) => {
+        const meta = episodeMetaMap[ep.data.slug] ?? { takeaways: [] };
+        return (
+          <EpisodeCard
+            episode={ep}
+            takeaways={meta.takeaways}
+            companionArticle={meta.companionArticle}
+          />
+        );
+      })}
+    </div>
+
+    <!-- Empty search state -->
+    <div id="no-results" class="empty-state sr-only" aria-live="polite">
+      <p>No podcast episodes match your search or filter. Try clearing your query.</p>
+    </div>
+  </section>
+
+
+
+  <script>
+    function initPodcastCatalog() {
+      const searchInput = document.getElementById('podcast-search');
+      const filterButtons = document.querySelectorAll('#podcast-filters .filter-pill');
+      const cards = document.querySelectorAll<HTMLElement>('.episode-card');
+      const noResults = document.getElementById('no-results');
+
+      let activeCategory = 'all';
+      let searchQuery = '';
+
+      function applyCatalogFilters() {
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const tags = card.dataset.tags || '';
+          const format = card.dataset.format || '';
+          const title = card.dataset.title || '';
+          const summary = card.dataset.summary || '';
+          const takeaways = card.dataset.takeaways || '';
+
+          // Category match logic
+          let matchesCategory = false;
+          if (activeCategory === 'all') {
+            matchesCategory = true;
+          } else if (activeCategory === 'briefing' || activeCategory === 'debate') {
+            matchesCategory = format === activeCategory;
+          } else {
+            matchesCategory = tags.split(' ').includes(activeCategory);
+          }
+
+          // Search query match logic (searches editorial content, excluding audio player controls)
+          const matchesQuery = !searchQuery ||
+            title.includes(searchQuery) ||
+            summary.includes(searchQuery) ||
+            tags.includes(searchQuery) ||
+            takeaways.includes(searchQuery);
+
+          if (matchesCategory && matchesQuery) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (noResults) {
+          if (visibleCount === 0) {
+            noResults.classList.remove('sr-only');
+          } else {
+            noResults.classList.add('sr-only');
+          }
+        }
+      }
+
+      if (searchInput instanceof HTMLInputElement && !searchInput.dataset.initialized) {
+        searchInput.dataset.initialized = 'true';
+        searchInput.addEventListener('input', (e) => {
+          searchQuery = (e.target as HTMLInputElement).value.toLowerCase().trim();
+          applyCatalogFilters();
+        });
+      }
+
+      filterButtons.forEach((btn) => {
+        if (btn instanceof HTMLElement && !btn.dataset.initialized) {
+          btn.dataset.initialized = 'true';
+          btn.addEventListener('click', () => {
+            filterButtons.forEach((b) => {
+              b.classList.remove('is-active');
+              b.setAttribute('aria-pressed', 'false');
+            });
+            btn.classList.add('is-active');
+            btn.setAttribute('aria-pressed', 'true');
+            activeCategory = btn.getAttribute('data-category') || 'all';
+            applyCatalogFilters();
+          });
+        }
       });
+    }
 
-      return (
-        <article class="episode-card">
-          <div class="episode-card-header">
-            <span class="episode-badge">Episode {ep.data.episode}</span>
-            <time datetime={new Date(ep.data.published).toISOString().slice(0, 10)} class="episode-date">
-              {pubDate}
-            </time>
-            <span class="episode-duration">⏱️ {minutes} min</span>
-          </div>
-
-          <h3 class="episode-title" id={playerTitleId}>
-            <a href={`/podcast/${ep.data.slug}`}>{ep.data.title}</a>
-          </h3>
-
-          <p class="episode-summary">{ep.data.summary}</p>
-
-          <div class="episode-player-row">
-            <audio
-              class="custom-audio-player"
-              controls
-              preload="none"
-              aria-labelledby={playerTitleId}
-            >
-              <source src={resolveAudioUrl(ep.data.audio.src)} type={ep.data.audio.mimeType || 'audio/mpeg'} />
-              <p>Your browser does not support audio playback.</p>
-            </audio>
-          </div>
-
-          <div class="episode-card-footer">
-            <a href={`/podcast/${ep.data.slug}`} class="episode-notes-link">
-              View Episode & Show Notes →
-            </a>
-            <span class="ai-disclosure-badge">AI Disclosed</span>
-          </div>
-        </article>
-      );
-    })}
-  </div>
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPodcastCatalog);
+    } else {
+      initPodcastCatalog();
+    }
+    document.addEventListener('astro:page-load', initPodcastCatalog);
+  </script>
 </BaseLayout>
 
 <style>
@@ -106,20 +240,20 @@ const sortedEpisodes = episodes.sort((a, b) => b.data.episode - a.data.episode);
     justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
-    margin: 1.5rem auto 2.5rem;
+    margin: 1.75rem auto 1.5rem;
   }
 
   .platform-pill {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.65rem 1.35rem;
+    padding: 0.7rem 1.4rem;
     border-radius: 50px;
-    background: #ffffff;
+    background: var(--surface-button);
     border: 1px solid var(--border-light);
     color: var(--dark-text);
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     text-decoration: none;
     box-shadow: 0 2px 8px var(--shadow-light);
     transition: all 0.25s ease;
@@ -142,113 +276,109 @@ const sortedEpisodes = episodes.sort((a, b) => b.data.episode - a.data.episode);
     color: #ffffff;
   }
 
-  .episodes-container {
+  .platform-pill.apple:hover {
+    border-color: #a855f7;
+    color: #9333ea;
+  }
+
+  .platform-pill.rss:hover {
+    border-color: var(--accent-amber);
+    color: var(--accent-amber);
+  }
+
+  /* Filter & Search Bar */
+  .controls-bar {
+    max-width: 960px;
+    margin: 0 auto 2.5rem;
     display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    max-width: 900px;
-    margin: 0 auto 4rem;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  .episode-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
-    border-radius: 20px;
-    padding: 2.25rem;
+  .search-box {
+    position: relative;
+    flex: 1 1 300px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.95rem;
+    pointer-events: none;
+    color: var(--light-text);
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 0.85rem 1rem 0.85rem 2.75rem;
+    border-radius: 12px;
     border: 1px solid var(--border-light);
-    box-shadow: 0 4px 20px var(--shadow-light);
-    transition: all 0.3s ease;
+    background: var(--surface-input);
+    font-size: 0.95rem;
+    color: var(--dark-text);
+    font-family: inherit;
+    box-shadow: 0 2px 8px var(--shadow-light);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .episode-card:hover {
-    box-shadow: 0 8px 30px var(--shadow-medium);
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--accent-amber);
+    box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+  }
+
+  .category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .filter-pill {
+    padding: 0.6rem 1.15rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border-light);
+    background: var(--surface-button);
+    color: var(--light-text);
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .filter-pill:hover {
+    color: var(--dark-text);
     border-color: var(--accent-amber);
   }
 
-  .episode-card-header {
+  .filter-pill.is-active {
+    background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(146, 64, 14, 0.25);
+  }
+
+  /* Catalog Layout */
+  .catalog-section {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .episodes-container {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 1rem;
-    font-size: 0.85rem;
+    flex-direction: column;
+    gap: 2.25rem;
+    margin-bottom: 3rem;
   }
 
-  .episode-badge {
-    background: rgba(146, 64, 14, 0.12);
-    color: var(--primary-brown);
-    font-weight: 700;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .episode-date,
-  .episode-duration {
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
     color: var(--light-text);
-    font-weight: 500;
-  }
-
-  .episode-title {
-    font-size: 1.45rem;
-    font-weight: 800;
-    color: var(--dark-text);
-    margin-bottom: 0.75rem;
-    line-height: 1.3;
-  }
-
-  .episode-title a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .episode-title a:hover {
-    color: var(--accent-amber);
-  }
-
-  .episode-summary {
-    color: var(--light-text);
-    font-size: 0.98rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-
-  .episode-player-row {
-    margin-bottom: 1.5rem;
-  }
-
-  .custom-audio-player {
-    width: 100%;
-    height: 44px;
-    display: block;
-  }
-
-  .episode-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--border-light);
-    font-size: 0.9rem;
-  }
-
-  .episode-notes-link {
-    color: var(--accent-amber);
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  .episode-notes-link:hover {
-    color: var(--primary-brown);
-    text-decoration: underline;
-  }
-
-  .ai-disclosure-badge {
-    font-size: 0.75rem;
-    color: var(--light-text);
-    background: #f1f5f9;
-    padding: 0.25rem 0.65rem;
-    border-radius: 12px;
-    font-weight: 600;
+    font-size: 1.1rem;
   }
 </style>

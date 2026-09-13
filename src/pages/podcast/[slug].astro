@@ -1,8 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import site from '../../../content/site.json';
-import { resolveAudioUrl } from '../../utils/audio';
+import AudioPlayer from '../../components/AudioPlayer.astro';
 
 export async function getStaticPaths() {
   const episodes = await getCollection('episodes', ({ data }) => data.status === 'published');
@@ -23,6 +22,41 @@ const formattedDate = publishedDate.toLocaleDateString('en-GB', {
   month: 'short',
   year: 'numeric',
 });
+
+// Bi-directional link to companion articles
+const companionArticleMap: Record<string, { title: string; href: string }> = {
+  'the-50b-ai-partnership-bubble': {
+    title: 'When Billion-Dollar AI Partnerships Meet Reality: A $50B Accounting Crisis in the Making',
+    href: '/articles/ai-partnership-accounting',
+  },
+  'big-tech-ai-investments-the-great-accounting-debate': {
+    title: 'When Billion-Dollar AI Partnerships Meet Reality: A $50B Accounting Crisis in the Making',
+    href: '/articles/ai-partnership-accounting',
+  },
+};
+
+const companionArticle = companionArticleMap[data.slug];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "PodcastEpisode",
+  name: data.title,
+  description: data.summary,
+  datePublished: publishedDate.toISOString().slice(0, 10),
+  episodeNumber: data.episode,
+  url: `https://lukethinks.nl/podcast/${data.slug}`,
+  partOfSeries: {
+    "@type": "PodcastSeries",
+    name: "Luke Thinks",
+    url: "https://lukethinks.nl/podcast",
+  },
+  associatedMedia: {
+    "@type": "AudioObject",
+    contentUrl: data.audio.src,
+    encodingFormat: data.audio.mimeType || "audio/mpeg",
+    duration: `PT${Math.round(data.audio.durationSeconds / 60)}M`,
+  },
+};
 ---
 
 <BaseLayout
@@ -31,6 +65,7 @@ const formattedDate = publishedDate.toLocaleDateString('en-GB', {
   ogType="article"
   publishedTime={publishedDate.toISOString()}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
   <nav aria-label="Breadcrumb" class="breadcrumbs">
     <ol>
       <li><a href="/">Home</a></li>
@@ -43,38 +78,48 @@ const formattedDate = publishedDate.toLocaleDateString('en-GB', {
     <header class="article-header">
       <div class="article-meta">
         <span class="article-category">Episode {data.episode}</span>
+        {data.season && <span>Season {data.season}</span>}
         <time datetime={publishedDate.toISOString().slice(0, 10)}>{formattedDate}</time>
         <span>{durationMinutes} min</span>
+        {data.confidence && (
+          <span class="confidence-badge" data-confidence={data.confidence}>
+            Confidence: {data.confidence}
+          </span>
+        )}
       </div>
 
       <h1 class="article-title">{data.title}</h1>
       <p class="article-subtitle">{data.summary}</p>
     </header>
 
-    <div class="audio-player-container">
-      <h2 class="audio-title" id="audio-episode">Listen to Episode {data.episode}</h2>
-      <audio
-        class="custom-audio-player"
-        controls
-        preload="none"
-        aria-labelledby="audio-episode"
-      >
-        <source src={resolveAudioUrl(data.audio.src)} type={data.audio.mimeType || 'audio/mpeg'} />
-        <p>
-          Your browser does not support audio playback.
-          <a href={resolveAudioUrl(data.audio.src)}>Download the MP3</a>.
-        </p>
-      </audio>
-
-      {data.production?.aiDisclosed && (
-        <p class="audio-disclosure">Audio produced with AI voices. Written, directed and edited by Luke.</p>
-      )}
-
-      <p class="audio-subscribe">
-        Subscribe: <a href="https://open.spotify.com/search/Luke%20Thinks" target="_blank" rel="noopener noreferrer">Spotify</a> ·
-        <a href="/podcast.xml">RSS Feed</a>
-      </p>
+    <!-- Governance AudioPlayer with speed controls and ARIA bindings -->
+    <div class="episode-player-wrap">
+      <AudioPlayer
+        src={data.audio.src}
+        title={`Listen to Episode ${data.episode}: ${data.title}`}
+        id={`episode-${data.episode}`}
+        durationSeconds={data.audio.durationSeconds}
+        variant="episode"
+        mimeType={data.audio.mimeType}
+        headingLevel="h2"
+        aiDisclosed={data.production?.aiDisclosed}
+        disclosureText="Audio produced with AI voices. Written, directed and fact-checked by Luke."
+        showSubscribe={true}
+      />
     </div>
+
+    <!-- Bi-directional Cross-Pollination Callout -->
+    {companionArticle && (
+      <aside class="callout companion-box" aria-labelledby="companion-title">
+        <h2 class="callout-title" id="companion-title">📖 Companion Research Essay</h2>
+        <p>
+          This episode explores the forensic accounting mechanics detailed in our full written teardown:
+          <a href={companionArticle.href} class="companion-link">
+            {companionArticle.title} →
+          </a>
+        </p>
+      </aside>
+    )}
 
     <section class="article-content" aria-label="Show notes and breakdown">
       <Content />
@@ -83,48 +128,26 @@ const formattedDate = publishedDate.toLocaleDateString('en-GB', {
 </BaseLayout>
 
 <style>
-  .audio-player-container {
-    background: linear-gradient(135deg, rgba(254, 247, 240, 0.95), rgba(255, 255, 255, 0.95));
-    border: 1px solid rgba(234, 88, 12, 0.3);
-    border-radius: 20px;
-    padding: 2.25rem;
-    margin: 2.5rem auto 3.5rem;
+  .episode-player-wrap {
     max-width: 860px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    text-align: center;
+    margin: 2rem auto 2.5rem;
   }
 
-  .audio-title {
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: var(--dark-text);
-    margin-bottom: 1.25rem;
+  .companion-box {
+    max-width: 860px;
+    margin: 0 auto 2.5rem;
+    border-left: 4px solid var(--accent-amber);
+    background: var(--surface-card-translucent);
   }
 
-  .custom-audio-player {
-    width: 100%;
-    max-width: 600px;
-    height: 48px;
-    margin: 0 auto 1.25rem;
-    display: block;
-  }
-
-  .audio-disclosure {
-    font-size: 0.85rem;
-    color: var(--light-text);
-    margin-bottom: 0.75rem;
-    font-style: italic;
-  }
-
-  .audio-subscribe {
-    font-size: 0.9rem;
-    color: var(--medium-text);
-    font-weight: 600;
-    margin: 0;
-  }
-
-  .audio-subscribe a {
+  .companion-link {
+    font-weight: 700;
     color: var(--accent-amber);
     text-decoration: underline;
+    margin-left: 0.25rem;
+  }
+
+  .companion-link:hover {
+    color: var(--primary-brown);
   }
 </style>

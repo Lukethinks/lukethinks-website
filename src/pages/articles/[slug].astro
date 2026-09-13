@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ReactionsBar from '../../components/ReactionsBar.astro';
+import CompanionAudioBanner from '../../components/CompanionAudioBanner.astro';
 import { resolveAudioUrl } from '../../utils/audio';
 
 export async function getStaticPaths() {
@@ -93,24 +94,11 @@ const jsonLd = {
     )}
 
     {article.data.audio && article.data.audio.length > 0 && (
-      <div data-region="audio">
-        {article.data.audio.map((a) => (
-          <div class="audio-player-container" data-variant={a.variant}>
-            <h2 class="audio-title" id={`audio-${a.variant}`}>{a.label}</h2>
-            <p class="audio-meta">
-              <span aria-hidden="true">🎧</span>
-              <span>{a.variant} · <time datetime={`PT${Math.round(a.durationSeconds / 60)}M`}>{Math.round(a.durationSeconds / 60)} min</time></span>
-            </p>
-            <audio class="custom-audio-player" controls preload="none" aria-labelledby={`audio-${a.variant}`}>
-              <source src={resolveAudioUrl(a.src)} type={a.mimeType || 'audio/mpeg'} />
-              <p>Your browser does not support audio playback. <a href={resolveAudioUrl(a.src)}>Download the MP3</a>.</p>
-            </audio>
-            {a.production?.aiDisclosed && (
-              <p class="audio-disclosure">Audio generated with AI from the written article.</p>
-            )}
-          </div>
-        ))}
-      </div>
+      <CompanionAudioBanner
+        audio={article.data.audio}
+        slug={article.data.slug}
+        articleTitle={article.data.title}
+      />
     )}
 
     <div class="article-content" data-region="body">

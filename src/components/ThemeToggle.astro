@@ -1,4 +1,4 @@
-﻿---
+---
 // src/components/ThemeToggle.astro
 ---
 <button
@@ -29,7 +29,8 @@
 <script>
   function initThemeToggle() {
     const toggle = document.getElementById('theme-toggle');
-    if (!toggle) return;
+    if (!toggle || toggle.dataset.initialized === 'true') return;
+    toggle.dataset.initialized = 'true';
 
     function getResolvedTheme(): 'light' | 'dark' {
       const docTheme = document.documentElement.getAttribute('data-theme');

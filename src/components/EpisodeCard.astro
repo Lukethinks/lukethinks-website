@@ -1,0 +1,405 @@
+---
+import AudioPlayer from './AudioPlayer.astro';
+
+interface Props {
+  episode: {
+    data: {
+      title: string;
+      slug: string;
+      summary: string;
+      published: Date | string;
+      episode: number;
+      season?: number;
+      tags?: string[];
+      confidence?: string;
+      audio: {
+        src: string;
+        bytes: number;
+        durationSeconds: number;
+        mimeType?: string;
+      };
+      production?: {
+        source?: string;
+        aiDisclosed?: boolean;
+      };
+    };
+  };
+  takeaways?: string[];
+  companionArticle?: { title: string; href: string };
+}
+
+const { episode, takeaways = [], companionArticle } = Astro.props;
+const { data } = episode;
+
+const durationMinutes = Math.ceil(data.audio.durationSeconds / 60);
+const publishedDate = new Date(data.published);
+const publishedIso = publishedDate.toISOString().slice(0, 10);
+const pubDateHuman = publishedDate.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+});
+
+const epNumPadded = String(data.episode).padStart(2, '0');
+const playerTitle = `Play Episode ${data.episode}: ${data.title}`;
+
+const isDebate = data.title.toLowerCase().includes('debate') || data.audio.src.toLowerCase().includes('debate');
+const format = isDebate ? 'debate' : 'briefing';
+const formatLabel = isDebate ? 'Point · Counterpoint' : 'Executive Briefing';
+---
+
+<article
+  class="episode-card"
+  data-slug={data.slug}
+  data-episode={data.episode}
+  data-format={format}
+  data-tags={(data.tags ?? []).join(' ').toLowerCase()}
+  data-title={data.title.toLowerCase()}
+  data-summary={data.summary.toLowerCase()}
+  data-takeaways={takeaways.join(' ').toLowerCase()}
+>
+  <!-- 1:1 Square Artwork / Episode Badge -->
+  <div class="episode-card-art" aria-hidden="true">
+    <div class="art-inner">
+      <span class="art-icon">{isDebate ? '⚖️' : '🎙️'}</span>
+      <span class="art-number">EP {epNumPadded}</span>
+      <span class="art-label">{formatLabel}</span>
+    </div>
+  </div>
+
+  <!-- Main Card Body -->
+  <div class="episode-card-content">
+    <div class="episode-card-header">
+      <span class="episode-badge">Episode {data.episode}</span>
+      <span class="episode-format-badge">{isDebate ? 'Debate' : 'Briefing'}</span>
+      {data.season && <span class="episode-season">Season {data.season}</span>}
+      <time datetime={publishedIso} class="episode-date">{pubDateHuman}</time>
+      <span class="episode-duration">⏱️ {durationMinutes} min</span>
+      {data.confidence && (
+        <span class="confidence-badge" data-confidence={data.confidence}>
+          {data.confidence}
+        </span>
+      )}
+    </div>
+
+    <h3 class="episode-title">
+      <a href={`/podcast/${data.slug}`}>{data.title}</a>
+    </h3>
+
+    <p class="episode-summary">{data.summary}</p>
+
+    {takeaways.length > 0 && (
+      <div class="episode-takeaways">
+        <h4 class="takeaways-heading">Key Takeaways & Discussion:</h4>
+        <ul class="takeaways-list">
+          {takeaways.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <!-- Interactive Player with Speed Controls -->
+    <div class="episode-player-section">
+      <AudioPlayer
+        src={data.audio.src}
+        title={playerTitle}
+        id={`card-${data.slug}`}
+        durationSeconds={data.audio.durationSeconds}
+        variant="episode"
+        mimeType={data.audio.mimeType}
+        headingLevel="h4"
+        aiDisclosed={data.production?.aiDisclosed}
+        disclosureText="AI voices curated, directed and fact-checked by Luke."
+      />
+    </div>
+
+    <div class="episode-card-footer">
+      <div class="footer-links-group">
+        <a href={`/podcast/${data.slug}`} class="episode-notes-link">
+          View Episode & Show Notes →
+        </a>
+        {companionArticle && (
+          <a href={companionArticle.href} class="companion-article-link">
+            📖 Read Full Essay: {companionArticle.title}
+          </a>
+        )}
+      </div>
+
+      <div class="footer-badges">
+        {data.production?.aiDisclosed && (
+          <span class="ai-disclosure-badge">AI Disclosed</span>
+        )}
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  .episode-card {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    background: var(--surface-card);
+    border-radius: 20px;
+    padding: 2.25rem;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 20px var(--shadow-light);
+    transition: all 0.3s ease;
+    align-items: flex-start;
+  }
+
+  .episode-card:hover {
+    box-shadow: 0 8px 30px var(--shadow-medium);
+    border-color: var(--accent-amber);
+    transform: translateY(-2px);
+  }
+
+  /* 1:1 Square Artwork Badge (Construction Disruption inspired) */
+  .episode-card-art {
+    flex: 0 0 170px;
+    width: 170px;
+    height: 170px;
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, var(--primary-brown) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(234, 88, 12, 0.4);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    position: sticky;
+    top: 6rem;
+  }
+
+  .art-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    color: #ffffff;
+  }
+
+  .art-icon {
+    font-size: 2.25rem;
+    margin-bottom: 0.35rem;
+    line-height: 1;
+  }
+
+  .art-number {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #fef7f0;
+  }
+
+  .art-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--light-amber);
+    font-weight: 700;
+    margin-top: 0.25rem;
+  }
+
+  /* Main Content Area */
+  .episode-card-content {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .episode-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .episode-badge {
+    background: rgba(146, 64, 14, 0.12);
+    color: var(--primary-brown);
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.8rem;
+  }
+
+  .episode-format-badge {
+    background: rgba(234, 88, 12, 0.12);
+    color: var(--accent-amber);
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-size: 0.75rem;
+  }
+
+  .episode-season {
+    color: var(--light-text);
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  .episode-date,
+  .episode-duration {
+    color: var(--light-text);
+    font-weight: 500;
+  }
+
+  .episode-title {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .episode-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .episode-title a:hover {
+    color: var(--accent-amber);
+  }
+
+  .episode-summary {
+    color: var(--light-text);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Takeaways Bullets */
+  .episode-takeaways {
+    background: rgba(146, 64, 14, 0.04);
+    border-left: 3px solid var(--accent-amber);
+    border-radius: 0 10px 10px 0;
+    padding: 0.85rem 1.15rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .takeaways-heading {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .takeaways-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--medium-text);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .takeaways-list li {
+    margin-bottom: 0.35rem;
+  }
+
+  .takeaways-list li:last-child {
+    margin-bottom: 0;
+  }
+
+  .episode-player-section {
+    margin-bottom: 1.25rem;
+  }
+
+  .episode-player-section :global(.audio-player-container) {
+    margin: 0;
+    padding: 1.15rem 1.35rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+  }
+
+  .episode-player-section :global(.audio-title) {
+    font-size: 1.05rem;
+  }
+
+  .episode-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1.15rem;
+    border-top: 1px solid var(--border-light);
+    font-size: 0.9rem;
+  }
+
+  .footer-links-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .episode-notes-link {
+    color: var(--accent-amber);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .episode-notes-link:hover {
+    color: var(--primary-brown);
+    text-decoration: underline;
+  }
+
+  .companion-article-link {
+    color: var(--primary-brown);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .companion-article-link:hover {
+    color: var(--accent-amber);
+    text-decoration: underline;
+  }
+
+  .ai-disclosure-badge {
+    font-size: 0.75rem;
+    color: var(--light-text);
+    background: rgba(148, 163, 184, 0.15);
+    padding: 0.25rem 0.65rem;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .episode-card {
+      flex-direction: column;
+      padding: 1.5rem;
+      gap: 1.25rem;
+    }
+
+    .episode-card-art {
+      width: 100%;
+      height: 120px;
+      position: static;
+      flex: 0 0 auto;
+    }
+
+    .art-inner {
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    .art-icon {
+      font-size: 1.75rem;
+      margin-bottom: 0;
+    }
+  }
+</style>
