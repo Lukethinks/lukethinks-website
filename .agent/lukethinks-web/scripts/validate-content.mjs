@@ -15,6 +15,7 @@
 
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 
 // Resolve `yaml` from the project root so the script can live anywhere.
@@ -315,6 +316,63 @@ for (const file of htmlFiles) {
   }
 }
 
+// ---------------------------------------------------------------- secrets
+
+// Known SHA-256 digests of previously rotated secrets.
+// Storing one-way digests avoids embedding plaintext secret values in tracked repository files.
+const KNOWN_ROTATED_SECRET_HASHES = new Set([
+  '524eb3a39a404d0c763ed10decb3da1a286b02009d25a178bdd724686a18b5b2', // rotated KV_REST_API_TOKEN
+  '53b35ee8d9efab9ddbc517e8d9ec12840a0f79834f6a93343406cb59da604a72', // rotated REACTIONS_COOKIE_SECRET
+]);
+
+const SUSPICIOUS_SECRET_PATTERNS = [
+  { name: 'Upstash REST Token', regex: /gQAAAA[A-Za-z0-9_-]{20,}/ },
+  { name: 'Hardcoded KV_REST_API_TOKEN', regex: /KV_REST_API_TOKEN\s*[:=]\s*["'][A-Za-z0-9_-]{20,}["']/ },
+  { name: 'Hardcoded REACTIONS_COOKIE_SECRET', regex: /REACTIONS_COOKIE_SECRET\s*[:=]\s*["'][A-Za-z0-9_-]{20,}["']/ },
+  { name: 'Default secret in Astro envField', regex: /access\s*:\s*['"]secret['"][\s\S]*?default\s*:\s*['"][^'"]+['"]/ },
+];
+
+const secretScanRoots = ['content', 'src', 'api', 'scripts', '.agent', 'agent'];
+const filesToScanForSecrets = new Set([
+  'astro.config.mjs',
+  'ORIGINAL_REQUEST.md',
+  'PROJECT.md',
+  'AGENTS.md',
+  'README.md',
+  'vercel.json',
+  'package.json',
+]);
+
+for (const dir of secretScanRoots) {
+  if (existsSync(dir)) {
+    const files = await walk(dir, ['.ts', '.js', '.mjs', '.astro', '.md', '.json', '.css']);
+    for (const f of files) filesToScanForSecrets.add(f);
+  }
+}
+
+let scannedSecretFilesCount = 0;
+for (const file of filesToScanForSecrets) {
+  if (!existsSync(file)) continue;
+  scannedSecretFilesCount++;
+  const content = await readFile(file, 'utf8');
+
+  // Check candidate tokens against known rotated secret hashes
+  for (const match of content.matchAll(/[A-Za-z0-9_-]{32,}/g)) {
+    const digest = createHash('sha256').update(match[0]).digest('hex');
+    if (KNOWN_ROTATED_SECRET_HASHES.has(digest)) {
+      err(file, 'Leaked secret detected: file contains rotated secret value.');
+      break;
+    }
+  }
+
+  // Check suspicious credential patterns
+  for (const { name, regex } of SUSPICIOUS_SECRET_PATTERNS) {
+    if (regex.test(content)) {
+      err(file, `Secret leak detected: file matches ${name} pattern.`);
+    }
+  }
+}
+
 // ---------------------------------------------------------------- report
 
 const errors = problems.filter((p) => p.level === 'error');
@@ -331,7 +389,7 @@ for (const [file, list] of byFile) {
 }
 
 console.log(
-  `\nChecked ${contentFiles.length} content file(s) and ${htmlFiles.length} HTML file(s).` +
+  `\nChecked ${contentFiles.length} content file(s), ${htmlFiles.length} HTML file(s), and scanned ${scannedSecretFilesCount} file(s) for secrets.` +
     `\n${errors.length} error(s), ${warns.length} warning(s).`
 );
 

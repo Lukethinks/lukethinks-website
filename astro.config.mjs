@@ -13,7 +13,6 @@ export default defineConfig({
         context: 'server',
         access: 'secret',
         optional: true,
-        default: '1dcff79446fea86ac745e0c22449ab76da33d073884fcae78402e2123b572af8',
       }),
     },
   },

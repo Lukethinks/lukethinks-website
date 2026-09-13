@@ -75,10 +75,10 @@ This is a single self-contained feature; keep it small and focused.
 
 ## Environment Configuration
 The Vercel project uses the following Upstash/KV variables:
-- `KV_REST_API_URL="https://super-terrier-152269.upstash.io"`
-- `KV_REST_API_TOKEN="xxx"`
+- `KV_REST_API_URL` — set in Vercel
+- `KV_REST_API_TOKEN` — set in Vercel
 - Cookie signing secret set in .env and to be set in Vercel:
-  `REACTIONS_COOKIE_SECRET="xxx"`
+  `REACTIONS_COOKIE_SECRET` — set in Vercel
 
 Node and npm are located at: `C:\Users\lvanden\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v24.19.0-win-x64`
 Run commands using `$env:PATH = "C:\Users\lvanden\AppData\Local\Microsoft\WinGet\Packages\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\node-v24.19.0-win-x64;$env:PATH"` and `npm.cmd`.

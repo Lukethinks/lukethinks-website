@@ -15,7 +15,8 @@ export interface ReactionVotes {
   [slug: string]: string; // slug -> kind
 }
 
-function signPayload(payload: string, secret: string): string {
+function signPayload(payload: string, secret?: string): string {
+  if (!secret) return payload;
   const signature = crypto.createHmac('sha256', secret).update(payload).digest('base64url');
   return `${payload}.${signature}`;
 }
@@ -24,7 +25,7 @@ function signPayload(payload: string, secret: string): string {
  * Sign reaction votes into a tamper-evident string,
  * strictly capped below 2KB (2048 bytes).
  */
-export function serializeReactionsCookie(votes: ReactionVotes, secret: string, maxBytes: number = 1900): string {
+export function serializeReactionsCookie(votes: ReactionVotes, secret?: string, maxBytes: number = 1900): string {
   const copy: ReactionVotes = { ...votes };
   const keys = Object.keys(copy);
 
@@ -47,9 +48,9 @@ export function serializeReactionsCookie(votes: ReactionVotes, secret: string, m
  * Verify and parse a signed reactions cookie.
  * Returns empty object if cookie is missing, tampered with, or invalid.
  */
-export function getVotesFromCookie(cookieValue: string | undefined | null, secret: string): ReactionVotes {
+export function getVotesFromCookie(cookieValue: string | undefined | null, secret?: string): ReactionVotes {
   const empty: ReactionVotes = Object.create(null);
-  if (!cookieValue) return empty;
+  if (!cookieValue || !secret) return empty;
 
   let val = cookieValue.trim();
   if (val.startsWith('"') && val.endsWith('"') && val.length >= 2) {
@@ -93,15 +94,15 @@ export function getVotesFromCookie(cookieValue: string | undefined | null, secre
  * Hash an IP address with HMAC-SHA256.
  * The raw IP is never persisted or logged.
  */
-export function hashIp(ip: string, secret: string): string {
-  return crypto.createHmac('sha256', secret).update(ip).digest('hex');
+export function hashIp(ip: string, secret?: string): string {
+  return crypto.createHmac('sha256', secret || 'reactions-salt').update(ip).digest('hex');
 }
 
 /**
  * Rate limit requests by hashed IP address using atomic Redis INCR.
  * Allows up to 15 reaction submissions per 1-minute window.
  */
-export async function checkRateLimit(request: Request, secret: string, limit: number = 15): Promise<boolean> {
+export async function checkRateLimit(request: Request, secret?: string, limit: number = 15): Promise<boolean> {
   const forwarded = request.headers.get('x-forwarded-for');
   const ip = (forwarded ? forwarded.split(',')[0].trim() : null)
     || request.headers.get('x-real-ip')
