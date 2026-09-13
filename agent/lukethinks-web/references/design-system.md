@@ -21,6 +21,10 @@ Declared once, in `src/styles/site.css`, under `:root`. Never redeclare in a pag
 | `--border-light` | `rgba(226,232,240,0.5)` | Card and section borders |
 | `--shadow-light` | `rgba(0,0,0,0.1)` | Resting shadow |
 | `--shadow-medium` | `rgba(0,0,0,0.15)` | Hover shadow |
+| `--surface-header` | `rgba(255,255,255,0.95)` | Sticky header surface |
+| `--surface-card` | `linear-gradient(...)` | Card & content panels background |
+| `--surface-card-translucent` | `rgba(255,255,255,0.85)` | Secondary/translucent card surfaces |
+| `--surface-footer` | `#0f172a` | Footer background |
 
 Signature gradients: page background `linear-gradient(135deg, var(--cream), var(--light-cream))`; active/primary surfaces `linear-gradient(135deg, var(--primary-brown), var(--accent-amber))`.
 
@@ -74,4 +78,6 @@ Fixed public paths: `/assets/` static assets, `/assets/og/` generated OG images,
 
 ## Dark mode
 
-Not implemented, and not a priority. If added, it must be done by redefining tokens under `@media (prefers-color-scheme: dark)` in one place — which is only possible if the no-inline-styles rule has been honoured. Another reason to honour it.
+Implemented via single-place token redefinition in `src/styles/site.css` (ADR-0016) under `@media (prefers-color-scheme: dark)` (system preference default) and `:root[data-theme="dark"]` (explicit override).
+The header contains an accessible `<ThemeToggle />` component. An anti-FOUC inline script in `BaseLayout.astro` applies any stored user preference from `localStorage` synchronously before first paint.
+Surface tokens `--surface-header`, `--surface-card`, `--surface-card-translucent`, and `--surface-footer` map container and card backgrounds across themes.

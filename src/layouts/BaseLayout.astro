@@ -1,6 +1,7 @@
 ---
 import '../styles/site.css';
 import site from '../../content/site.json';
+import ThemeToggle from '../components/ThemeToggle.astro';
 
 interface Props {
   title?: string;
@@ -47,6 +48,16 @@ const currentYear = 2026; // ADR-0010: idempotent build, fixed copyright year
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      (function () {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark' || theme === 'light') {
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      })();
+    </script>
+
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
@@ -87,26 +98,29 @@ const currentYear = 2026; // ADR-0010: idempotent build, fixed copyright year
             <span class="logo-sub">{site.tagline}</span>
           </a>
         </div>
-        <nav aria-label="Primary">
-          <ul>
-            {site.nav.map((item) => {
-              const isCurrent = item.href === '/'
-                ? currentPath === '/'
-                : currentPath === item.href || currentPath.startsWith(`${item.href}/`);
-              return (
-                <li>
-                  <a
-                    href={item.href}
-                    class:list={[{ 'is-current': isCurrent }]}
-                    aria-current={isCurrent ? 'page' : undefined}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        <div class="header-actions">
+          <nav aria-label="Primary">
+            <ul>
+              {site.nav.map((item) => {
+                const isCurrent = item.href === '/'
+                  ? currentPath === '/'
+                  : currentPath === item.href || currentPath.startsWith(`${item.href}/`);
+                return (
+                  <li>
+                    <a
+                      href={item.href}
+                      class:list={[{ 'is-current': isCurrent }]}
+                      aria-current={isCurrent ? 'page' : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
 

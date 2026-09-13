@@ -16,6 +16,12 @@ Any agent that makes a structural choice adds an entry in the same change. Any a
 
 ---
 
+## ADR-0016 — Dark mode and theme toggle via single-place token redefinition
+**Date:** 2026-09-13 · **Status:** Accepted
+**Context:** The site lacked dark mode support. Readers in low-light environments need a comfortable reading experience, and modern web guidelines recommend supporting both system preferences and explicit manual overrides without layout flashes (FOUC).
+**Decision:** Dark mode is implemented by redefining design tokens in one place (`src/styles/site.css`) under `@media (prefers-color-scheme: dark)` (system preference) and `:root[data-theme="dark"]` (explicit override). Explicit surface tokens (`--surface-header`, `--surface-card`, `--surface-card-translucent`, `--surface-footer`) map card and header surfaces to dark slate values. An accessible `ThemeToggle.astro` component in the header lets users switch modes, and an inline script in `<head>` applies any saved preference synchronously before paint to prevent FOUC.
+**Consequences:** Theme switching is instantaneous and zero-flicker; individual page templates remain purely semantic without inline theme checks; class register constraints (ADR-0013) remain fully compliant.
+
 ## ADR-0015 — Counters stored in Upstash Redis over HTTP
 **Date:** 2026-09-12 · **Status:** Accepted
 **Context:** Article reader reactions require persistent atomic counters without adding database overhead or client bundle weight.
