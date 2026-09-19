@@ -16,6 +16,12 @@ Any agent that makes a structural choice adds an entry in the same change. Any a
 
 ---
 
+## ADR-0018 — iPod-like scroll interaction for podcast and audio browsing
+**Date:** 2026-09-19 · **Status:** Accepted
+**Context:** Luke requested an iPod-style tactile scroll/wheel interface for browsing through podcasts, audio stacks, and series of audio items in chronological order.
+**Decision:** Implement an iPod classic-inspired scroll carousel/rotator interaction for browsing audio cards and episodes. This will feature rotary/scroll navigation, tactile haptic/audio cues, active track previewing, and seamless docking to playback, while preserving keyboard accessibility and fallback grid views.
+**Consequences:** A dedicated, polished listening interface that distinguishes Luke Thinks audio; encapsulated in reusable components conforming to the class register.
+
 ## ADR-0017 — Podcast catalog architecture and foundational subscription layer
 **Date:** 2026-09-13 · **Status:** Accepted
 **Context:** Podcast audio was previously rendered as isolated raw HTML audio elements without speed controls or catalog filtering. In addition, the site needed a foundational architecture for commerciality and subscriber briefings.

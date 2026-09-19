@@ -49,8 +49,8 @@ Every feature from the survey phase is enumerated here and assigned to a milesto
 |---|------|-------|-------------|--------|
 | M1 | Step 1: Scaffold Astro | Astro v5 minimal, TS strict, `@astrojs/vercel`, scripts copied to `scripts/`, `package.json` scripts configured, install dependencies, commit, `npm run validate` | None | DONE |
 | M2 | Step 2: Content Schema & Core Collections | Place `src/content.config.ts`, `content/site.json`, `content/podcast.json`, `content/taxonomy.json`, commit, `npm run validate` | M1 | DONE |
-| M3 | Step 3: Design System & BaseLayout | Build `src/styles/site.css` with 13 tokens and component styles, build `src/layouts/BaseLayout.astro`, commit, `npm run validate` | M2 | PLANNED |
-| M4 | Step 4: Port One Reference Article & Stop | Move legacy HTML to `legacy/`, port `asc-323-equity-method.md`, create `src/pages/articles/[slug].astro`, configure `vercel.json` 301s, commit, `npm run validate`, generate Luke review handoff | M3 | PLANNED |
+| M3 | Step 3: Design System & BaseLayout | Build `src/styles/site.css` with 13 tokens and component styles, build `src/layouts/BaseLayout.astro`, commit, `npm run validate` | M2 | DONE |
+| M4 | Step 4: Port One Reference Article & Stop | Move legacy HTML to `legacy/`, port `asc-323-equity-method.md`, create `src/pages/articles/[slug].astro`, configure `vercel.json` 301s, commit, `npm run validate`, generate Luke review handoff | M3 | DONE |
 
 ## Interface Contracts
 

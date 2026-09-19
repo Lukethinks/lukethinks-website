@@ -106,3 +106,38 @@ When done:
 - Provide health check route /api/health against Redis
 - Hit /api/health against the live Vercel deployment if reachable or verify it locally with live Upstash Redis
 - Report the exact article URL to check by hand.
+
+## 2026-09-19T16:28:35Z
+
+# Teamwork Project Prompt — Draft
+
+> Status: Launched
+> Goal: Craft prompt → get user approval → delegate to teamwork_preview
+> Requested team: Program Manager, Strategist, Website Developer
+
+Implement an iPod classic-inspired scroll carousel/rotator interaction for browsing audio cards and episodes on lukethinks.nl, per ADR-0018.
+
+Working directory: c:/Users/lvanden/OneDrive - Stryker/Documents/1. Trauma & Extremities - Personal Luke vdTop/4. LukeThinks/lukethinks-website
+Integrity mode: demo
+
+## Requirements
+
+### R1. iPod-style Scroll Carousel Component
+Build a reusable Astro component that presents audio cards in a scrollable, iPod-style carousel. The team can decide the specific visual implementation (e.g., true 3D vs modern 2D). Tactile feedback should be purely visual (focus states and animations only).
+
+### R2. Keyboard Accessibility & Fallbacks
+The interaction must support keyboard navigation and include a fallback grid view. It must dock smoothly to the existing `AudioPlayer.astro`.
+
+### R3. Architectural Compliance
+The component must use the existing design system tokens and conform to the class register constraint.
+
+## Acceptance Criteria
+
+### Component Functionality
+- [ ] The carousel can be navigated using keyboard controls.
+- [ ] Active items display distinct visual focus states/animations.
+- [ ] The fallback grid view renders correctly when the carousel is toggled or unavailable.
+
+### Architectural Integrity
+- [ ] `npm run validate` passes without any new class register errors.
+- [ ] The implementation introduces no inline page-level `<style>` tags (component-scoped is fine).

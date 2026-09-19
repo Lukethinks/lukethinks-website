@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EpisodeCard from '../components/EpisodeCard.astro';
+import IpodCarousel, { type CarouselItem } from '../components/IpodCarousel.astro';
 
 const episodes = await getCollection('episodes', ({ data }) => data.status === 'published');
 const sortedEpisodes = episodes.sort((a, b) => b.data.episode - a.data.episode);
@@ -31,6 +32,27 @@ const episodeMetaMap: Record<string, { takeaways: string[]; companionArticle?: {
     },
   },
 };
+
+const carouselItems: CarouselItem[] = sortedEpisodes.map((ep) => {
+  const meta = episodeMetaMap[ep.data.slug] ?? { takeaways: [] };
+  const isDebate = ep.data.title.toLowerCase().includes('debate') || ep.data.audio.src.toLowerCase().includes('debate');
+  return {
+    id: ep.id,
+    slug: ep.data.slug,
+    title: ep.data.title,
+    summary: ep.data.summary,
+    published: ep.data.published,
+    episodeNumber: ep.data.episode,
+    season: ep.data.season,
+    format: isDebate ? 'debate' : 'briefing',
+    tags: ep.data.tags,
+    confidence: ep.data.confidence,
+    audio: ep.data.audio,
+    takeaways: meta.takeaways,
+    companionArticle: meta.companionArticle,
+    production: ep.data.production,
+  };
+});
 
 const filterCategories = [
   { id: 'all', label: 'All Episodes' },
@@ -89,6 +111,14 @@ const filterCategories = [
       </div>
     </div>
   </section>
+
+  <!-- iPod Classic Cover Flow Showcase & Rotator -->
+  <IpodCarousel
+    items={carouselItems}
+    title="Featured Audio & Episodes"
+    subtitle="Browse executive briefings and debates with iPod-style Cover Flow navigation."
+    defaultView="carousel"
+  />
 
   <!-- Filter & Search Controls Bar -->
   <section class="controls-bar" aria-label="Podcast filter and search">

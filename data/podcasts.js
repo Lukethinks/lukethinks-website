@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ============================================================================
  * LUKE THINKS - PODCASTS & AUDIO LIBRARY DATA
  * ============================================================================
@@ -51,7 +51,7 @@ window.LUKE_THINKS_PODCASTS = [
     "chronologicalDate": "2025-10-12",
     "duration": "4:15",
     "durationSeconds": 255,
-    "audioSrc": "/audio/ai-thinking-frameworks-narration.mp3",
+    "audioSrc": "https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/ai-thinking-frameworks-narration.mp3",
     "hasLocalAudio": true,
     "thumbnail": "/android-chrome-192x192.png",
     "spotifyUrl": "https://open.spotify.com/search/Luke%20Thinks%20AI%20Partnership",
@@ -87,7 +87,7 @@ window.LUKE_THINKS_PODCASTS = [
     "chronologicalDate": "2025-10-26",
     "duration": "15:20",
     "durationSeconds": 920,
-    "audioSrc": "/audio/compress-ai-thinking-frameworks-narration_debate.mp3",
+    "audioSrc": "https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/compress-ai-thinking-frameworks-narration_debate.mp3",
     "hasLocalAudio": true,
     "thumbnail": "/android-chrome-192x192.png",
     "spotifyUrl": "https://open.spotify.com/search/Luke%20Thinks%20AI%20Debate",
