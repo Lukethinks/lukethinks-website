@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EpisodeCard from '../components/EpisodeCard.astro';
-import IpodCarousel, { type CarouselItem } from '../components/IpodCarousel.astro';
+import AudioCarousel, { type CarouselItem } from '../components/AudioCarousel.astro';
 
 const episodes = await getCollection('episodes', ({ data }) => data.status === 'published');
 const sortedEpisodes = episodes.sort((a, b) => b.data.episode - a.data.episode);
@@ -112,11 +112,11 @@ const filterCategories = [
     </div>
   </section>
 
-  <!-- iPod Classic Cover Flow Showcase & Rotator -->
-  <IpodCarousel
+  <!-- Audio Episodes Showcase Carousel -->
+  <AudioCarousel
     items={carouselItems}
     title="Featured Audio & Episodes"
-    subtitle="Browse executive briefings and debates with iPod-style Cover Flow navigation."
+    subtitle="Browse executive briefings and point-counterpoint debates."
     defaultView="carousel"
   />
 

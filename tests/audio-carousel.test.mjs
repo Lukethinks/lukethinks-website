@@ -1,5 +1,5 @@
 /**
- * E2E Test Suite: iPod Classic-Inspired Scroll Carousel (ADR-0018)
+ * E2E Test Suite: Audio Carousel (ADR-0019)
  * Framework: Node 24 Native Test Runner (node:test, node:assert/strict)
  *
  * Test Architecture: 4-Tier Opaque-Box Methodology
@@ -17,7 +17,7 @@ import { parse as parseYaml } from 'yaml';
 
 // --- Paths & Fixtures ---
 const ROOT_DIR = process.cwd();
-const CAROUSEL_COMPONENT_PATH = path.join(ROOT_DIR, 'src', 'components', 'IpodCarousel.astro');
+const CAROUSEL_COMPONENT_PATH = path.join(ROOT_DIR, 'src', 'components', 'AudioCarousel.astro');
 const PODCAST_PAGE_PATH = path.join(ROOT_DIR, 'src', 'pages', 'podcast.astro');
 const AUDIO_PLAYER_PATH = path.join(ROOT_DIR, 'src', 'components', 'AudioPlayer.astro');
 const SITE_CSS_PATH = path.join(ROOT_DIR, 'src', 'styles', 'site.css');
@@ -159,20 +159,20 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
       assert.equal(smCustom.viewMode, 'grid', 'Custom defaultView preserved');
     });
 
-    it('F01.3: Container specification mandates .ipod-carousel-container and data-component', (t) => {
+    it('F01.3: Container specification mandates .audio-carousel-container and data-component', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
-      assert.match(src, /ipod-carousel-container|ipod-carousel-section/, 'Stage container class present');
-      assert.match(src, /data-component=["']ipod-carousel["']/, 'data-component attribute present');
+      assert.match(src, /audio-carousel-container|audio-carousel-section/, 'Stage container class present');
+      assert.match(src, /data-component=["']audio-carousel["']/, 'data-component attribute present');
     });
 
     it('F01.4: Container sets data-initial-index attribute matching prop', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /data-initial-index/, 'data-initial-index attribute present in template');
@@ -181,19 +181,19 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F01.5: Track scroller renders with id="carousel-track" or class .carousel-track', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
-      assert.match(src, /carousel-track|ipod-carousel-track/, 'Carousel track class present');
+      assert.match(src, /carousel-track|audio-carousel-track/, 'Carousel track class present');
     });
 
-    it('F01.6: Component supports parameterized id prop defaulting to ipod-carousel and prefixes internal element IDs', (t) => {
+    it('F01.6: Component supports parameterized id prop defaulting to audio-carousel and prefixes internal element IDs', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
-      assert.match(src, /id\s*=\s*['"]ipod-carousel['"]/, 'Default id prop is ipod-carousel');
+      assert.match(src, /id\s*=\s*['"]audio-carousel['"]/, 'Default id prop is audio-carousel');
       assert.match(src, /id=\{`?\$\{id\}-track`?\}|id=\{trackId\}/, 'Track id is parameterized with component id');
       assert.match(src, /id=\{`?\$\{id\}-announcer`?\}|id=\{announcerId\}/, 'Live announcer id is parameterized');
       assert.match(src, /id=\{`?\$\{id\}-docked-player`?\}|id=\{dockedPlayerId\}/, 'Docked player id is parameterized');
@@ -207,7 +207,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F02.1: Perspective viewport stage defines 1000px focal depth', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /perspective:\s*(1000px|800px|1200px)/, 'Perspective viewport defined');
@@ -242,7 +242,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F02.5: Stage enforces transform-style: preserve-3d for 3D stacking', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /transform-style:\s*preserve-3d/, 'preserve-3d present in component styles');
@@ -254,7 +254,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F03.1: Artwork badge enforces 1:1 square aspect ratio', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /aspect-ratio:\s*1\s*\/\s*1/, '1:1 aspect-ratio declared on artwork badge');
@@ -263,7 +263,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F03.2: Artwork badge renders formatted episode number (EP 0X)', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /EP\s*\d+|episodeNumber|data\.episode/, 'Episode number badge rendering in template');
@@ -272,7 +272,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F03.3: Artwork badge renders format pill (Briefing / Debate)', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /format|audio-variant-label/, 'Format label pill rendering in artwork');
@@ -281,7 +281,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F03.4: Artwork badge uses site design tokens for gradient background', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /var\(--primary-brown\)|var\(--accent-amber\)|var\(--surface-card\)/, 'Site tokens used for artwork gradient');
@@ -290,7 +290,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F03.5: Acrylic floor reflection or sheen gradient is declared', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /-webkit-box-reflect|linear-gradient\(transparent|sheen/, 'Acrylic reflection or gradient sheen declared');
@@ -308,7 +308,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F04.2: Active card elevation uses var(--shadow-medium) and transform transition', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /var\(--shadow-medium\)/, 'Elevated shadow token used');
@@ -318,7 +318,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F04.3: Active border highlight uses var(--accent-amber)', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /border-color:\s*var\(--accent-amber\)|outline:\s*[^;]*var\(--accent-amber\)/, 'Amber border or outline declared for active state');
@@ -327,7 +327,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F04.4: STRICT: Zero audio sound effects or clicks on slide transition', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.doesNotMatch(src, /new\s+Audio\(/, 'No synthetic sound effect Audio constructor');
@@ -337,7 +337,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F04.5: STRICT: Zero hardware vibration calls (navigator.vibrate prohibited)', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.doesNotMatch(src, /navigator\.vibrate/, 'navigator.vibrate is strictly prohibited');
@@ -349,7 +349,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F05.1: Track defines scroll-snap-type: x mandatory', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /scroll-snap-type:\s*x\s+mandatory/, 'scroll-snap-type: x mandatory declared');
@@ -358,7 +358,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F05.2: Slide cards define scroll-snap-align: center', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /scroll-snap-align:\s*center/, 'scroll-snap-align: center declared');
@@ -367,7 +367,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F05.3: Track scroller defines scroll-behavior: smooth', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /scroll-behavior:\s*smooth/, 'scroll-behavior: smooth declared');
@@ -376,7 +376,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F05.4: Track scrollbars are hidden across Firefox and WebKit', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /scrollbar-width:\s*none/, 'Firefox scrollbar-width: none declared');
@@ -386,7 +386,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F05.5: Track scroller defines overflow-x: auto and overflow-y: hidden', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /overflow-x:\s*auto/, 'overflow-x: auto declared on track');
@@ -398,7 +398,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F06.1: Stage root defines role="region"', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /role=["']region["']/, 'role="region" declared on carousel stage');
@@ -407,7 +407,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F06.2: Stage defines aria-roledescription="carousel"', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /aria-roledescription=["']carousel["']/, 'aria-roledescription="carousel" declared');
@@ -416,7 +416,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F06.3: Stage defines accessible aria-label', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /aria-label=["'][^"']+["']/, 'Accessible aria-label present on stage');
@@ -425,7 +425,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F06.4: Live region defines aria-live="polite"', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /aria-live=["']polite["']/, 'aria-live="polite" live region declared');
@@ -434,7 +434,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F06.5: Slides define role="group" and aria-roledescription="slide"', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /role=["']group["']/, 'role="group" declared on slide');
@@ -486,7 +486,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F07.6: Inactive slides and interactive children have tabindex="-1" and inert in carousel mode; relaxed in grid mode', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /inert=\{isInert|\.setAttribute\(['"]inert['"]/, 'Inert attribute applied to inactive slides in carousel mode');
@@ -559,7 +559,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F09.1: Previous stepper button declares accessible aria-label', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /aria-label=["'][^"']*Previous[^"']*["']/i, 'Previous episode button has accessible label');
@@ -568,7 +568,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F09.2: Next stepper button declares accessible aria-label', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /aria-label=["'][^"']*Next[^"']*["']/i, 'Next episode button has accessible label');
@@ -577,7 +577,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F09.3: Stepper buttons bind to track via aria-controls', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /aria-controls=(?:["'][^"']*carousel-track[^"']*["']|\{`?\$\{[^}]*id\}[^`}]*track`?\}|\{trackId\}|["'][^"']*track["'])/, 'Stepper buttons have aria-controls targeting track');
@@ -605,7 +605,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F10.1: Toolbar container declares role="toolbar" or view toggle group', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /role=["']toolbar["']|view-toggle|view-btn/, 'Toolbar structure present');
@@ -614,7 +614,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F10.2: Toggle buttons exist for Cover Flow / Carousel and Grid View', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /data-view=["']carousel["']|Cover Flow|Carousel/, 'Carousel view toggle option present');
@@ -624,7 +624,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F10.3: Buttons expose aria-pressed attribute reflecting active view', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /aria-pressed/, 'aria-pressed present on view mode toggle');
@@ -650,7 +650,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F11.1: In .is-grid-view, track scroller switches to display: grid', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /is-grid-view[^}]*display:\s*grid|\.is-grid-view[\s\S]*?display:\s*grid/, 'display: grid declared for grid view');
@@ -659,7 +659,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F11.2: Grid view uses responsive columns (repeat(auto-fit/fill, minmax(...)))', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /grid-template-columns:\s*repeat\(auto-(fit|fill),\s*minmax\(/, 'Responsive minmax grid columns declared');
@@ -668,7 +668,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F11.3: Grid view suppresses 3D card transforms', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /is-grid-view[^}]*transform:\s*none|\.is-grid-view[\s\S]*?transform:\s*none/, '3D transform reset in grid mode');
@@ -677,7 +677,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F11.4: Grid view disables horizontal scroll snapping', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /is-grid-view[^}]*scroll-snap-type:\s*none|\.is-grid-view[\s\S]*?scroll-snap-type:\s*none/, 'scroll-snap-type: none declared in grid mode');
@@ -686,7 +686,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F11.5: Grid view defines card gap using standard spacing (1.5rem to 2rem)', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /gap:\s*(1\.5rem|1\.75rem|2rem|1\.25rem)/, 'Standard card gap declared in grid mode');
@@ -698,7 +698,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F12.1: Server-rendered HTML payload contains all episode cards', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /items\.map|\.map\(/, 'Component maps items into server-rendered markup');
@@ -707,7 +707,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F12.2: Every card provides a direct link to /podcast/${slug}', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /\/podcast\/\$\{?item\.slug|\/podcast\/\$\{?ep\.data\.slug|\/podcast\//, 'Direct episode show notes links present');
@@ -716,7 +716,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F12.3: Audio download link or native audio fallback is present in static payload', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /download|downloadable|AudioPlayer/, 'Direct download or AudioPlayer fallback present in payload');
@@ -725,17 +725,17 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F12.4: noscript styles ensure content remains accessible without JS', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /<noscript>|display:\s*(grid|flex)/, 'Progressive fallback styles or noscript tag present');
-      assert.match(src, /\.ipod-carousel-stage\s*\{[^}]*perspective:\s*none/, 'Noscript styles target .ipod-carousel-stage without typo');
+      assert.match(src, /\.audio-carousel-stage\s*\{[^}]*perspective:\s*none/, 'Noscript styles target .audio-carousel-stage without typo');
     });
 
     it('F12.5: Episode title and summary are visible semantic headings and paragraphs', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /<h[34][^>]*>[^<]*title|<h[34]/, 'Semantic heading tag used for card title');
@@ -814,7 +814,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F15.1: Card includes an accessible "▶ Listen" / play action button', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /carousel-play-btn|play-btn|Listen/, 'Play button present in card markup');
@@ -823,7 +823,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F15.2: Play button carries dataset attributes (slug, audioSrc, title, duration)', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /data-slug|data-audio-src|data-title|data-duration/, 'Dataset attributes present on card or play button');
@@ -832,7 +832,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F15.3: Dock action triggers custom event (lukethinks:dock-audio or lukethinks:cue-episode)', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /lukethinks:(dock-audio|cue-episode)/, 'Decoupled custom event dispatched on dock action');
@@ -852,7 +852,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F15.5: Active cued card receives .is-docked or .is-playing modifier class', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /is-docked|is-playing|is-cued/, 'Modifier class applied on active playback dock');
@@ -976,7 +976,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F18.2: State modifiers strictly adhere to .is-* and .has-* standard (ADR-0009)', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       const classes = [...src.matchAll(/class(?:Name|:list)?=["'{]([^"'}]*)/g)]
@@ -997,7 +997,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F18.4: Zero inline style attributes present in component template', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       // Astro templates must not use inline style="..." attributes
@@ -1014,7 +1014,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     it('F18.6: Artwork number uses design token var(--cream) instead of hardcoded hex', (t) => {
       const src = loadComponentSource();
       if (!src) {
-        t.skip('src/components/IpodCarousel.astro not yet authored by M1 implementer');
+        t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
         return;
       }
       assert.match(src, /\.artwork-number\s*\{[^}]*color:\s*var\(--cream\)/, '.artwork-number uses var(--cream)');

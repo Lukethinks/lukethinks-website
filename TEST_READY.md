@@ -1,24 +1,18 @@
-# TEST_READY: iPod Classic Scroll Carousel E2E Test Suite (ADR-0018)
+# TEST_READY: Audio Carousel E2E Test Suite (ADR-0019)
 
 **Project:** lukethinks.nl Rebuild & Feature Extension  
-**Feature:** iPod Classic-Inspired Scroll Carousel / Rotator Interaction (ADR-0018)  
-**Author:** `teamwork_preview_test_writer_e2e_1`  
-**Test Suite Path:** `tests/ipod-carousel.test.mjs`  
+**Feature:** Audio Carousel / Rotator Interaction (ADR-0019)  
+**Test Suite Path:** `tests/audio-carousel.test.mjs`  
 **Date:** 2026-09-19  
-**Status:** READY & PASSING (105 / 105 tests passing, 0 failures, 0 skips)  
+**Status:** READY & PASSING (108 / 108 tests passing, 0 failures, 0 skips)  
 
 ---
 
 ## 1. Executive Summary
 
-A comprehensive, opaque-box, 4-tier End-to-End (E2E) automated test suite has been designed, implemented, and verified in `tests/ipod-carousel.test.mjs` using the **Node 24 native test runner** (`node:test`, `node:assert/strict`).
+A comprehensive, opaque-box, 4-tier End-to-End (E2E) automated test suite has been designed, implemented, and verified in `tests/audio-carousel.test.mjs` using the **Node 24 native test runner** (`node:test`, `node:assert/strict`).
 
-The test suite systematically verifies all requirements set forth in:
-- `ORIGINAL_REQUEST.md` (R1: iPod Scroll Carousel Component, R2: Keyboard Accessibility & Fallbacks, R3: Architectural Compliance)
-- `specs.md` (Features 1–25, edge cases 1–25)
-- `ux_recommendations.md` (2.5D Cover Flow geometry, roving tabindex, visual tactile cues, decoupled audio event bridge)
-- `TEST_INFRA.md` (4-tier test architecture and F01–F18 coverage matrix)
-- `codebase_audit.md` (Class register drift prevention via `scripts/check-register.mjs`, design tokens via `src/styles/site.css`)
+The test suite systematically verifies all requirements: keyboard accessibility, roving tabindex, stepper controls, docked audio player, mutual exclusion playback, and responsive fallback grid view.
 
 ---
 
@@ -30,10 +24,10 @@ $nodeDir = "C:\Users\lvanden\AppData\Local\Microsoft\WinGet\Packages\OpenJS.Node
 $env:PATH = "$nodeDir;$env:PATH"
 
 # Run the test suite
-node --test tests/ipod-carousel.test.mjs
+node --test tests/audio-carousel.test.mjs
 
 # Run with detailed spec reporter
-node --test --test-reporter spec tests/ipod-carousel.test.mjs
+node --test --test-reporter spec tests/audio-carousel.test.mjs
 ```
 
 ---
@@ -70,7 +64,7 @@ node --test --test-reporter spec tests/ipod-carousel.test.mjs
 ## 4. Test Suite Structure & Detailed Assertions
 
 ### Tier 1: Feature Coverage (F01–F18)
-- **F01 Props & Structure**: Enforces `CarouselItem` and `Props` contracts (`items`, `initialIndex`, `defaultView`, `title`, `subtitle`), container classes (`.ipod-carousel-container`, `.is-carousel-view`), `data-component="ipod-carousel"`, and scroller track markup.
+- **F01 Props & Structure**: Enforces `CarouselItem` and `Props` contracts (`items`, `initialIndex`, `defaultView`, `title`, `subtitle`), container classes (`.audio-carousel-container`, `.is-carousel-view`), `data-component="audio-carousel"`, and scroller track markup.
 - **F02 2.5D Perspective**: Perspective viewport (`perspective: 1000px`), centered active card (`rotateY(0deg)`, `scale(1.04)`, `opacity: 1`), left flank receding depth (`rotateY(36deg)`, `scale(0.82)`, `translateZ(-70px)`), right flank (`rotateY(-36deg)`), and `transform-style: preserve-3d`.
 - **F03 1:1 Badges**: 1:1 aspect ratio constraint (`aspect-ratio: 1 / 1`), formatted episode numbers (`EP 0X`), format pills (`Briefing` / `Debate`), site token gradients (`--primary-brown` / `--accent-amber`), and acrylic floor reflection (`-webkit-box-reflect`).
 - **F04 Purely Visual Tactile Feedback**: Amber focus ring (`2px solid var(--accent-amber)`), elevation lift (`var(--shadow-medium)`), border highlight, **STRICT prohibition of synthetic audio click sound effects (0 audio beeps)**, and **STRICT prohibition of hardware vibration (0 `navigator.vibrate` calls)**.

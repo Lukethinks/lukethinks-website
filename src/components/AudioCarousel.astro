@@ -43,10 +43,10 @@ export interface Props {
 }
 
 const {
-  id = 'ipod-carousel',
+  id = 'audio-carousel',
   items = [],
   title = 'Featured Audio & Episodes',
-  subtitle = 'Browse executive briefings and debates with iPod-style Cover Flow navigation.',
+  subtitle = 'Browse executive briefings and debates.',
   initialIndex = 0,
   defaultView = 'carousel',
   showDockedPlayer = true,
@@ -68,9 +68,9 @@ const dockedStationId = `${id}-docked-station`;
 ---
 
 <section
-  class={`ipod-carousel-container ${defaultView === 'grid' ? 'is-grid-view' : 'is-carousel-view'} ${className}`.trim()}
+  class={`audio-carousel-container ${defaultView === 'grid' ? 'is-grid-view' : 'is-carousel-view'} ${className}`.trim()}
   id={containerId}
-  data-component="ipod-carousel"
+  data-component="audio-carousel"
   data-initial-index={safeInitialIndex}
   data-total-items={totalItems}
   role="region"
@@ -103,10 +103,10 @@ const dockedStationId = `${id}-docked-station`;
             class={`view-btn ${defaultView === 'carousel' ? 'is-active' : ''}`}
             data-view="carousel"
             aria-pressed={defaultView === 'carousel' ? 'true' : 'false'}
-            aria-label="Switch to iPod Cover Flow view"
+            aria-label="Switch to carousel view"
           >
             <span class="view-btn-icon" aria-hidden="true">🎛️</span>
-            <span class="view-btn-label">Cover Flow</span>
+            <span class="view-btn-label">Carousel</span>
           </button>
           <button
             type="button"
@@ -130,7 +130,7 @@ const dockedStationId = `${id}-docked-station`;
   ) : (
     <>
       <!-- Carousel Stage Viewport -->
-      <div class="ipod-carousel-stage">
+      <div class="audio-carousel-stage">
         <!-- Edge Stepper Buttons -->
         <button
           type="button"
@@ -213,7 +213,7 @@ const dockedStationId = `${id}-docked-station`;
                 inert={isInert ? true : undefined}
               >
                 <div class="carousel-card-inner">
-                  <!-- 1:1 Square Artwork Badge with Acrylic Floor Reflection -->
+                  <!-- 1:1 Square Artwork Badge with Floor Reflection -->
                   <div class="carousel-card-artwork" aria-hidden="true">
                     <div class="artwork-inner">
                       <span class="artwork-icon">{isDebate ? '⚖️' : '🎙️'}</span>
@@ -287,35 +287,10 @@ const dockedStationId = `${id}-docked-station`;
         </div>
       </div>
 
-      <!-- iPod Virtual Rotary Dial -->
-      <div class="rotary-dial-wrapper" aria-hidden="true">
-        <div class="rotary-dial">
-          <div class="rotary-wheel-disc">
-            <button type="button" class="rotary-btn rotary-top-btn" tabindex="-1" title="Toggle Grid View">
-              ▦
-            </button>
-            <button type="button" class="rotary-btn rotary-left-btn" tabindex="-1" title="Previous Episode">
-              ‹
-            </button>
-            <button type="button" class="rotary-btn rotary-right-btn" tabindex="-1" title="Next Episode">
-              ›
-            </button>
-            <a href={`#${dockedPlayerId}`} class="rotary-btn rotary-bottom-btn" tabindex="-1" title="Docked Station">
-              🎧
-            </a>
-            <div class="rotary-wheel-center">
-              <button type="button" class="rotary-center-btn" tabindex="-1" title="Play Selected Track">
-                ▶
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Docked Master Audio Player Section -->
       {showDockedPlayer && initialItem && (
         <section
-          class="ipod-docked-section has-docked-audio"
+          class="audio-docked-section has-docked-audio"
           id={dockedPlayerId}
           aria-labelledby={dockedHeadingId}
         >
@@ -348,11 +323,10 @@ const dockedStationId = `${id}-docked-station`;
 <noscript>
   <style>
     .carousel-toolbar,
-    .carousel-stepper-btn,
-    .rotary-dial-wrapper {
+    .carousel-stepper-btn {
       display: none !important;
     }
-    .ipod-carousel-stage {
+    .audio-carousel-stage {
       perspective: none !important;
     }
     .carousel-track {
@@ -380,29 +354,24 @@ const dockedStationId = `${id}-docked-station`;
 <script>
   import { CarouselStateMachine, enforceExclusivePlayback } from '../utils/carousel-state';
 
-  function initIpodCarousels() {
-    const containers = document.querySelectorAll<HTMLElement>('.ipod-carousel-container[data-component="ipod-carousel"]');
+  function initAudioCarousels() {
+    const containers = document.querySelectorAll<HTMLElement>('.audio-carousel-container[data-component="audio-carousel"]');
 
     containers.forEach((container) => {
       if (container.dataset.initialized === 'true') return;
       container.dataset.initialized = 'true';
 
-      const containerId = container.id || 'ipod-carousel';
+      const containerId = container.id || 'audio-carousel';
       const track = container.querySelector<HTMLElement>('.carousel-track');
       const slides = Array.from(container.querySelectorAll<HTMLElement>('.carousel-item'));
       const prevBtn = container.querySelector<HTMLButtonElement>('.carousel-stepper-btn.prev-btn');
       const nextBtn = container.querySelector<HTMLButtonElement>('.carousel-stepper-btn.next-btn');
-      const rotaryLeft = container.querySelector<HTMLButtonElement>('.rotary-left-btn');
-      const rotaryRight = container.querySelector<HTMLButtonElement>('.rotary-right-btn');
-      const rotaryCenter = container.querySelector<HTMLButtonElement>('.rotary-center-btn');
-      const rotaryTop = container.querySelector<HTMLButtonElement>('.rotary-top-btn');
-      const rotaryDisc = container.querySelector<HTMLElement>('.rotary-wheel-disc');
       const currentTrackNum = container.querySelector<HTMLElement>('.current-track-num');
       const announcer = container.querySelector<HTMLElement>(`#${containerId}-announcer`) ||
         container.querySelector<HTMLElement>('.sr-only[aria-live="polite"]');
       const viewButtons = container.querySelectorAll<HTMLButtonElement>('.view-btn');
       const dockedSection = container.querySelector<HTMLElement>(`#${containerId}-docked-player`) ||
-        container.querySelector<HTMLElement>('.ipod-docked-section');
+        container.querySelector<HTMLElement>('.audio-docked-section');
       const playButtons = container.querySelectorAll<HTMLButtonElement>('.carousel-play-btn');
 
       if (!track || slides.length === 0) return;
@@ -448,115 +417,105 @@ const dockedStationId = `${id}-docked-station`;
         const t = slide.dataset.title || '';
 
         if (isPlaying) {
-          if (icon) icon.textContent = '❚❚';
-          if (text) text.textContent = 'Pause';
+          btn.classList.add('is-playing');
           btn.setAttribute('aria-label', `Pause Episode ${ep}: ${t}`);
+          if (icon) icon.textContent = '⏸';
+          if (text) text.textContent = 'Pause';
         } else {
+          btn.classList.remove('is-playing');
+          btn.setAttribute('aria-label', `Play Episode ${ep}: ${t}`);
           if (icon) icon.textContent = '▶';
           if (text) text.textContent = 'Listen';
-          btn.setAttribute('aria-label', `Play Episode ${ep}: ${t}`);
         }
       }
 
-      function updateSlideClasses(newIndex: number) {
-        stateMachine.selectItem(newIndex);
-        const isGrid = stateMachine.viewMode === 'grid';
+      function updateSlideClasses(activeIndex: number) {
+        const isGridView = stateMachine.viewMode === 'grid';
 
         slides.forEach((slide, idx) => {
           slide.classList.remove('is-active', 'is-prev', 'is-next', 'is-far-prev', 'is-far-next');
 
-          const interactiveChildren = slide.querySelectorAll<HTMLElement>(
-            '.carousel-play-btn, .carousel-detail-link, .carousel-title-link'
-          );
-
-          if (isGrid) {
+          if (isGridView) {
             slide.setAttribute('tabindex', '0');
-            slide.removeAttribute('aria-current');
             slide.removeAttribute('inert');
-            interactiveChildren.forEach((child) => child.setAttribute('tabindex', '0'));
+            slide.removeAttribute('aria-current');
+            const links = slide.querySelectorAll<HTMLElement>('a, button');
+            links.forEach((l) => l.setAttribute('tabindex', '0'));
             return;
           }
 
-          if (idx === newIndex) {
+          if (idx === activeIndex) {
             slide.classList.add('is-active');
             slide.setAttribute('tabindex', '0');
             slide.setAttribute('aria-current', 'true');
             slide.removeAttribute('inert');
-            interactiveChildren.forEach((child) => child.setAttribute('tabindex', '0'));
+            const links = slide.querySelectorAll<HTMLElement>('a, button');
+            links.forEach((l) => l.setAttribute('tabindex', '0'));
           } else {
             slide.setAttribute('tabindex', '-1');
             slide.removeAttribute('aria-current');
             slide.setAttribute('inert', '');
-            interactiveChildren.forEach((child) => child.setAttribute('tabindex', '-1'));
+            const links = slide.querySelectorAll<HTMLElement>('a, button');
+            links.forEach((l) => l.setAttribute('tabindex', '-1'));
 
-            if (idx === newIndex - 1) {
+            if (idx === activeIndex - 1) {
               slide.classList.add('is-prev');
-            } else if (idx < newIndex - 1) {
+            } else if (idx < activeIndex - 1) {
               slide.classList.add('is-far-prev');
-            } else if (idx === newIndex + 1) {
+            } else if (idx === activeIndex + 1) {
               slide.classList.add('is-next');
-            } else if (idx > newIndex + 1) {
+            } else {
               slide.classList.add('is-far-next');
             }
           }
         });
 
+        // Update counter & steppers
         if (currentTrackNum) {
-          currentTrackNum.textContent = String(newIndex + 1);
+          currentTrackNum.textContent = String(activeIndex + 1);
         }
 
-        if (announcer && slides[newIndex]) {
-          const t = slides[newIndex].dataset.title || '';
-          announcer.textContent = `Slide ${newIndex + 1} of ${slides.length}: ${t}`;
-        }
+        if (prevBtn) prevBtn.disabled = activeIndex === 0;
+        if (nextBtn) nextBtn.disabled = activeIndex >= slides.length - 1;
 
-        if (prevBtn) {
-          const isStart = newIndex <= 0;
-          prevBtn.disabled = isStart;
-          prevBtn.setAttribute('aria-disabled', String(isStart));
-        }
-
-        if (nextBtn) {
-          const isEnd = newIndex >= slides.length - 1;
-          nextBtn.disabled = isEnd;
-          nextBtn.setAttribute('aria-disabled', String(isEnd));
-        }
-
-        // Tactile rotary tick animation
-        if (rotaryDisc) {
-          rotaryDisc.classList.add('is-ticking');
-          setTimeout(() => rotaryDisc.classList.remove('is-ticking'), 260);
+        // Screen reader announcement
+        if (announcer && slides[activeIndex]) {
+          const itemTitle = slides[activeIndex].dataset.title || '';
+          announcer.textContent = `Slide ${activeIndex + 1} of ${slides.length}: ${itemTitle}`;
         }
       }
 
-      function scrollToIndex(newIndex: number, smooth = true) {
-        if (stateMachine.viewMode === 'grid' || !track) return;
-        const targetSlide = slides[newIndex];
-        if (!targetSlide) return;
-
+      function scrollToIndex(index: number, smooth = true) {
+        if (!track || !slides[index]) return;
         isProgrammaticScroll = true;
-        const trackCenter = track.clientWidth / 2;
-        const slideCenter = targetSlide.offsetLeft + targetSlide.offsetWidth / 2;
-        const scrollLeft = slideCenter - trackCenter;
 
-        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const slide = slides[index];
+        const trackWidth = track.clientWidth;
+        const slideWidth = slide.offsetWidth;
+        const slideLeft = slide.offsetLeft;
+
+        // Target center offset
+        const targetScrollLeft = slideLeft - (trackWidth / 2) + (slideWidth / 2);
 
         track.scrollTo({
-          left: scrollLeft,
-          behavior: (!prefersReduced && smooth) ? 'smooth' : 'auto',
+          left: Math.max(0, targetScrollLeft),
+          behavior: smooth ? 'smooth' : 'auto',
         });
 
         setTimeout(() => {
           isProgrammaticScroll = false;
-        }, 360);
+        }, smooth ? 450 : 50);
       }
 
-      function goToSlide(newIndex: number, shouldFocus = false) {
-        const clampedIndex = stateMachine.selectItem(newIndex);
+      function goToSlide(index: number, focusCard = false) {
+        const clampedIndex = stateMachine.selectItem(index);
         updateSlideClasses(clampedIndex);
-        scrollToIndex(clampedIndex, true);
 
-        if (shouldFocus && stateMachine.viewMode !== 'grid' && slides[clampedIndex]) {
+        if (stateMachine.viewMode !== 'grid') {
+          scrollToIndex(clampedIndex, true);
+        }
+
+        if (focusCard && slides[clampedIndex] && stateMachine.viewMode !== 'grid') {
           slides[clampedIndex].focus();
         }
       }
@@ -625,7 +584,6 @@ const dockedStationId = `${id}-docked-station`;
         docked.audio.load();
 
         docked.audio.play().catch((err) => {
-          // User interaction required or autoplay deferred
           console.log('Audio play triggered:', err);
         });
 
@@ -683,16 +641,6 @@ const dockedStationId = `${id}-docked-station`;
       // Stepper button events
       prevBtn?.addEventListener('click', () => goToSlide(stateMachine.prev(), true));
       nextBtn?.addEventListener('click', () => goToSlide(stateMachine.next(), true));
-
-      // Virtual rotary dial events
-      rotaryLeft?.addEventListener('click', () => goToSlide(stateMachine.prev(), true));
-      rotaryRight?.addEventListener('click', () => goToSlide(stateMachine.next(), true));
-      rotaryCenter?.addEventListener('click', () => {
-        if (slides[stateMachine.activeIndex]) dockAndPlay(slides[stateMachine.activeIndex], true);
-      });
-      rotaryTop?.addEventListener('click', () => {
-        switchView(stateMachine.viewMode === 'grid' ? 'carousel' : 'grid');
-      });
 
       // View toggle buttons
       viewButtons.forEach((btn) => {
@@ -765,7 +713,6 @@ const dockedStationId = `${id}-docked-station`;
             break;
           }
           default:
-            // ArrowUp, ArrowDown, Tab, and others are NOT intercepted, allowing natural page scrolling
             break;
         }
       });
@@ -790,7 +737,6 @@ const dockedStationId = `${id}-docked-station`;
       const docked = getDockedPlayerElements();
       if (docked?.audio) {
         docked.audio.addEventListener('play', () => {
-          // Pause all other audio on page using shared mutual exclusion utility
           enforceExclusivePlayback(
             docked.audio,
             document.querySelectorAll<HTMLAudioElement>('audio.custom-audio-player')
@@ -849,18 +795,18 @@ const dockedStationId = `${id}-docked-station`;
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initIpodCarousels);
+    document.addEventListener('DOMContentLoaded', initAudioCarousels);
   } else {
-    initIpodCarousels();
+    initAudioCarousels();
   }
-  document.addEventListener('astro:page-load', initIpodCarousels);
+  document.addEventListener('astro:page-load', initAudioCarousels);
 </script>
 
 <style>
   /* ==========================================================================
-     iPod Carousel Main Container
+     Audio Carousel Main Container
      ========================================================================== */
-  .ipod-carousel-container {
+  .audio-carousel-container {
     max-width: 1140px;
     margin: 0 auto 3.5rem;
     padding: 0 1rem;
@@ -967,9 +913,9 @@ const dockedStationId = `${id}-docked-station`;
   }
 
   /* ==========================================================================
-     Carousel Stage & 2.5D Cover Flow Perspective
+     Carousel Stage & 2.5D Perspective
      ========================================================================== */
-  .ipod-carousel-stage {
+  .audio-carousel-stage {
     position: relative;
     width: 100%;
     margin: 0 auto;
@@ -1051,93 +997,108 @@ const dockedStationId = `${id}-docked-station`;
   .carousel-track:focus-visible {
     outline: 2px solid var(--accent-amber);
     outline-offset: 6px;
-    border-radius: 16px;
+    border-radius: 12px;
   }
 
-  /* Slide Cards */
+  /* ==========================================================================
+     Carousel Item (Card)
+     ========================================================================== */
   .carousel-item {
     flex: 0 0 320px;
     width: 320px;
     scroll-snap-align: center;
-    scroll-snap-stop: normal;
+    scroll-snap-stop: always;
     background: var(--surface-card);
     border: 1px solid var(--border-light);
     border-radius: 20px;
     padding: 1.75rem;
-    box-shadow: 0 4px 20px var(--shadow-light);
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-                opacity 0.4s ease,
-                box-shadow 0.4s ease,
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 6px 24px var(--shadow-light);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
                 border-color 0.25s ease,
-                outline 0.25s ease;
-    will-change: transform, opacity;
+                box-shadow 0.35s ease;
+    cursor: pointer;
+    outline: none;
     transform-origin: center center;
-    user-select: none;
-  }
-
-  /* 2.5D Cover Flow Geometry */
-  .is-carousel-view .carousel-item.is-active {
-    transform: perspective(1000px) rotateY(0deg) scale(1.04) translateZ(0);
-    opacity: 1;
-    z-index: 10;
-    border-color: var(--accent-amber);
-    box-shadow: 0 16px 36px var(--shadow-medium);
-    outline: 2px solid var(--accent-amber);
-    outline-offset: 4px;
-  }
-
-  .is-carousel-view .carousel-item.is-prev {
-    transform: perspective(1000px) rotateY(36deg) scale(0.82) translateZ(-70px);
-    opacity: 0.72;
-    z-index: 4;
-    cursor: pointer;
-  }
-
-  .is-carousel-view .carousel-item.is-next {
-    transform: perspective(1000px) rotateY(-36deg) scale(0.82) translateZ(-70px);
-    opacity: 0.72;
-    z-index: 4;
-    cursor: pointer;
-  }
-
-  .is-carousel-view .carousel-item.is-far-prev {
-    transform: perspective(1000px) rotateY(45deg) scale(0.7) translateZ(-120px);
-    opacity: 0.45;
-    z-index: 2;
-    cursor: pointer;
-  }
-
-  .is-carousel-view .carousel-item.is-far-next {
-    transform: perspective(1000px) rotateY(-45deg) scale(0.7) translateZ(-120px);
-    opacity: 0.45;
-    z-index: 2;
-    cursor: pointer;
-  }
-
-  .is-carousel-view .carousel-item:hover:not(.is-active) {
-    opacity: 0.9;
+    will-change: transform, opacity;
   }
 
   .carousel-item:focus-visible {
     outline: 2px solid var(--accent-amber);
     outline-offset: 4px;
+    border-color: var(--accent-amber);
   }
 
-  /* 1:1 Square Artwork Badge with Acrylic Floor Reflection */
+  /* 2.5D Flank Transforms */
+  .is-carousel-view .carousel-item.is-active {
+    transform: scale(1.06) translateZ(40px);
+    opacity: 1;
+    z-index: 10;
+    border-color: rgba(234, 88, 12, 0.4);
+    box-shadow: 0 16px 36px var(--shadow-medium);
+  }
+
+  .is-carousel-view .carousel-item.is-prev {
+    transform: scale(0.92) rotateY(28deg) translateZ(-30px);
+    opacity: 0.82;
+    z-index: 5;
+  }
+
+  .is-carousel-view .carousel-item.is-next {
+    transform: scale(0.92) rotateY(-28deg) translateZ(-30px);
+    opacity: 0.82;
+    z-index: 5;
+  }
+
+  .is-carousel-view .carousel-item.is-far-prev {
+    transform: scale(0.84) rotateY(42deg) translateZ(-80px);
+    opacity: 0.45;
+    z-index: 2;
+  }
+
+  .is-carousel-view .carousel-item.is-far-next {
+    transform: scale(0.84) rotateY(-42deg) translateZ(-80px);
+    opacity: 0.45;
+    z-index: 2;
+  }
+
+  /* Docked & Playing State Modifiers */
+  .carousel-item.is-docked {
+    border-color: var(--accent-amber);
+  }
+
+  .carousel-item.is-playing {
+    border-color: #ea580c;
+    box-shadow: 0 16px 40px rgba(234, 88, 12, 0.25);
+  }
+
+  .carousel-card-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  /* ==========================================================================
+     Card Artwork Badge
+     ========================================================================== */
   .carousel-card-artwork {
-    position: relative;
     aspect-ratio: 1 / 1;
     width: 100%;
     max-width: 220px;
     margin: 0 auto 1.5rem;
     border-radius: 16px;
-    background: linear-gradient(135deg, var(--card-bg) 0%, var(--surface-footer) 60%, var(--primary-brown) 100%);
+    background: linear-gradient(135deg, var(--card-bg) 0%, var(--surface-card) 100%);
+    border: 1px solid var(--border-light);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid rgba(234, 88, 12, 0.4);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-    -webkit-box-reflect: below 6px linear-gradient(transparent 70%, rgba(0, 0, 0, 0.18));
+    padding: 1.25rem;
+    box-shadow: 0 8px 24px var(--shadow-light);
+    position: relative;
+    overflow: hidden;
+    -webkit-box-reflect: below 6px linear-gradient(transparent 65%, rgba(0, 0, 0, 0.15));
   }
 
   .artwork-inner {
@@ -1145,92 +1106,94 @@ const dockedStationId = `${id}-docked-station`;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 1rem;
-    color: #ffffff;
+    gap: 0.4rem;
   }
 
   .artwork-icon {
-    font-size: 2.25rem;
-    margin-bottom: 0.25rem;
+    font-size: 2.75rem;
     line-height: 1;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
   }
 
   .artwork-number {
-    font-size: 1.25rem;
+    font-size: 0.85rem;
     font-weight: 800;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     color: var(--cream);
-  }
-
-  .artwork-label {
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--light-amber);
-    font-weight: 700;
+    background: var(--dark-text);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
     margin-top: 0.25rem;
   }
 
-  /* Card Content */
+  .artwork-label {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--light-text);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  /* ==========================================================================
+     Card Content Typography & Meta
+     ========================================================================== */
   .carousel-card-content {
     display: flex;
     flex-direction: column;
+    flex: 1 1 auto;
   }
 
   .carousel-card-meta {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     flex-wrap: wrap;
+    gap: 0.5rem;
     margin-bottom: 0.75rem;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
+    color: var(--light-text);
   }
 
   .carousel-badge {
     background: rgba(146, 64, 14, 0.12);
     color: var(--primary-brown);
-    font-weight: 700;
-    padding: 0.2rem 0.6rem;
-    border-radius: 16px;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
   }
 
   .carousel-format-badge {
-    background: rgba(234, 88, 12, 0.12);
-    color: var(--accent-amber);
+    background: var(--surface-button);
+    border: 1px solid var(--border-light);
+    color: var(--dark-text);
     font-weight: 700;
-    padding: 0.2rem 0.55rem;
-    border-radius: 16px;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    font-size: 0.72rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
   }
 
   .carousel-date,
   .carousel-duration {
-    color: var(--light-text);
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .carousel-confidence {
-    color: var(--light-text);
-    background: var(--surface-button);
-    border: 1px solid var(--border-light);
+    margin-left: auto;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     padding: 0.15rem 0.45rem;
-    border-radius: 8px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: capitalize;
+    border-radius: 4px;
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
   }
 
   .carousel-card-title {
     font-size: 1.25rem;
     font-weight: 800;
-    color: var(--dark-text);
-    margin-bottom: 0.65rem;
     line-height: 1.35;
+    margin: 0 0 0.65rem;
+    color: var(--dark-text);
   }
 
   .carousel-title-link {
@@ -1241,18 +1204,14 @@ const dockedStationId = `${id}-docked-station`;
 
   .carousel-title-link:hover {
     color: var(--accent-amber);
-  }
-
-  .carousel-title-link:focus-visible {
-    outline: 2px solid var(--accent-amber);
-    outline-offset: 2px;
+    text-decoration: underline;
   }
 
   .carousel-card-summary {
+    font-size: 0.88rem;
+    line-height: 1.5;
     color: var(--light-text);
-    font-size: 0.92rem;
-    line-height: 1.55;
-    margin-bottom: 1rem;
+    margin: 0 0 1rem;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -1260,61 +1219,61 @@ const dockedStationId = `${id}-docked-station`;
   }
 
   .carousel-takeaways-preview {
-    background: rgba(146, 64, 14, 0.05);
+    background: var(--card-bg);
     border-left: 3px solid var(--accent-amber);
-    border-radius: 0 8px 8px 0;
     padding: 0.6rem 0.85rem;
+    border-radius: 0 8px 8px 0;
     margin-bottom: 1.25rem;
+    font-size: 0.82rem;
   }
 
   .takeaways-preview-heading {
-    font-size: 0.78rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--dark-text);
+    margin: 0 0 0.25rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 0.4px;
-    margin-bottom: 0.25rem;
   }
 
   .takeaways-preview-list {
     margin: 0;
     padding-left: 1.1rem;
-    color: var(--medium-text);
-    font-size: 0.82rem;
+    color: var(--light-text);
     line-height: 1.45;
   }
 
-  /* Card Actions */
+  /* Card Action Buttons */
   .carousel-card-actions {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
+    margin-top: auto;
     padding-top: 1rem;
     border-top: 1px solid var(--border-light);
-    margin-top: auto;
   }
 
   .carousel-play-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    padding: 0.55rem 1.15rem;
-    border-radius: 50px;
     background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
     color: #ffffff;
-    font-weight: 700;
-    font-size: 0.85rem;
     border: none;
+    border-radius: 50px;
+    padding: 0.55rem 1.15rem;
+    font-size: 0.86rem;
+    font-weight: 800;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(146, 64, 14, 0.25);
+    box-shadow: 0 3px 10px rgba(146, 64, 14, 0.25);
     transition: all 0.2s ease;
     font-family: inherit;
   }
 
   .carousel-play-btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(146, 64, 14, 0.35);
+    box-shadow: 0 5px 14px rgba(146, 64, 14, 0.35);
   }
 
   .carousel-play-btn:focus-visible {
@@ -1322,14 +1281,19 @@ const dockedStationId = `${id}-docked-station`;
     outline-offset: 3px;
   }
 
+  .carousel-play-btn.is-playing {
+    background: linear-gradient(135deg, #ea580c, #c2410c);
+  }
+
   .play-btn-icon {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    line-height: 1;
   }
 
   .carousel-detail-link {
-    color: var(--accent-amber);
+    font-size: 0.84rem;
     font-weight: 700;
-    font-size: 0.85rem;
+    color: var(--accent-amber);
     text-decoration: none;
     transition: color 0.2s ease;
   }
@@ -1339,159 +1303,21 @@ const dockedStationId = `${id}-docked-station`;
     text-decoration: underline;
   }
 
-  .carousel-detail-link:focus-visible {
-    outline: 2px solid var(--accent-amber);
-    outline-offset: 2px;
-  }
-
-  /* ==========================================================================
-     Virtual Rotary Dial (iPod Click Wheel tribute)
-     ========================================================================== */
-  .rotary-dial-wrapper {
-    display: flex;
-    justify-content: center;
-    margin: 1rem auto 2.5rem;
-  }
-
-  .rotary-dial {
-    position: relative;
-    width: 140px;
-    height: 140px;
-  }
-
-  .rotary-wheel-disc {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: var(--surface-button);
-    border: 2px solid var(--border-light);
-    box-shadow: inset 0 2px 6px var(--shadow-light), 0 4px 16px var(--shadow-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-
-  @keyframes rotary-tick {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05) rotate(8deg); }
-    100% { transform: scale(1) rotate(0deg); }
-  }
-
-  .rotary-wheel-disc.is-ticking {
-    animation: rotary-tick 0.25s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-
-  .rotary-btn {
-    position: absolute;
-    background: transparent;
-    border: none;
-    color: var(--light-text);
-    font-weight: 700;
-    font-size: 0.95rem;
-    cursor: pointer;
-    padding: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    transition: color 0.2s ease, transform 0.2s ease;
-    font-family: inherit;
-  }
-
-  .rotary-btn:hover {
-    color: var(--accent-amber);
-    transform: scale(1.15);
-  }
-
-  .rotary-btn:focus-visible {
-    outline: 2px solid var(--accent-amber);
-    border-radius: 4px;
-  }
-
-  .rotary-top-btn {
-    top: 8px;
-    left: calc(50% - 12px);
-    width: 24px;
-    height: 24px;
-  }
-
-  .rotary-bottom-btn {
-    bottom: 8px;
-    left: calc(50% - 12px);
-    width: 24px;
-    height: 24px;
-  }
-
-  .rotary-left-btn {
-    left: 8px;
-    top: calc(50% - 12px);
-    width: 24px;
-    height: 24px;
-    font-size: 1.3rem;
-  }
-
-  .rotary-right-btn {
-    right: 8px;
-    top: calc(50% - 12px);
-    width: 24px;
-    height: 24px;
-    font-size: 1.3rem;
-  }
-
-  .rotary-wheel-center {
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    background: var(--surface-card);
-    border: 1px solid var(--border-light);
-    box-shadow: 0 2px 6px var(--shadow-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .rotary-center-btn {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: none;
-    background: transparent;
-    color: var(--dark-text);
-    font-size: 0.95rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s ease, transform 0.2s ease;
-    font-family: inherit;
-  }
-
-  .rotary-center-btn:hover {
-    color: var(--accent-amber);
-    transform: scale(1.1);
-  }
-
-  .rotary-center-btn:focus-visible {
-    outline: 2px solid var(--accent-amber);
-  }
-
   /* ==========================================================================
      Docked Master Audio Player Section
      ========================================================================== */
-  .ipod-docked-section {
+  .audio-docked-section {
     background: var(--surface-card);
     border: 1px solid var(--border-light);
     border-radius: 20px;
     padding: 1.75rem 2rem;
-    margin-top: 1rem;
+    margin-top: 2rem;
     box-shadow: 0 6px 24px var(--shadow-light);
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
-  .ipod-docked-section:hover,
-  .ipod-docked-section.has-docked-audio {
+  .audio-docked-section:hover,
+  .audio-docked-section.has-docked-audio {
     border-color: var(--accent-amber);
     box-shadow: 0 8px 30px var(--shadow-medium);
   }
@@ -1534,12 +1360,11 @@ const dockedStationId = `${id}-docked-station`;
   /* ==========================================================================
      Responsive Grid View Switch (.is-grid-view)
      ========================================================================== */
-  .is-grid-view .ipod-carousel-stage {
+  .is-grid-view .audio-carousel-stage {
     perspective: none;
   }
 
-  .is-grid-view .carousel-stepper-btn,
-  .is-grid-view .rotary-dial-wrapper {
+  .is-grid-view .carousel-stepper-btn {
     display: none !important;
   }
 
@@ -1606,14 +1431,6 @@ const dockedStationId = `${id}-docked-station`;
       transform: none !important;
       opacity: 0.85 !important;
     }
-
-    .rotary-wheel-disc {
-      transition: none !important;
-    }
-
-    .rotary-wheel-disc.is-ticking {
-      animation: none !important;
-    }
   }
 
   /* ==========================================================================
@@ -1652,7 +1469,7 @@ const dockedStationId = `${id}-docked-station`;
       font-size: 1.4rem;
     }
 
-    .ipod-docked-section {
+    .audio-docked-section {
       padding: 1.25rem;
     }
   }

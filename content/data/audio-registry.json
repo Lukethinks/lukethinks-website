@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "ai-partnership-accounting",
+    "variant": "narration",
+    "label": "Executive Briefing",
+    "src": "https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/ai-thinking-frameworks-narration.mp3",
+    "bytes": 2310182,
+    "durationSeconds": 255,
+    "production": {
+      "source": "notebooklm",
+      "aiDisclosed": true
+    }
+  },
+  {
+    "slug": "ai-partnership-accounting",
+    "variant": "debate",
+    "label": "Deep Debate: Bear vs Bull",
+    "src": "https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/compress-ai-thinking-frameworks-narration_debate.mp3",
+    "bytes": 22378715,
+    "durationSeconds": 920,
+    "production": {
+      "source": "notebooklm",
+      "aiDisclosed": true
+    }
+  }
+]

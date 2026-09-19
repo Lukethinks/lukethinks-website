@@ -1,5 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ReactionsBar from '../../components/ReactionsBar.astro';
 import CompanionAudioBanner from '../../components/CompanionAudioBanner.astro';
@@ -15,6 +17,16 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props;
 const { Content, headings } = await render(article);
+
+// Dynamically fetch companion audio from the generated registry
+let companionAudio = [];
+try {
+  const registryPath = join(process.cwd(), 'content', 'data', 'audio-registry.json');
+  const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
+  companionAudio = registry.filter(a => a.slug === article.data.slug);
+} catch (e) {
+  // If registry doesn't exist yet, gracefully fall back to empty
+}
 
 const publishedDate = new Date(article.data.published);
 const publishedIso = publishedDate.toISOString().slice(0, 10);
@@ -93,9 +105,9 @@ const jsonLd = {
       </nav>
     )}
 
-    {article.data.audio && article.data.audio.length > 0 && (
+    {companionAudio.length > 0 && (
       <CompanionAudioBanner
-        audio={article.data.audio}
+        audio={companionAudio}
         slug={article.data.slug}
         articleTitle={article.data.title}
       />

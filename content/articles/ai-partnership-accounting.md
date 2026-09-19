@@ -10,23 +10,6 @@ status: "published"
 lang: "en"
 tags: ["accounting", "ai", "valuation"]
 confidence: "medium"
-audio:
-  - label: "Executive Briefing"
-    src: "https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/ai-thinking-frameworks-narration.mp3"
-    variant: "narration"
-    bytes: 2310182
-    durationSeconds: 255
-    production:
-      source: "notebooklm"
-      aiDisclosed: true
-  - label: "Deep Debate: Bear vs Bull"
-    src: "https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/compress-ai-thinking-frameworks-narration_debate.mp3"
-    variant: "debate"
-    bytes: 22378715
-    durationSeconds: 920
-    production:
-      source: "notebooklm"
-      aiDisclosed: true
 sources:
   - title: "Microsoft FY2025 Q2 Form 10-Q"
     url: "https://www.sec.gov/edgar"

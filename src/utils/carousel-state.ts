@@ -1,6 +1,6 @@
 /**
- * Pure state machine and mutual-exclusion logic for the iPod Classic Carousel.
- * Shared between client-side component (IpodCarousel.astro) and test suite (ipod-carousel.test.mjs).
+ * Pure state machine and mutual-exclusion logic for the Audio Carousel.
+ * Shared between client-side component (AudioCarousel.astro) and test suite.
  */
 
 export interface CarouselItemData {

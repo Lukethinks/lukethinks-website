@@ -16,8 +16,14 @@ Any agent that makes a structural choice adds an entry in the same change. Any a
 
 ---
 
+## ADR-0019 — AudioCarousel component and removal of iPod skeuomorphism
+**Date:** 2026-09-19 · **Status:** Accepted (supersedes ADR-0018)
+**Context:** Luke requested removing the iPod click wheel on the website and all iPod branding/naming across the code.
+**Decision:** Remove the rotary click wheel element from the audio browsing UI and rename the component to `AudioCarousel.astro`. Preserve all responsive card navigation, stepper controls, roving tabindex, docked audio playback, and grid/flow view switching under clean, standard naming (`audio-carousel-*`).
+**Consequences:** Clean responsive presentation without skeuomorphic wheel controls or third-party trademark references in the codebase.
+
 ## ADR-0018 — iPod-like scroll interaction for podcast and audio browsing
-**Date:** 2026-09-19 · **Status:** Accepted
+**Date:** 2026-09-19 · **Status:** Superseded by ADR-0019
 **Context:** Luke requested an iPod-style tactile scroll/wheel interface for browsing through podcasts, audio stacks, and series of audio items in chronological order.
 **Decision:** Implement an iPod classic-inspired scroll carousel/rotator interaction for browsing audio cards and episodes. This will feature rotary/scroll navigation, tactile haptic/audio cues, active track previewing, and seamless docking to playback, while preserving keyboard accessibility and fallback grid views.
 **Consequences:** A dedicated, polished listening interface that distinguishes Luke Thinks audio; encapsulated in reusable components conforming to the class register.

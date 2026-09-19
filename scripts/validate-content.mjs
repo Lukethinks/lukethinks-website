@@ -237,6 +237,22 @@ for (const { file, slug } of relatedRefs) {
   else if (!publishedSlugs.has(slug)) warn(file, `related points at "${slug}", which is not published.`);
 }
 
+// ---------------------------------------------------------------- audio registry
+const registryPath = path.join(CONTENT_DIR, 'data', 'audio-registry.json');
+if (existsSync(registryPath)) {
+  try {
+    const registry = JSON.parse(await readFile(registryPath, 'utf8'));
+    for (const entry of registry) {
+      if (!seenSlugs.has(entry.slug)) {
+        err(registryPath, `Orphaned audio variant: "${entry.slug}--${entry.variant}.mp3" exists in Blob, but no markdown file uses slug "${entry.slug}".`);
+      }
+    }
+  } catch (e) {
+    err(registryPath, `Not valid JSON: ${e.message}`);
+  }
+}
+
+
 // ---------------------------------------------------------------- html
 
 const htmlFiles = existsSync(HTML_DIR) ? await walk(HTML_DIR, ['.html']) : [];
