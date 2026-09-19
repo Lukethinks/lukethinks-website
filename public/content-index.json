@@ -1,15 +1,43 @@
 {
   "_generated": "scripts/build-index.mjs — do not edit",
   "counts": {
-    "episode": 3,
-    "tag:ai": 4,
-    "tag:frameworks": 1,
+    "episode": 5,
+    "tag:ai": 6,
+    "tag:frameworks": 3,
+    "tag:experiments": 2,
     "article": 3,
     "tag:accounting": 5,
     "tag:valuation": 5,
     "tag:fpa": 1
   },
   "items": [
+    {
+      "slug": "the-ironies-of-automation-and-the-art-of-oversight",
+      "type": "episode",
+      "title": "The Ironies of Automation & The Art of Oversight",
+      "summary": "What happens when human operators supervise automated systems: Bainbridge's ironies of automation applied to Air France 447, medical deskilling trials, and code defects.",
+      "url": "/podcast/the-ironies-of-automation-and-the-art-of-oversight",
+      "published": "2026-09-19",
+      "updated": null,
+      "lang": "en",
+      "tags": [
+        "ai",
+        "frameworks",
+        "experiments"
+      ],
+      "category": null,
+      "confidence": "high",
+      "state": null,
+      "outcome": null,
+      "readingMinutes": null,
+      "durationSeconds": 1800,
+      "episode": 5,
+      "related": [],
+      "series": "AI Skills & The Future of Human Judgment",
+      "seriesPart": 3,
+      "hasAudio": true,
+      "file": "content\\episodes\\the-ironies-of-automation-and-the-art-of-oversight.md"
+    },
     {
       "slug": "why-ai-verification-replaced-prompt-engineering",
       "type": "episode",
@@ -35,6 +63,33 @@
       "seriesPart": 1,
       "hasAudio": true,
       "file": "content\\episodes\\why-ai-verification-replaced-prompt-engineering.md"
+    },
+    {
+      "slug": "why-your-brain-needs-cognitive-friction",
+      "type": "episode",
+      "title": "Why Your Brain Needs Cognitive Friction",
+      "summary": "Examining whether general thinking skills exist independently of subject matter, and measuring what happens to the human brain when the friction of thinking is offloaded to AI.",
+      "url": "/podcast/why-your-brain-needs-cognitive-friction",
+      "published": "2026-09-19",
+      "updated": null,
+      "lang": "en",
+      "tags": [
+        "ai",
+        "frameworks",
+        "experiments"
+      ],
+      "category": null,
+      "confidence": "high",
+      "state": null,
+      "outcome": null,
+      "readingMinutes": null,
+      "durationSeconds": 1800,
+      "episode": 4,
+      "related": [],
+      "series": "AI Skills & The Future of Human Judgment",
+      "seriesPart": 2,
+      "hasAudio": true,
+      "file": "content\\episodes\\why-your-brain-needs-cognitive-friction.md"
     },
     {
       "slug": "thames-water-crisis",

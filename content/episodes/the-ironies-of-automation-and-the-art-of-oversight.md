@@ -4,7 +4,7 @@ slug: "the-ironies-of-automation-and-the-art-of-oversight"
 type: "episode"
 summary: "What happens when human operators supervise automated systems: Bainbridge's ironies of automation applied to Air France 447, medical deskilling trials, and code defects."
 published: "2026-09-19"
-status: "draft"
+status: "published"
 lang: "en"
 tags: ["ai", "frameworks", "experiments"]
 episode: 5

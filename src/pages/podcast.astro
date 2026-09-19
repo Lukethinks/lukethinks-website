@@ -54,26 +54,118 @@ const episodeMetaMap: Record<string, { takeaways: string[]; companionArticle?: {
   },
 };
 
-const carouselItems: CarouselItem[] = sortedEpisodes.map((ep) => {
-  const meta = episodeMetaMap[ep.data.slug] ?? { takeaways: [] };
-  const isDebate = ep.data.title.toLowerCase().includes('debate') || ep.data.audio.src.toLowerCase().includes('debate');
+// Series metadata definitions for series-centric grouping
+const seriesMetaMap: Record<string, { summary: string; theme: string; takeaways?: string[] }> = {
+  'AI Skills & The Future of Human Judgment': {
+    summary:
+      'An investigative audio series dissecting what happens to human cognition, critical judgment, and error oversight when automated systems and agent harnesses handle routine execution.',
+    theme: 'Human Judgment, Cognitive Friction & Automation Oversight in the Agentic Era',
+    takeaways: [
+      'Part 1: Why AI Verification Replaced Prompt Engineering',
+      'Part 2: Why Your Brain Needs Cognitive Friction',
+      'Part 3: The Ironies of Automation & The Art of Oversight',
+    ],
+  },
+};
+
+// Group multi-part series for top carousel grouping
+const seriesGroups = new Map<string, typeof sortedEpisodes>();
+
+for (const ep of sortedEpisodes) {
+  if (ep.data.series) {
+    const list = seriesGroups.get(ep.data.series) || [];
+    list.push(ep);
+    seriesGroups.set(ep.data.series, list);
+  }
+}
+
+const seriesCards: CarouselItem[] = Array.from(seriesGroups.entries()).map(([seriesTitle, eps]) => {
+  // Chronological intended listening order: Part 1, Part 2, Part 3 (with stable tiebreakers)
+  const orderedEpisodes = [...eps].sort((a, b) => {
+    const partA = a.data.seriesPart ?? a.data.episode ?? 0;
+    const partB = b.data.seriesPart ?? b.data.episode ?? 0;
+    if (partA !== partB) return partA - partB;
+    const dateA = a.data.published ? new Date(a.data.published).getTime() : 0;
+    const dateB = b.data.published ? new Date(b.data.published).getTime() : 0;
+    if (dateA !== dateB) return dateA - dateB;
+    return (a.data.slug || '').localeCompare(b.data.slug || '');
+  });
+  const firstEp = orderedEpisodes[0];
+  const partsTotal = orderedEpisodes.length;
+
+  const episodeItems: CarouselItem[] = orderedEpisodes.map((ep) => {
+    const meta = episodeMetaMap[ep.data.slug] ?? { takeaways: [] };
+    const isDebate = ep.data.title.toLowerCase().includes('debate') || ep.data.audio.src.toLowerCase().includes('debate');
+    return {
+      id: ep.id,
+      slug: ep.data.slug,
+      title: ep.data.title,
+      summary: ep.data.summary,
+      published: ep.data.published,
+      episodeNumber: ep.data.episode,
+      season: ep.data.season,
+      format: isDebate ? 'debate' : 'briefing',
+      tags: ep.data.tags,
+      confidence: ep.data.confidence,
+      audio: ep.data.audio,
+      takeaways: meta.takeaways,
+      companionArticle: meta.companionArticle,
+      production: ep.data.production,
+      series: ep.data.series,
+      seriesPart: ep.data.seriesPart,
+    };
+  });
+
+  const seriesMeta = seriesMetaMap[seriesTitle];
+  const seriesSummary = seriesMeta?.summary || firstEp.data.summary;
+  const seriesTheme = seriesMeta?.theme || (firstEp.data.tags ? firstEp.data.tags.join(', ') : 'Series');
+  const seriesTakeaways =
+    seriesMeta?.takeaways ||
+    orderedEpisodes.map((e, idx) => `Part ${e.data.seriesPart ?? (idx + 1)}: ${e.data.title}`);
+
   return {
-    id: ep.id,
-    slug: ep.data.slug,
-    title: ep.data.title,
-    summary: ep.data.summary,
-    published: ep.data.published,
-    episodeNumber: ep.data.episode,
-    season: ep.data.season,
-    format: isDebate ? 'debate' : 'briefing',
-    tags: ep.data.tags,
-    confidence: ep.data.confidence,
-    audio: ep.data.audio,
-    takeaways: meta.takeaways,
-    companionArticle: meta.companionArticle,
-    production: ep.data.production,
+    id: `series-${firstEp.data.slug}`,
+    slug: firstEp.data.slug,
+    title: seriesTitle,
+    summary: seriesSummary,
+    published: firstEp.data.published,
+    episodeNumber: firstEp.data.episode,
+    season: firstEp.data.season,
+    format: 'series',
+    tags: firstEp.data.tags || ['ai', 'frameworks'],
+    confidence: firstEp.data.confidence || 'high',
+    audio: firstEp.data.audio,
+    isSeries: true,
+    series: seriesTitle,
+    partsCount: partsTotal,
+    theme: seriesTheme,
+    episodes: episodeItems,
+    takeaways: seriesTakeaways,
   };
 });
+
+const carouselItems: CarouselItem[] = seriesCards.length > 0
+  ? seriesCards
+  : sortedEpisodes.map((ep) => {
+      const meta = episodeMetaMap[ep.data.slug] ?? { takeaways: [] };
+      const isDebate = ep.data.title.toLowerCase().includes('debate') || ep.data.audio.src.toLowerCase().includes('debate');
+      return {
+        id: ep.id,
+        slug: ep.data.slug,
+        title: ep.data.title,
+        summary: ep.data.summary,
+        published: ep.data.published,
+        episodeNumber: ep.data.episode,
+        season: ep.data.season,
+        format: isDebate ? 'debate' : 'briefing',
+        tags: ep.data.tags,
+        confidence: ep.data.confidence,
+        audio: ep.data.audio,
+        takeaways: meta.takeaways,
+        companionArticle: meta.companionArticle,
+        production: ep.data.production,
+      };
+    });
 
 const filterCategories = [
   { id: 'all', label: 'All Episodes' },

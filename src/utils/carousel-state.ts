@@ -30,6 +30,12 @@ export interface CarouselItemData {
     source?: string;
     aiDisclosed?: boolean;
   };
+  isSeries?: boolean;
+  series?: string;
+  seriesPart?: number;
+  partsCount?: number;
+  theme?: string;
+  episodes?: CarouselItemData[];
   [key: string]: any;
 }
 
@@ -86,6 +92,7 @@ export class CarouselStateMachine {
   public dockedEpisode: CarouselItemData | null;
   public isPlaying: boolean;
   public isReducedMotion: boolean;
+  public expandedSeriesIndex: number | null;
 
   constructor(items: CarouselItemData[] = [], options: CarouselStateOptions = {}) {
     this.items = items;
@@ -97,6 +104,7 @@ export class CarouselStateMachine {
     this.dockedEpisode = null;
     this.isPlaying = false;
     this.isReducedMotion = options.prefersReducedMotion ?? false;
+    this.expandedSeriesIndex = null;
   }
 
   get activeItem(): CarouselItemData | null {
@@ -110,10 +118,104 @@ export class CarouselStateMachine {
   selectItem(index: number): number {
     if (!this.items.length) {
       this.activeIndex = 0;
+      this.expandedSeriesIndex = null;
       return 0;
     }
+    const prev = this.activeIndex;
     this.activeIndex = Math.max(0, Math.min(this.items.length - 1, index));
+    if (this.expandedSeriesIndex !== null && this.activeIndex !== prev) {
+      const target = this.items[this.activeIndex];
+      if (target?.isSeries || (target?.episodes && target.episodes.length > 0)) {
+        this.expandedSeriesIndex = this.activeIndex;
+      } else {
+        this.expandedSeriesIndex = null;
+      }
+    }
     return this.activeIndex;
+  }
+
+  /**
+   * Expands the drawer for the series at index, or collapses if invalid.
+   */
+  expandSeries(index: number): boolean {
+    if (index < 0 || index >= this.items.length) return false;
+    const item = this.items[index];
+    if (!item?.isSeries && (!item?.episodes || item.episodes.length === 0)) {
+      return false;
+    }
+    this.expandedSeriesIndex = index;
+    return true;
+  }
+
+  /**
+   * Collapses the series drawer.
+   */
+  collapseSeries(): void {
+    this.expandedSeriesIndex = null;
+  }
+
+  /**
+   * Toggles drawer expansion for series at index.
+   */
+  toggleSeries(index: number): boolean {
+    if (this.expandedSeriesIndex === index) {
+      this.collapseSeries();
+      return false;
+    }
+    return this.expandSeries(index);
+  }
+
+  /**
+   * Returns whether series at index is expanded.
+   */
+  isSeriesExpanded(index: number): boolean {
+    return this.expandedSeriesIndex === index;
+  }
+
+  /**
+   * Returns currently expanded series item, or null.
+   */
+  getExpandedSeries(): CarouselItemData | null {
+    if (this.expandedSeriesIndex === null) return null;
+    return this.items[this.expandedSeriesIndex] ?? null;
+  }
+
+  /**
+   * Returns episodes for the series item at index, sorted in intended chronological listening order (Part 1 -> Part 2 -> Part 3).
+   */
+  getSeriesEpisodes(index: number): CarouselItemData[] {
+    const item = this.items[index];
+    if (!item || !item.episodes) return [];
+    return [...item.episodes].sort((a, b) => {
+      const partA = a.seriesPart ?? a.episodeNumber ?? a.episode ?? 0;
+      const partB = b.seriesPart ?? b.episodeNumber ?? b.episode ?? 0;
+      if (partA !== partB) {
+        return partA - partB;
+      }
+      const dateA = a.published ? new Date(a.published).getTime() : 0;
+      const dateB = b.published ? new Date(b.published).getTime() : 0;
+      if (dateA !== dateB) {
+        return dateA - dateB;
+      }
+      return (a.slug || '').localeCompare(b.slug || '');
+    });
+  }
+
+  /**
+   * Docks and prepares playback for an episode from a series drawer.
+   */
+  dockAndPlayEpisode(episode: CarouselItemData): DockPayload | null {
+    if (!episode) return null;
+    this.dockedEpisode = episode;
+    this.isPlaying = true;
+    return {
+      slug: episode.slug,
+      title: episode.title,
+      audioSrc: episode.audio?.src,
+      durationSeconds: episode.audio?.durationSeconds,
+      format: episode.format,
+      episodeNumber: episode.episodeNumber ?? episode.episode ?? episode.seriesPart,
+    };
   }
 
   /**
@@ -239,9 +341,22 @@ export class CarouselStateMachine {
         this.selectItem(this.activeIndex - 3);
         break;
       case 'Enter':
-      case ' ':
+      case ' ': {
+        const active = this.activeItem;
+        if (active?.isSeries || (active?.episodes && active.episodes.length > 0)) {
+          this.toggleSeries(this.activeIndex);
+          return true;
+        }
         this.dockAndPlayActive();
         return true;
+      }
+      case 'Escape': {
+        if (this.expandedSeriesIndex !== null) {
+          this.collapseSeries();
+          return true;
+        }
+        return false;
+      }
       default:
         // ArrowUp, ArrowDown, Tab, and other keys are NOT intercepted
         return false;

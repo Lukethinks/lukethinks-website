@@ -4,7 +4,7 @@ slug: "why-your-brain-needs-cognitive-friction"
 type: "episode"
 summary: "Examining whether general thinking skills exist independently of subject matter, and measuring what happens to the human brain when the friction of thinking is offloaded to AI."
 published: "2026-09-19"
-status: "draft"
+status: "published"
 lang: "en"
 tags: ["ai", "frameworks", "experiments"]
 episode: 4

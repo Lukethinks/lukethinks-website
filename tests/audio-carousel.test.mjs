@@ -1011,7 +1011,7 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
       assert.match(script, /register\.has\(c\)/, 'Verifies built classes against registered set');
     });
 
-    it('F18.6: Artwork number uses design token var(--cream) instead of hardcoded hex', (t) => {
+    it('F18.6: Artwork number uses design token var(--cream) instead of hardcoded hex (ADR-0004)', (t) => {
       const src = loadComponentSource();
       if (!src) {
         t.skip('src/components/AudioCarousel.astro not yet authored by M1 implementer');
@@ -1019,6 +1019,380 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
       }
       assert.match(src, /\.artwork-number\s*\{[^}]*color:\s*var\(--cream\)/, '.artwork-number uses var(--cream)');
       assert.doesNotMatch(src, /\.artwork-number\s*\{[^}]*#fef7f0/, '.artwork-number does not contain hardcoded #fef7f0');
+    });
+  });
+
+  // --- F19: Expandable Series-Centric Browsing & Drawer Interaction ---
+  describe('F19: Expandable Series-Centric Browsing & Drawer Interaction', () => {
+    const mockSeriesCard = {
+      id: 'series-ai-skills',
+      slug: 'why-ai-verification-replaced-prompt-engineering',
+      title: 'AI Skills & The Future of Human Judgment',
+      series: 'AI Skills & The Future of Human Judgment',
+      isSeries: true,
+      partsCount: 3,
+      theme: 'Human Judgment, Cognitive Friction & Automation Oversight',
+      summary: 'A 3-part investigative audio series examining human skills in the agentic era.',
+      published: '2026-09-19',
+      audio: {
+        src: 'https://1fyj7adygjho7vgj.public.blob.vercel-storage.com/Podcasts/AI%20skills%20podcast%20part%201-debate.m4a',
+        bytes: 93819356,
+        durationSeconds: 2915,
+      },
+      episodes: [
+        {
+          slug: 'part-3-oversight',
+          title: 'The Ironies of Automation & The Art of Oversight',
+          seriesPart: 3,
+          format: 'debate',
+          audio: { src: 'https://example.com/p3.m4a', durationSeconds: 1800 },
+        },
+        {
+          slug: 'part-1-verification',
+          title: 'Why AI Verification Replaced Prompt Engineering',
+          seriesPart: 1,
+          format: 'debate',
+          audio: { src: 'https://example.com/p1.m4a', durationSeconds: 2915 },
+        },
+        {
+          slug: 'part-2-friction',
+          title: 'Why Your Brain Needs Cognitive Friction',
+          seriesPart: 2,
+          format: 'debate',
+          audio: { src: 'https://example.com/p2.m4a', durationSeconds: 1800 },
+        },
+      ],
+    };
+
+    it('F19.1: Top carousel highlights series cards with clear part counts and overarching theme', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      assert.match(src, /carousel-parts-count/, 'Part count badge class present');
+      assert.match(src, /data-parts-count/, 'data-parts-count attribute present');
+      assert.match(src, /data-is-series/, 'data-is-series attribute present');
+      assert.match(src, /carousel-series-toggle-btn/, 'Series toggle button present');
+      assert.match(src, /carousel-theme-tag|drawer-theme/, 'Overarching theme rendered');
+    });
+
+    it('F19.2: Series episodes in drawer are strictly ordered by intended listening sequence (Part 1 -> Part 2 -> Part 3)', () => {
+      const sm = new CarouselStateMachine([mockSeriesCard]);
+      const episodes = sm.getSeriesEpisodes(0);
+      assert.equal(episodes.length, 3, 'All 3 parts retrieved');
+      assert.equal(episodes[0].seriesPart, 1, 'Part 1 is first');
+      assert.equal(episodes[1].seriesPart, 2, 'Part 2 is second');
+      assert.equal(episodes[2].seriesPart, 3, 'Part 3 is third');
+      assert.equal(episodes[0].slug, 'part-1-verification');
+      assert.equal(episodes[1].slug, 'part-2-friction');
+      assert.equal(episodes[2].slug, 'part-3-oversight');
+    });
+
+    it('F19.3: Selecting a series card expands an in-place episode list drawer below the carousel track', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      assert.match(src, /carousel-series-drawer/, 'Series drawer container class present');
+      assert.match(src, /aria-controls=\{seriesDrawerId\}|aria-controls=/, 'Toggle button controls drawer');
+      assert.match(src, /drawer-tracklist/, 'Tracklist list element present in drawer');
+      assert.match(src, /drawer-close-btn/, 'Collapse button present in drawer');
+
+      const sm = new CarouselStateMachine([mockSeriesCard]);
+      assert.equal(sm.isSeriesExpanded(0), false, 'Initially collapsed');
+      sm.expandSeries(0);
+      assert.equal(sm.isSeriesExpanded(0), true, 'Expanded after expandSeries');
+      assert.equal(sm.expandedSeriesIndex, 0);
+      sm.collapseSeries();
+      assert.equal(sm.isSeriesExpanded(0), false, 'Collapsed after collapseSeries');
+      assert.equal(sm.expandedSeriesIndex, null);
+    });
+
+    it('F19.4: Clicking an episode in drawer initiates in-line synchronized playback and updates player', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      assert.match(src, /drawer-play-btn/, 'Drawer play button present');
+      assert.match(src, /data-part=/, 'Drawer play button includes data-part');
+
+      const sm = new CarouselStateMachine([mockSeriesCard]);
+      const episodes = sm.getSeriesEpisodes(0);
+      const payload = sm.dockAndPlayEpisode(episodes[1]); // Part 2
+      assert.ok(payload, 'Payload returned');
+      assert.equal(payload.slug, 'part-2-friction');
+      assert.equal(payload.audioSrc, 'https://example.com/p2.m4a');
+      assert.equal(sm.isPlaying, true);
+      assert.equal(sm.dockedEpisode?.slug, 'part-2-friction');
+    });
+
+    it('F19.5: Accessible keyboard navigation: Enter/Space toggles drawer, Escape collapses it', () => {
+      const sm = new CarouselStateMachine([mockSeriesCard]);
+      assert.equal(sm.isSeriesExpanded(0), false);
+
+      // Enter on series card expands drawer
+      const handledEnter = sm.handleKeyDown('Enter');
+      assert.equal(handledEnter, true);
+      assert.equal(sm.isSeriesExpanded(0), true, 'Enter expands series drawer');
+
+      // Escape key collapses drawer
+      const handledEscape = sm.handleKeyDown('Escape');
+      assert.equal(handledEscape, true);
+      assert.equal(sm.isSeriesExpanded(0), false, 'Escape collapses series drawer');
+
+      // Space key toggles drawer back open
+      const handledSpace = sm.handleKeyDown(' ');
+      assert.equal(handledSpace, true);
+      assert.equal(sm.isSeriesExpanded(0), true, 'Space toggles series drawer');
+    });
+
+    it('F19.6: Strict Zero-Hardware-Trademark Compliance across modified components and tests', () => {
+      const carouselSrc = readFileSync(CAROUSEL_COMPONENT_PATH, 'utf8');
+      const stateSrc = readFileSync(path.join(ROOT_DIR, 'src', 'utils', 'carousel-state.ts'), 'utf8');
+      const podcastSrc = readFileSync(PODCAST_PAGE_PATH, 'utf8');
+      const testSrc = readFileSync(path.join(ROOT_DIR, 'tests', 'audio-carousel.test.mjs'), 'utf8');
+
+      const FORBIDDEN_KEYWORD = ['i', 'p', 'o', 'd'].join('');
+      const forbiddenPattern = new RegExp(FORBIDDEN_KEYWORD, 'i');
+
+      assert.doesNotMatch(carouselSrc, forbiddenPattern, 'AudioCarousel.astro contains zero forbidden hardware references');
+      assert.doesNotMatch(stateSrc, forbiddenPattern, 'carousel-state.ts contains zero forbidden hardware references');
+      assert.doesNotMatch(podcastSrc, forbiddenPattern, 'podcast.astro contains zero forbidden hardware references');
+      assert.doesNotMatch(testSrc, forbiddenPattern, 'audio-carousel.test.mjs contains zero forbidden hardware references');
+    });
+
+    it('F19.7: Deterministic tiebreaker sorting when seriesPart and episode numbers are identical or omitted', () => {
+      const cardWithAmbiguousParts = {
+        id: 'series-ambiguous',
+        slug: 'series-ambiguous',
+        title: 'Ambiguous Series',
+        isSeries: true,
+        episodes: [
+          { slug: 'part-b', title: 'Part B', published: '2026-09-20', audio: { src: 'https://example.com/b.m4a', durationSeconds: 100 } },
+          { slug: 'part-a', title: 'Part A', published: '2026-09-10', audio: { src: 'https://example.com/a.m4a', durationSeconds: 100 } },
+          { slug: 'part-c', title: 'Part C', published: '2026-09-20', audio: { src: 'https://example.com/c.m4a', durationSeconds: 100 } },
+        ],
+      };
+      const sm = new CarouselStateMachine([cardWithAmbiguousParts]);
+      const episodes = sm.getSeriesEpisodes(0);
+      assert.equal(episodes.length, 3);
+      assert.equal(episodes[0].slug, 'part-a', 'Earliest published date comes first when parts are unnumbered');
+      assert.equal(episodes[1].slug, 'part-b', 'Alphabetical slug tiebreaker when published dates match');
+      assert.equal(episodes[2].slug, 'part-c');
+    });
+
+    it('F19.8: Switching between series cards updates expandedSeriesIndex, while switching to standalone slide collapses drawer', () => {
+      const standaloneCard = {
+        id: 'standalone-ep',
+        slug: 'standalone-ep',
+        title: 'Standalone Episode',
+        audio: { src: 'https://example.com/single.m4a', durationSeconds: 500 },
+      };
+      const secondSeriesCard = {
+        id: 'series-2',
+        slug: 'series-2',
+        title: 'Second Series',
+        isSeries: true,
+        episodes: [
+          { slug: 's2-p1', title: 'S2 Part 1', seriesPart: 1, audio: { src: 'https://example.com/s2p1.m4a', durationSeconds: 300 } },
+        ],
+      };
+
+      const sm = new CarouselStateMachine([mockSeriesCard, standaloneCard, secondSeriesCard]);
+      assert.equal(sm.activeIndex, 0);
+
+      // Expand first series
+      sm.expandSeries(0);
+      assert.equal(sm.expandedSeriesIndex, 0);
+
+      // Select standalone card (index 1) -> drawer must collapse (expandedSeriesIndex becomes null)
+      sm.selectItem(1);
+      assert.equal(sm.expandedSeriesIndex, null, 'Drawer collapses when navigating to standalone episode');
+
+      // Select second series card (index 2) and expand
+      sm.expandSeries(2);
+      assert.equal(sm.expandedSeriesIndex, 2);
+
+      // Navigate back to first series card (index 0) while expanded -> automatically switches expanded index
+      sm.selectItem(0);
+      assert.equal(sm.expandedSeriesIndex, 0, 'Drawer switches expanded series index when moving between series cards');
+    });
+
+    it('F19.9: APG trigger focus restoration and scoped keyboard navigation within active series', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      // Verify APG trigger focus restoration in collapseDrawer
+      assert.match(src, /triggerBtn\s*=\s*slides\[prevIdx\]\.querySelector.*carousel-series-toggle-btn/, 'Returns focus to series toggle button on collapse');
+      // Verify scoped navigation within active series
+      assert.match(src, /activeSeriesContent\s*=\s*item\.closest.*drawer-series-content/, 'Scopes drawer items within active series content');
+      assert.match(src, /target\s*!==\s*item\s*&&\s*\(target\.closest\(['"]a['"]\)\s*\|\|\s*target\.closest\(['"]button['"]\)\)/, 'Prevents double-click activation on interactive children');
+    });
+
+    it('F19.10: Series card button label preservation and prefers-reduced-motion compliance', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      // Verify series button preserves Play Part 1 and Pause Part 1
+      assert.match(src, /isSeries[\s\S]*?Play Part 1/, 'Series play button preserves Play Part 1 label');
+      assert.match(src, /isSeries[\s\S]*?Pause Part 1/, 'Series play button updates to Pause Part 1 when active');
+      // Verify scrollIntoView checks prefers-reduced-motion
+      assert.match(src, /prefersReduced[\s\S]*?scrollIntoView/, 'Docked player scrollIntoView respects prefers-reduced-motion');
+    });
+
+    it('F19.11: Unified playback state synchronization across drawer, series cards, and docked player', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      // Verify unified syncPlaybackState function exists
+      assert.match(src, /function\s+syncPlaybackState\s*\(/, 'syncPlaybackState function defined');
+      // Verify docked audio events (play, pause, ended) invoke syncPlaybackState
+      assert.match(src, /docked\.audio\.addEventListener\(['"]play['"][\s\S]*?syncPlaybackState/, 'Audio play event triggers syncPlaybackState');
+      assert.match(src, /docked\.audio\.addEventListener\(['"]pause['"][\s\S]*?syncPlaybackState/, 'Audio pause event triggers syncPlaybackState');
+      assert.match(src, /docked\.audio\.addEventListener\(['"]ended['"][\s\S]*?syncPlaybackState/, 'Audio ended event triggers syncPlaybackState');
+      // Verify aria-pressed is synchronized on play buttons
+      assert.match(src, /btn\.setAttribute\(['"]aria-pressed['"]/, 'aria-pressed synchronized on carousel play buttons');
+      assert.match(src, /pBtn\.setAttribute\(['"]aria-pressed['"]/, 'aria-pressed synchronized on drawer play buttons');
+    });
+
+    it('F19.12: Track keydown excludes button children to prevent double-trigger toggling on Enter/Space', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      assert.match(
+        src,
+        /!target\.closest\(['"]a['"]\)\s*&&\s*!target\.closest\(['"]button['"]\)/,
+        'Track keydown excludes button children on Enter/Space to avoid duplicate events'
+      );
+    });
+
+    it('F19.13: Scoped ArrowDown and ArrowUp navigation across drawer episodes supports focused drawer buttons', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      // Verify keydown guard on drawer episode items only excludes Enter and Space for interactive children
+      assert.match(
+        src,
+        /\(e\.key\s*===\s*['"]Enter['"]\s*\|\|\s*e\.key\s*===\s*['"]\s*['"]\)\s*&&\s*target\s*!==\s*item/,
+        'Only guards Enter and Space for interactive children, allowing vertical arrow navigation'
+      );
+      // Verify ArrowDown and ArrowUp support navigating when focus is on play button
+      assert.match(src, /target\.classList\.contains\(['"]drawer-play-btn['"]\)/, 'Maintains focus on drawer-play-btn during arrow navigation');
+    });
+
+    it('F19.14: Series quick play button toggles play/pause on active series rather than restarting Part 1', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      assert.match(
+        src,
+        /isThisSeriesActive[\s\S]*?docked\.audio\.paused[\s\S]*?docked\.audio\.pause\(\)/,
+        'Series quick play button pauses active playback if series is already playing'
+      );
+    });
+
+    it('F19.15: Strict design token adherence in .carousel-play-btn.is-playing without hardcoded hex colors', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      assert.match(
+        src,
+        /\.carousel-play-btn\.is-playing\s*\{[\s\S]*?var\(--accent-amber\)[\s\S]*?var\(--secondary-brown\)/,
+        '.carousel-play-btn.is-playing uses CSS custom property tokens instead of hardcoded hex colors'
+      );
+    });
+
+    it('F19.16: Scroll synchronization updates state machine active index and synchronizes drawer state', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      assert.match(
+        src,
+        /handleScrollSync[\s\S]*?clampedIndex\s*=\s*stateMachine\.selectItem\(newIndex\)/,
+        'handleScrollSync updates stateMachine.selectItem to maintain index consistency during manual scrolling'
+      );
+      assert.match(
+        src,
+        /handleScrollSync[\s\S]*?wasDrawerOpen[\s\S]*?expandDrawer\(clampedIndex,\s*false\)/,
+        'handleScrollSync synchronizes expanded drawer when active slide changes via manual scroll'
+      );
+    });
+
+    it('F19.17: Initial direct docked audio playback resolves currentPlayingSlug and synchronizes playback UI', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      assert.match(
+        src,
+        /docked\.audio\.addEventListener\(['"]play['"][\s\S]*?!currentPlayingSlug[\s\S]*?activeSlide(?:\.|\?\.)dataset\.isSeries/,
+        'Docked audio play event resolves currentPlayingSlug when playback starts directly from docked player'
+      );
+    });
+
+    it('F19.18: Pausing playback on Part 2 or Part 3 preserves paused episode part in series button label', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      assert.match(
+        src,
+        /pausedPartLabel[\s\S]*?Play Part \$\{pausedPartLabel\}/,
+        'updatePlayButtonUI dynamically retains the paused part number when paused'
+      );
+    });
+
+    it('F19.19: Complete zero hex colors in AudioCarousel.astro styles adhering to design tokens', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      const hexMatches = [...src.matchAll(/#[0-9a-fA-F]{3,6}\b/g)];
+      assert.equal(
+        hexMatches.length,
+        0,
+        `AudioCarousel.astro must contain 0 hardcoded hex colors, found: ${hexMatches.map((m) => m[0]).join(', ')}`
+      );
+    });
+
+    it('F19.20: APG Home and End keys navigate to first and last items in series drawer tracklist', (t) => {
+      const src = loadComponentSource();
+      if (!src) {
+        t.skip('src/components/AudioCarousel.astro not found');
+        return;
+      }
+      assert.match(
+        src,
+        /e\.key\s*===\s*['"]Home['"][\s\S]*?siblingItems\[0\]/,
+        'Drawer keydown handles Home key to navigate to first episode'
+      );
+      assert.match(
+        src,
+        /e\.key\s*===\s*['"]End['"][\s\S]*?siblingItems\[siblingItems\.length\s*-\s*1\]/,
+        'Drawer keydown handles End key to navigate to last episode'
+      );
     });
   });
 

@@ -141,3 +141,45 @@ The component must use the existing design system tokens and conform to the clas
 ### Architectural Integrity
 - [ ] `npm run validate` passes without any new class register errors.
 - [ ] The implementation introduces no inline page-level `<style>` tags (component-scoped is fine).
+
+## 2026-09-19T19:48:20Z
+
+This is a single self-contained fix; keep it small and focused.
+
+Implement an expandable series-focused browsing interaction for the audio carousel on lukethinks.nl, allowing multi-part series to be selected and expanded in-place with episodes presented in chronological intended playback order (Part 1, Part 2, etc.), with synchronized in-line playback controls.
+
+Working directory: c:/Users/lvanden/OneDrive - Stryker/Documents/1. Trauma & Extremities - Personal Luke vdTop/4. LukeThinks/lukethinks-website
+Integrity mode: development
+
+## Requirements
+
+### R1. Series-Centric Carousel Grouping
+The top carousel should highlight multi-part series (e.g. the 3-part "AI Skills & The Future of Human Judgment" series) as top-level group cards, showing the series title, total parts count, and overarching theme. Standalone single episodes continue to live in the catalog below.
+
+### R2. In-Place Drawer Expansion
+Selecting a series card must expand an in-place tracklist drawer directly underneath the active carousel card without navigating away or breaking the carousel view. The drawer displays the episodes in their intended listening order (Earliest / Part 1 first, followed by Part 2, Part 3).
+
+### R3. In-Line Synchronized Audio Playback
+Selecting an episode from the expanded series drawer must smoothly dock and initiate playback in the audio player, keeping playback controls cleanly in line with the viewport so users can listen effortlessly while browsing the page.
+
+### R4. Architectural & Trademark Compliance
+- Absolutely zero mentions or trademarks of third-party hardware (strictly no "iPod" in code, comments, classes, or copy).
+- Fully accessible keyboard navigation (Arrow keys, Enter/Space to expand, Esc to collapse, roving tabindex).
+- Strict adherence to site design tokens (src/styles/site.css) and the class register (scripts/check-register.mjs).
+
+## Acceptance Criteria
+
+### Carousel & Drawer Interaction
+- [ ] Top carousel displays series cards with clear part counts (e.g., "3 Parts").
+- [ ] Clicking a series card expands an in-place episode list drawer below the carousel track.
+- [ ] Episodes within the drawer are strictly ordered by intended playback sequence (Part 1 -> Part 2 -> Part 3).
+- [ ] Clicking an episode in the drawer immediately updates the docked audio player and begins playback.
+- [ ] Users can easily collapse the drawer or switch between series cards.
+
+### Accessibility & Governance
+- [ ] Keyboard navigation allows opening the drawer, tabbing through episodes, and playing with Space/Enter.
+- [ ] ARIA attributes (aria-expanded, aria-controls, live region announcements) properly reflect the drawer state.
+- [ ] Zero instances of "ipod" (case-insensitive) anywhere in modified components, tests, or styles.
+- [ ] npm run validate passes with 0 errors and 0 class register drift.
+- [ ] Automated tests in tests/audio-carousel.test.mjs pass.
+

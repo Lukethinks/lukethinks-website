@@ -28,6 +28,12 @@ export interface CarouselItem {
     source?: string;
     aiDisclosed?: boolean;
   };
+  isSeries?: boolean;
+  series?: string;
+  seriesPart?: number;
+  partsCount?: number;
+  theme?: string;
+  episodes?: CarouselItem[];
 }
 
 export interface Props {
@@ -57,14 +63,25 @@ const {
 const totalItems = items.length;
 const safeInitialIndex = totalItems > 0 ? Math.max(0, Math.min(totalItems - 1, initialIndex)) : 0;
 const initialItem = items[safeInitialIndex];
-const initialResolvedAudio = initialItem ? resolveAudioUrl(initialItem.audio.src) : '';
+const initialIsSeries = Boolean(initialItem && (initialItem.isSeries || (initialItem.episodes && initialItem.episodes.length > 0)));
+const initialFirstEp = initialIsSeries && initialItem?.episodes && initialItem.episodes.length > 0 ? initialItem.episodes[0] : initialItem;
+const initialResolvedAudio = initialFirstEp ? resolveAudioUrl(initialFirstEp.audio.src) : '';
+const initialTitle = initialIsSeries && initialFirstEp
+  ? (initialFirstEp.seriesPart ? `Play Part ${initialFirstEp.seriesPart}: ${initialFirstEp.title}` : `Play Episode ${String(initialFirstEp.episodeNumber ?? 1).padStart(2, '0')}: ${initialFirstEp.title}`)
+  : (initialItem ? `Play Episode ${String(initialItem.episodeNumber ?? 1).padStart(2, '0')}: ${initialItem.title}` : '');
+const initialDurationSeconds = initialFirstEp ? initialFirstEp.audio.durationSeconds : (initialItem ? initialItem.audio.durationSeconds : 0);
+const initialVariant = initialIsSeries ? 'series' : (initialItem?.format || 'episode');
 
 const containerId = id;
 const announcerId = `${id}-announcer`;
 const trackId = `${id}-track`;
+const seriesDrawerId = `${id}-series-drawer`;
 const dockedPlayerId = `${id}-docked-player`;
 const dockedHeadingId = `${id}-docked-heading`;
 const dockedStationId = `${id}-docked-station`;
+
+const seriesItems = items.filter((it) => Boolean(it.isSeries || (it.episodes && it.episodes.length > 0)));
+const hasSeries = seriesItems.length > 0;
 ---
 
 <section
@@ -165,6 +182,9 @@ const dockedStationId = `${id}-docked-station`;
             const isFocusable = isInitial || defaultView === 'grid';
             const childTabIndex = isFocusable ? '0' : '-1';
             const isInert = !isInitial && defaultView !== 'grid';
+            const isSeries = Boolean(item.isSeries || (item.episodes && item.episodes.length > 0));
+            const partsCount = item.partsCount ?? item.episodes?.length ?? 1;
+            const seriesTheme = item.theme ?? '';
             const epNum = item.episodeNumber ?? (idx + 1);
             const epNumPadded = String(epNum).padStart(2, '0');
             const durationMin = Math.ceil(item.audio.durationSeconds / 60);
@@ -175,8 +195,11 @@ const dockedStationId = `${id}-docked-station`;
               year: 'numeric',
             });
             const isDebate = (item.format === 'debate') || item.title.toLowerCase().includes('debate');
-            const formatLabel = isDebate ? 'Point · Counterpoint' : 'Executive Briefing';
+            const formatLabel = isSeries ? 'Curated Series' : (isDebate ? 'Point · Counterpoint' : 'Executive Briefing');
             const resolvedSrc = resolveAudioUrl(item.audio.src);
+            const firstEpSlug = item.episodes?.[0]?.slug || item.slug;
+            const firstAudioSrc = item.episodes?.[0]?.audio?.src ? resolveAudioUrl(item.episodes[0].audio.src) : resolvedSrc;
+            const firstDurationMin = item.episodes?.[0]?.audio?.durationSeconds ? Math.ceil(item.episodes[0].audio.durationSeconds / 60) : durationMin;
 
             let initialFlankClass = '';
             if (isInitial) {
@@ -196,54 +219,73 @@ const dockedStationId = `${id}-docked-station`;
                 class={`carousel-item ${initialFlankClass}`.trim()}
                 role="group"
                 aria-roledescription="slide"
-                aria-label={`Episode ${idx + 1} of ${totalItems}: ${item.title}`}
+                aria-label={isSeries ? `Series ${idx + 1} of ${totalItems}: ${item.title} (${partsCount} Parts)` : `Episode ${idx + 1} of ${totalItems}: ${item.title}`}
                 data-index={idx}
                 data-slug={item.slug}
                 data-title={item.title}
                 data-episode={epNumPadded}
-                data-format={item.format || (isDebate ? 'debate' : 'briefing')}
+                data-format={item.format || (isSeries ? 'series' : (isDebate ? 'debate' : 'briefing'))}
                 data-format-label={formatLabel}
                 data-audio-src={resolvedSrc}
                 data-duration={durationMin}
                 data-duration-seconds={item.audio.durationSeconds}
                 data-companion-href={item.companionArticle?.href || ''}
                 data-companion-title={item.companionArticle?.title || ''}
+                data-is-series={isSeries ? 'true' : 'false'}
+                data-parts-count={isSeries ? partsCount : undefined}
+                data-series-title={isSeries ? item.title : undefined}
                 tabindex={isFocusable ? '0' : '-1'}
                 aria-current={isInitial ? 'true' : undefined}
+                aria-haspopup={isSeries ? 'true' : undefined}
+                aria-expanded={isSeries ? 'false' : undefined}
                 inert={isInert ? true : undefined}
               >
                 <div class="carousel-card-inner">
                   <!-- 1:1 Square Artwork Badge with Floor Reflection -->
                   <div class="carousel-card-artwork" aria-hidden="true">
                     <div class="artwork-inner">
-                      <span class="artwork-icon">{isDebate ? '⚖️' : '🎙️'}</span>
-                      <span class="artwork-number">EP {epNumPadded}</span>
-                      <span class="artwork-label">{formatLabel}</span>
+                      <span class="artwork-icon">{isSeries ? '📚' : (isDebate ? '⚖️' : '🎙️')}</span>
+                      <span class="artwork-number">{isSeries ? `${partsCount} PARTS` : `EP ${epNumPadded}`}</span>
+                      <span class="artwork-label">{isSeries ? 'Series' : formatLabel}</span>
                     </div>
                   </div>
 
                   <!-- Card Editorial Content -->
                   <div class="carousel-card-content">
                     <div class="carousel-card-meta">
-                      <span class="carousel-badge">EP {epNumPadded}</span>
-                      <span class="carousel-format-badge">{isDebate ? 'Debate' : 'Briefing'}</span>
-                      <time datetime={pubDate.toISOString().slice(0, 10)} class="carousel-date">{pubDateHuman}</time>
-                      <span class="carousel-duration">⏱️ {durationMin} min</span>
-                      {item.confidence && (
-                        <span class="carousel-confidence">
-                          {item.confidence}
-                        </span>
+                      {isSeries ? (
+                        <>
+                          <span class="carousel-badge carousel-parts-count">{partsCount} Parts</span>
+                          <span class="carousel-format-badge carousel-series-badge">Series</span>
+                          {seriesTheme && <span class="carousel-theme-tag">{seriesTheme}</span>}
+                        </>
+                      ) : (
+                        <>
+                          <span class="carousel-badge">EP {epNumPadded}</span>
+                          <span class="carousel-format-badge">{isDebate ? 'Debate' : 'Briefing'}</span>
+                          <time datetime={pubDate.toISOString().slice(0, 10)} class="carousel-date">{pubDateHuman}</time>
+                          <span class="carousel-duration">⏱️ {durationMin} min</span>
+                          {item.confidence && (
+                            <span class="carousel-confidence">
+                              {item.confidence}
+                            </span>
+                          )}
+                        </>
                       )}
                     </div>
 
                     <h3 class="carousel-card-title">
-                      <a
-                        href={`/podcast/${item.slug}`}
-                        class="carousel-title-link"
-                        tabindex={childTabIndex}
-                      >
-                        {item.title}
-                      </a>
+                      {isSeries ? (
+                        <span class="carousel-series-title">{item.title}</span>
+                      ) : (
+                        <a
+                          href={`/podcast/${item.slug}`}
+                          class="carousel-title-link"
+                          tabindex={childTabIndex}
+                        >
+                          {item.title}
+                        </a>
+                      )}
                     </h3>
 
                     <p class="carousel-card-summary">{item.summary}</p>
@@ -259,25 +301,62 @@ const dockedStationId = `${id}-docked-station`;
 
                     <!-- Card Actions -->
                     <div class="carousel-card-actions">
-                      <button
-                        type="button"
-                        class="carousel-play-btn"
-                        data-index={idx}
-                        data-slug={item.slug}
-                        aria-label={`Play Episode ${epNumPadded}: ${item.title}`}
-                        tabindex={childTabIndex}
-                      >
-                        <span class="play-btn-icon" aria-hidden="true">▶</span>
-                        <span class="play-btn-text">Listen</span>
-                      </button>
+                      {isSeries ? (
+                        <>
+                          <button
+                            type="button"
+                            class="carousel-series-toggle-btn"
+                            data-index={idx}
+                            data-series-slug={item.slug}
+                            aria-expanded="false"
+                            aria-controls={seriesDrawerId}
+                            aria-label={`Explore ${item.title} series (${partsCount} parts)`}
+                            tabindex={childTabIndex}
+                          >
+                            <span class="toggle-btn-icon" aria-hidden="true">▾</span>
+                            <span class="toggle-btn-text">Explore Series ({partsCount} Parts)</span>
+                          </button>
+                          <button
+                            type="button"
+                            class="carousel-play-btn series-quick-play-btn"
+                            data-index={idx}
+                            data-slug={firstEpSlug}
+                            data-audio-src={firstAudioSrc}
+                            data-title={item.episodes?.[0]?.title || item.title}
+                            data-duration={firstDurationMin}
+                            aria-label={`Play Part 1 of ${item.title}`}
+                            tabindex={childTabIndex}
+                          >
+                            <span class="play-btn-icon" aria-hidden="true">▶</span>
+                            <span class="play-btn-text">Play Part 1</span>
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            class="carousel-play-btn"
+                            data-index={idx}
+                            data-slug={item.slug}
+                            data-audio-src={resolvedSrc}
+                            data-title={item.title}
+                            data-duration={durationMin}
+                            aria-label={`Play Episode ${epNumPadded}: ${item.title}`}
+                            tabindex={childTabIndex}
+                          >
+                            <span class="play-btn-icon" aria-hidden="true">▶</span>
+                            <span class="play-btn-text">Listen</span>
+                          </button>
 
-                      <a
-                        href={`/podcast/${item.slug}`}
-                        class="carousel-detail-link"
-                        tabindex={childTabIndex}
-                      >
-                        Show Notes →
-                      </a>
+                          <a
+                            href={`/podcast/${item.slug}`}
+                            class="carousel-detail-link"
+                            tabindex={childTabIndex}
+                          >
+                            Show Notes →
+                          </a>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -286,6 +365,127 @@ const dockedStationId = `${id}-docked-station`;
           })}
         </div>
       </div>
+
+      <!-- In-Place Expandable Series Drawer -->
+      {hasSeries && (
+        <div
+          class="carousel-series-drawer is-collapsed"
+          id={seriesDrawerId}
+          role="region"
+          aria-label="Series episode tracklist"
+          aria-hidden="true"
+        >
+          {seriesItems.map((series, sIdx) => {
+            const eps = [...(series.episodes || [])].sort((a, b) => {
+              const partA = a.seriesPart ?? a.episodeNumber ?? (a as any).episode ?? 0;
+              const partB = b.seriesPart ?? b.episodeNumber ?? (b as any).episode ?? 0;
+              if (partA !== partB) return partA - partB;
+              const dateA = a.published ? new Date(a.published).getTime() : 0;
+              const dateB = b.published ? new Date(b.published).getTime() : 0;
+              if (dateA !== dateB) return dateA - dateB;
+              return (a.slug || '').localeCompare(b.slug || '');
+            });
+            const isInitialSeries = sIdx === 0;
+            const partsTotal = eps.length;
+
+            return (
+              <div
+                class={`drawer-series-content ${isInitialSeries ? 'is-active' : ''}`}
+                data-series-index={items.indexOf(series)}
+                data-series-slug={series.slug}
+                id={`${id}-drawer-content-${series.slug}`}
+              >
+                <div class="drawer-header">
+                  <div class="drawer-title-group">
+                    <div class="drawer-kicker-row">
+                      <span class="drawer-kicker">Multi-Part Series Tracklist</span>
+                      <span class="drawer-parts-count">{partsTotal} Parts · Intended Listening Sequence</span>
+                    </div>
+                    <h3 class="drawer-title">{series.title}</h3>
+                    {series.theme && <p class="drawer-theme">{series.theme}</p>}
+                  </div>
+                  <button
+                    type="button"
+                    class="drawer-close-btn"
+                    aria-label={`Collapse ${series.title} tracklist drawer`}
+                    aria-controls={seriesDrawerId}
+                  >
+                    <span class="close-icon" aria-hidden="true">✕</span>
+                    <span class="drawer-close-text">Collapse Drawer</span>
+                  </button>
+                </div>
+
+                <ol class="drawer-tracklist" role="list">
+                  {eps.map((ep, epIdx) => {
+                    const partNum = ep.seriesPart ?? (epIdx + 1);
+                    const epDurationMin = ep.audio?.durationSeconds ? Math.ceil(ep.audio.durationSeconds / 60) : 0;
+                    const resolvedAudio = resolveAudioUrl(ep.audio?.src || '');
+                    const isEpDebate = ep.format === 'debate' || ep.title.toLowerCase().includes('debate');
+                    const epFormatBadge = isEpDebate ? 'Point · Counterpoint' : 'Executive Briefing';
+
+                    return (
+                      <li
+                        class="drawer-episode-item"
+                        data-slug={ep.slug}
+                        data-part={partNum}
+                        data-audio-src={resolvedAudio}
+                        data-title={ep.title}
+                        data-duration={epDurationMin}
+                        data-duration-seconds={ep.audio?.durationSeconds || 0}
+                        data-format-label={epFormatBadge}
+                        data-episode={ep.episodeNumber ?? ep.episode ?? partNum}
+                        tabindex="0"
+                      >
+                        <div class="drawer-episode-part">
+                          <span class="part-label">PART</span>
+                          <span class="part-number">{partNum}</span>
+                        </div>
+
+                        <div class="drawer-episode-main">
+                          <div class="drawer-episode-header">
+                            <h4 class="drawer-episode-title">
+                              <a href={`/podcast/${ep.slug}`} class="drawer-episode-link">
+                                {ep.title}
+                              </a>
+                            </h4>
+                          </div>
+                          <p class="drawer-episode-summary">{ep.summary}</p>
+                          <div class="drawer-episode-meta">
+                            <span class="drawer-format-badge">{epFormatBadge}</span>
+                            <span class="drawer-duration">⏱️ {epDurationMin} min</span>
+                            <a href={`/podcast/${ep.slug}`} class="drawer-notes-link">
+                              Show Notes →
+                            </a>
+                          </div>
+                        </div>
+
+                        <div class="drawer-episode-actions">
+                          <button
+                            type="button"
+                            class="drawer-play-btn carousel-play-btn"
+                            data-slug={ep.slug}
+                            data-part={partNum}
+                            data-audio-src={resolvedAudio}
+                            data-title={ep.title}
+                            data-duration={epDurationMin}
+                            data-duration-seconds={ep.audio?.durationSeconds || 0}
+                            data-format-label={epFormatBadge}
+                            data-episode={ep.episodeNumber ?? ep.episode ?? partNum}
+                            aria-label={`Play Part ${partNum}: ${ep.title}`}
+                          >
+                            <span class="play-btn-icon" aria-hidden="true">▶</span>
+                            <span class="play-btn-text">Play Part {partNum}</span>
+                          </button>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <!-- Docked Master Audio Player Section -->
       {showDockedPlayer && initialItem && (
@@ -304,10 +504,10 @@ const dockedStationId = `${id}-docked-station`;
           <div class="docked-player-wrapper">
             <AudioPlayer
               src={initialResolvedAudio}
-              title={`Play Episode ${String(initialItem.episodeNumber ?? 1).padStart(2, '0')}: ${initialItem.title}`}
+              title={initialTitle}
               id={dockedStationId}
-              durationSeconds={initialItem.audio.durationSeconds}
-              variant={initialItem.format || 'episode'}
+              durationSeconds={initialDurationSeconds}
+              variant={initialVariant}
               headingLevel={dockedHeadingLevel}
               aiDisclosed={initialItem.production?.aiDisclosed}
               disclosureText="AI voices curated, directed and fact-checked by Luke."
@@ -348,6 +548,14 @@ const dockedStationId = `${id}-docked-station`;
     .carousel-card-artwork {
       -webkit-box-reflect: none !important;
     }
+    .carousel-series-drawer,
+    .carousel-series-drawer.is-collapsed,
+    .drawer-series-content {
+      display: block !important;
+    }
+    .drawer-close-btn {
+      display: none !important;
+    }
   </style>
 </noscript>
 
@@ -372,20 +580,51 @@ const dockedStationId = `${id}-docked-station`;
       const viewButtons = container.querySelectorAll<HTMLButtonElement>('.view-btn');
       const dockedSection = container.querySelector<HTMLElement>(`#${containerId}-docked-player`) ||
         container.querySelector<HTMLElement>('.audio-docked-section');
-      const playButtons = container.querySelectorAll<HTMLButtonElement>('.carousel-play-btn');
+      const playButtons = container.querySelectorAll<HTMLButtonElement>('.carousel-play-btn:not(.drawer-play-btn):not(.series-quick-play-btn)');
+      const seriesDrawer = container.querySelector<HTMLElement>(`#${containerId}-series-drawer`) ||
+        container.querySelector<HTMLElement>('.carousel-series-drawer');
+      const seriesToggleButtons = container.querySelectorAll<HTMLButtonElement>('.carousel-series-toggle-btn');
+      const drawerCloseButtons = container.querySelectorAll<HTMLButtonElement>('.drawer-close-btn');
+      const drawerPlayButtons = container.querySelectorAll<HTMLButtonElement>('.drawer-play-btn');
+      const drawerEpisodeItems = container.querySelectorAll<HTMLElement>('.drawer-episode-item');
 
       if (!track || slides.length === 0) return;
 
-      const itemsData = slides.map((slide, idx) => ({
-        slug: slide.dataset.slug || '',
-        title: slide.dataset.title || '',
-        episodeNumber: parseInt(slide.dataset.episode || String(idx + 1), 10),
-        format: slide.dataset.format || '',
-        audio: {
-          src: slide.dataset.audioSrc || '',
-          durationSeconds: parseInt(slide.dataset.durationSeconds || '0', 10),
-        },
-      }));
+      const itemsData = slides.map((slide, idx) => {
+        const isSeries = slide.dataset.isSeries === 'true';
+        let episodes: any[] | undefined = undefined;
+        if (isSeries && seriesDrawer) {
+          const content = seriesDrawer.querySelector<HTMLElement>(
+            `.drawer-series-content[data-series-index="${idx}"], .drawer-series-content[data-series-slug="${slide.dataset.slug}"]`
+          );
+          if (content) {
+            episodes = Array.from(content.querySelectorAll<HTMLElement>('.drawer-episode-item')).map((epItem) => ({
+              slug: epItem.dataset.slug || '',
+              title: epItem.dataset.title || '',
+              seriesPart: parseInt(epItem.dataset.part || '1', 10),
+              format: epItem.dataset.formatLabel || '',
+              audio: {
+                src: epItem.dataset.audioSrc || '',
+                durationSeconds: parseInt(epItem.dataset.durationSeconds || '0', 10),
+              },
+            }));
+          }
+        }
+        return {
+          slug: slide.dataset.slug || '',
+          title: slide.dataset.title || '',
+          episodeNumber: parseInt(slide.dataset.episode || String(idx + 1), 10),
+          format: slide.dataset.format || '',
+          isSeries,
+          partsCount: slide.dataset.partsCount ? parseInt(slide.dataset.partsCount, 10) : undefined,
+          series: slide.dataset.seriesTitle,
+          episodes,
+          audio: {
+            src: slide.dataset.audioSrc || '',
+            durationSeconds: parseInt(slide.dataset.durationSeconds || '0', 10),
+          },
+        };
+      });
 
       const stateMachine = new CarouselStateMachine(itemsData, {
         initialIndex: parseInt(container.dataset.initialIndex || '0', 10),
@@ -408,24 +647,176 @@ const dockedStationId = `${id}-docked-station`;
         return { audio, titleEl, variantEl, timeEl, downloadLink };
       }
 
-      function updatePlayButtonUI(slide: HTMLElement, isPlaying: boolean) {
+      function updatePlayButtonUI(slide: HTMLElement, isPlaying: boolean, playingPart?: string | number) {
         const btn = slide.querySelector<HTMLButtonElement>('.carousel-play-btn');
         if (!btn) return;
+        const isSeries = slide.dataset.isSeries === 'true';
         const icon = btn.querySelector<HTMLElement>('.play-btn-icon');
         const text = btn.querySelector<HTMLElement>('.play-btn-text');
         const ep = slide.dataset.episode || '';
         const t = slide.dataset.title || '';
+        const partLabel = playingPart ? String(playingPart) : '1';
+
+        btn.classList.toggle('is-playing', isPlaying);
+        btn.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
 
         if (isPlaying) {
-          btn.classList.add('is-playing');
-          btn.setAttribute('aria-label', `Pause Episode ${ep}: ${t}`);
-          if (icon) icon.textContent = '⏸';
-          if (text) text.textContent = 'Pause';
+          if (isSeries) {
+            btn.setAttribute('aria-label', `Pause Part ${partLabel} of ${t}`);
+            if (icon) icon.textContent = '⏸';
+            if (text) text.textContent = partLabel === '1' ? 'Pause Part 1' : `Pause Part ${partLabel}`;
+          } else {
+            btn.setAttribute('aria-label', `Pause Episode ${ep}: ${t}`);
+            if (icon) icon.textContent = '⏸';
+            if (text) text.textContent = 'Pause';
+          }
         } else {
-          btn.classList.remove('is-playing');
-          btn.setAttribute('aria-label', `Play Episode ${ep}: ${t}`);
-          if (icon) icon.textContent = '▶';
-          if (text) text.textContent = 'Listen';
+          if (isSeries) {
+            const pausedPartLabel = playingPart ? String(playingPart) : '1';
+            btn.setAttribute('aria-label', `Play Part ${pausedPartLabel} of ${t}`);
+            if (icon) icon.textContent = '▶';
+            if (text) text.textContent = pausedPartLabel === '1' ? 'Play Part 1' : `Play Part ${pausedPartLabel}`;
+          } else {
+            btn.setAttribute('aria-label', `Play Episode ${ep}: ${t}`);
+            if (icon) icon.textContent = '▶';
+            if (text) text.textContent = 'Listen';
+          }
+        }
+      }
+
+      function syncPlaybackState(playingSlug: string | null, isPlaying: boolean) {
+        stateMachine.isPlaying = isPlaying;
+
+        let activeSeriesSlideIndex: number | null = null;
+        let activePartNumber: string | number | undefined;
+
+        const drawerItems = seriesDrawer ? Array.from(seriesDrawer.querySelectorAll<HTMLElement>('.drawer-episode-item')) : [];
+        drawerItems.forEach((item) => {
+          const isThis = Boolean(playingSlug && item.dataset.slug === playingSlug);
+          item.classList.toggle('is-playing', isThis && isPlaying);
+          item.classList.toggle('is-active', isThis);
+
+          const pBtn = item.querySelector<HTMLButtonElement>('.drawer-play-btn');
+          const pIcon = pBtn?.querySelector<HTMLElement>('.play-btn-icon');
+          const pText = pBtn?.querySelector<HTMLElement>('.play-btn-text');
+          const partNum = item.dataset.part || '';
+          const title = item.dataset.title || '';
+
+          if (isThis) {
+            activePartNumber = partNum;
+            const parentSeriesContent = item.closest<HTMLElement>('.drawer-series-content');
+            if (parentSeriesContent?.dataset.seriesIndex) {
+              activeSeriesSlideIndex = parseInt(parentSeriesContent.dataset.seriesIndex, 10);
+            }
+          }
+
+          if (pBtn) {
+            pBtn.classList.toggle('is-playing', isThis && isPlaying);
+            pBtn.setAttribute('aria-pressed', isThis && isPlaying ? 'true' : 'false');
+            if (isThis && isPlaying) {
+              if (pIcon) pIcon.textContent = '⏸';
+              if (pText) pText.textContent = `Pause Part ${partNum}`;
+              pBtn.setAttribute('aria-label', `Pause Part ${partNum}: ${title}`);
+            } else {
+              if (pIcon) pIcon.textContent = '▶';
+              if (pText) pText.textContent = `Play Part ${partNum}`;
+              pBtn.setAttribute('aria-label', `Play Part ${partNum}: ${title}`);
+            }
+          }
+        });
+
+        slides.forEach((slide, idx) => {
+          const isDirectMatch = Boolean(playingSlug && slide.dataset.slug === playingSlug);
+          const isSeriesOwner = activeSeriesSlideIndex !== null && idx === activeSeriesSlideIndex;
+          const isSlidePlaying = (isDirectMatch || isSeriesOwner) && isPlaying;
+          const isSlideDocked = isDirectMatch || isSeriesOwner;
+
+          slide.classList.toggle('is-playing', isSlidePlaying);
+          slide.classList.toggle('is-docked', isSlideDocked);
+
+          updatePlayButtonUI(slide, isSlidePlaying, isSeriesOwner ? activePartNumber : undefined);
+        });
+      }
+
+      function expandDrawer(seriesIndex: number, focusFirst = false) {
+        if (!seriesDrawer) return;
+        const seriesSlide = slides[seriesIndex];
+        if (!seriesSlide || seriesSlide.dataset.isSeries !== 'true') return;
+
+        stateMachine.expandSeries(seriesIndex);
+
+        seriesDrawer.classList.remove('is-collapsed');
+        seriesDrawer.classList.add('is-expanded');
+        seriesDrawer.setAttribute('aria-hidden', 'false');
+
+        const seriesSlug = seriesSlide.dataset.slug || '';
+        const allSeriesContents = seriesDrawer.querySelectorAll<HTMLElement>('.drawer-series-content');
+        allSeriesContents.forEach((c) => {
+          const isTarget = c.dataset.seriesIndex === String(seriesIndex) || c.dataset.seriesSlug === seriesSlug;
+          c.classList.toggle('is-active', isTarget);
+        });
+
+        slides.forEach((s, idx) => {
+          const toggleBtn = s.querySelector<HTMLButtonElement>('.carousel-series-toggle-btn');
+          const isThis = idx === seriesIndex;
+          if (toggleBtn) {
+            toggleBtn.setAttribute('aria-expanded', isThis ? 'true' : 'false');
+            toggleBtn.classList.toggle('is-expanded', isThis);
+          }
+          s.setAttribute('aria-expanded', isThis ? 'true' : 'false');
+        });
+
+        const sTitle = seriesSlide.dataset.seriesTitle || seriesSlide.dataset.title || '';
+        const pCount = seriesSlide.dataset.partsCount || '3';
+        if (announcer) {
+          announcer.textContent = `Expanded series tracklist: ${sTitle}. ${pCount} parts available in intended listening sequence.`;
+        }
+
+        if (focusFirst) {
+          const firstDrawerPlay = seriesDrawer.querySelector<HTMLElement>(
+            '.drawer-series-content.is-active .drawer-play-btn'
+          );
+          firstDrawerPlay?.focus();
+        }
+      }
+
+      function collapseDrawer(returnFocus = false) {
+        if (!seriesDrawer) return;
+        const prevIdx = stateMachine.expandedSeriesIndex;
+        stateMachine.collapseSeries();
+
+        seriesDrawer.classList.remove('is-expanded');
+        seriesDrawer.classList.add('is-collapsed');
+        seriesDrawer.setAttribute('aria-hidden', 'true');
+
+        slides.forEach((s) => {
+          const toggleBtn = s.querySelector<HTMLButtonElement>('.carousel-series-toggle-btn');
+          if (toggleBtn) {
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            toggleBtn.classList.remove('is-expanded');
+          }
+          s.setAttribute('aria-expanded', 'false');
+        });
+
+        if (announcer) {
+          announcer.textContent = 'Series tracklist drawer collapsed.';
+        }
+
+        if (returnFocus && prevIdx !== null && slides[prevIdx]) {
+          const triggerBtn = slides[prevIdx].querySelector<HTMLButtonElement>('.carousel-series-toggle-btn');
+          if (triggerBtn) {
+            triggerBtn.focus();
+          } else {
+            slides[prevIdx].focus();
+          }
+        }
+      }
+
+      function toggleDrawer(seriesIndex: number, focusFirst = false) {
+        if (stateMachine.expandedSeriesIndex === seriesIndex) {
+          collapseDrawer(false);
+        } else {
+          expandDrawer(seriesIndex, focusFirst);
         }
       }
 
@@ -508,8 +899,17 @@ const dockedStationId = `${id}-docked-station`;
       }
 
       function goToSlide(index: number, focusCard = false) {
+        const wasDrawerOpen = stateMachine.expandedSeriesIndex !== null;
         const clampedIndex = stateMachine.selectItem(index);
         updateSlideClasses(clampedIndex);
+
+        if (wasDrawerOpen) {
+          if (stateMachine.expandedSeriesIndex !== null) {
+            expandDrawer(clampedIndex, false);
+          } else {
+            collapseDrawer(false);
+          }
+        }
 
         if (stateMachine.viewMode !== 'grid') {
           scrollToIndex(clampedIndex, true);
@@ -590,14 +990,7 @@ const dockedStationId = `${id}-docked-station`;
         currentPlayingSlug = slug;
         stateMachine.dockAndPlayActive();
 
-        // Update slide states
-        slides.forEach((s) => {
-          s.classList.remove('is-docked', 'is-playing');
-          updatePlayButtonUI(s, false);
-        });
-
-        slide.classList.add('is-docked', 'is-playing');
-        updatePlayButtonUI(slide, true);
+        syncPlaybackState(currentPlayingSlug, true);
 
         // Dispatch decoupled event for observers
         window.dispatchEvent(
@@ -647,13 +1040,232 @@ const dockedStationId = `${id}-docked-station`;
         btn.addEventListener('click', () => switchView(btn.dataset.view));
       });
 
-      // Play button actions
+      // Play button actions on slides
       playButtons.forEach((btn) => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           const slide = btn.closest<HTMLElement>('.carousel-item');
           if (slide) dockAndPlay(slide, true);
         });
+      });
+
+      // Series toggle buttons on slides
+      seriesToggleButtons.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const slide = btn.closest<HTMLElement>('.carousel-item');
+          if (!slide) return;
+          const idx = parseInt(slide.dataset.index || '0', 10);
+          if (idx !== stateMachine.activeIndex) {
+            goToSlide(idx, false);
+          }
+          toggleDrawer(idx, false);
+        });
+      });
+
+      // Series quick play buttons on slides
+      container.querySelectorAll<HTMLButtonElement>('.series-quick-play-btn').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const slide = btn.closest<HTMLElement>('.carousel-item');
+          if (!slide) return;
+          const idx = parseInt(slide.dataset.index || '0', 10);
+
+          const docked = getDockedPlayerElements();
+          const isThisSeriesActive = slide.classList.contains('is-docked') || slide.classList.contains('is-playing');
+
+          if (isThisSeriesActive && docked?.audio && currentPlayingSlug) {
+            if (docked.audio.paused) {
+              docked.audio.play().catch(() => {});
+            } else {
+              docked.audio.pause();
+            }
+            return;
+          }
+
+          expandDrawer(idx, false);
+          const firstDrawerPlay = seriesDrawer?.querySelector<HTMLButtonElement>(
+            `.drawer-series-content[data-series-index="${idx}"] .drawer-play-btn`
+          );
+          if (firstDrawerPlay) {
+            firstDrawerPlay.click();
+          } else {
+            dockAndPlay(slide, true);
+          }
+        });
+      });
+
+      // Drawer close buttons
+      drawerCloseButtons.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          collapseDrawer(true);
+        });
+      });
+
+      // Drawer episode play buttons
+      drawerPlayButtons.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const epItem = btn.closest<HTMLElement>('.drawer-episode-item');
+          if (!epItem) return;
+
+          const slug = btn.dataset.slug || epItem.dataset.slug || '';
+          const title = btn.dataset.title || epItem.dataset.title || '';
+          const partNum = btn.dataset.part || epItem.dataset.part || '';
+          const audioSrc = btn.dataset.audioSrc || epItem.dataset.audioSrc || '';
+          const duration = btn.dataset.duration || epItem.dataset.duration || '';
+          const formatLabel = btn.dataset.formatLabel || epItem.dataset.formatLabel || 'Series Episode';
+          const epNumber = btn.dataset.episode || epItem.dataset.episode || partNum;
+
+          const docked = getDockedPlayerElements();
+          if (!docked || !docked.audio) return;
+
+          if (currentPlayingSlug === slug) {
+            if (docked.audio.paused) {
+              docked.audio.play().catch(() => {});
+            } else {
+              docked.audio.pause();
+            }
+            return;
+          }
+
+          if (docked.titleEl) {
+            docked.titleEl.textContent = `Play Part ${partNum}: ${title}`;
+          }
+          if (docked.variantEl) {
+            docked.variantEl.textContent = formatLabel;
+          }
+          if (docked.timeEl && duration) {
+            docked.timeEl.textContent = `${duration} min`;
+          }
+          if (docked.downloadLink && audioSrc) {
+            docked.downloadLink.href = audioSrc;
+            docked.downloadLink.setAttribute('aria-label', `Download MP3 for Part ${partNum}: ${title}`);
+          }
+
+          docked.audio.src = audioSrc;
+          const sourceEl = docked.audio.querySelector<HTMLSourceElement>('source');
+          if (sourceEl) sourceEl.src = audioSrc;
+          docked.audio.setAttribute('aria-label', `Play Part ${partNum}: ${title}`);
+          docked.audio.load();
+          docked.audio.play().catch(() => {});
+
+          currentPlayingSlug = slug;
+          stateMachine.dockAndPlayEpisode({
+            slug,
+            title,
+            seriesPart: parseInt(partNum, 10),
+            episodeNumber: parseInt(epNumber, 10),
+            format: formatLabel,
+            audio: {
+              src: audioSrc,
+              durationSeconds: parseInt(duration, 10) * 60,
+            },
+          });
+          syncPlaybackState(currentPlayingSlug, true);
+
+          // Scroll docked player into viewport if offscreen (respecting prefers-reduced-motion)
+          const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          dockedSection?.scrollIntoView({
+            behavior: prefersReduced ? 'auto' : 'smooth',
+            block: 'nearest',
+          });
+
+          // Dispatch decoupled event
+          window.dispatchEvent(
+            new CustomEvent('lukethinks:dock-audio', {
+              detail: {
+                slug,
+                title,
+                episodeNumber: epNumber,
+                partNumber: partNum,
+                format: formatLabel,
+                audioSrc,
+                durationMinutes: duration,
+              },
+              bubbles: true,
+            })
+          );
+        });
+      });
+
+      // Drawer episode keyboard interactions (scoped to active series tracklist)
+      drawerEpisodeItems.forEach((item) => {
+        item.addEventListener('keydown', (e: KeyboardEvent) => {
+          const target = e.target as HTMLElement;
+
+          // If the key event originated from an interactive child (a or button), let the element handle Enter and Space natively
+          if ((e.key === 'Enter' || e.key === ' ') && target !== item && (target.closest('a') || target.closest('button'))) {
+            return;
+          }
+
+          const activeSeriesContent = item.closest<HTMLElement>('.drawer-series-content');
+          const siblingItems = activeSeriesContent
+            ? Array.from(activeSeriesContent.querySelectorAll<HTMLElement>('.drawer-episode-item'))
+            : Array.from(drawerEpisodeItems);
+          const currentLocalIdx = siblingItems.indexOf(item);
+          const isButtonFocused = Boolean(target.closest('.drawer-play-btn'));
+
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const playBtn = item.querySelector<HTMLButtonElement>('.drawer-play-btn');
+            playBtn?.click();
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (currentLocalIdx >= 0 && currentLocalIdx < siblingItems.length - 1) {
+              const nextItem = siblingItems[currentLocalIdx + 1];
+              if (isButtonFocused || target.classList.contains('drawer-play-btn')) {
+                nextItem?.querySelector<HTMLElement>('.drawer-play-btn')?.focus();
+              } else {
+                nextItem?.focus();
+              }
+            }
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (currentLocalIdx > 0) {
+              const prevItem = siblingItems[currentLocalIdx - 1];
+              if (isButtonFocused || target.classList.contains('drawer-play-btn')) {
+                prevItem?.querySelector<HTMLElement>('.drawer-play-btn')?.focus();
+              } else {
+                prevItem?.focus();
+              }
+            } else {
+              const activeSlide = slides[stateMachine.activeIndex];
+              const triggerBtn = activeSlide?.querySelector<HTMLButtonElement>('.carousel-series-toggle-btn');
+              (triggerBtn || activeSlide)?.focus();
+            }
+          } else if (e.key === 'Home') {
+            e.preventDefault();
+            if (siblingItems.length > 0) {
+              if (isButtonFocused || target.classList.contains('drawer-play-btn')) {
+                siblingItems[0]?.querySelector<HTMLElement>('.drawer-play-btn')?.focus();
+              } else {
+                siblingItems[0]?.focus();
+              }
+            }
+          } else if (e.key === 'End') {
+            e.preventDefault();
+            if (siblingItems.length > 0) {
+              const lastItem = siblingItems[siblingItems.length - 1];
+              if (isButtonFocused || target.classList.contains('drawer-play-btn')) {
+                lastItem?.querySelector<HTMLElement>('.drawer-play-btn')?.focus();
+              } else {
+                lastItem?.focus();
+              }
+            }
+          }
+        });
+      });
+
+      // Escape key handler on container/drawer
+      container.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          if (seriesDrawer && seriesDrawer.classList.contains('is-expanded')) {
+            e.preventDefault();
+            collapseDrawer(true);
+          }
+        }
       });
 
       // Slide click interaction
@@ -665,14 +1277,21 @@ const dockedStationId = `${id}-docked-station`;
           if (stateMachine.viewMode !== 'grid') {
             if (idx !== stateMachine.activeIndex) {
               goToSlide(idx, true);
+              if (slide.dataset.isSeries === 'true') {
+                expandDrawer(idx, false);
+              }
             } else {
-              dockAndPlay(slide, true);
+              if (slide.dataset.isSeries === 'true') {
+                toggleDrawer(idx, false);
+              } else {
+                dockAndPlay(slide, true);
+              }
             }
           }
         });
       });
 
-      // Keyboard navigation strictly on horizontal axis (ArrowUp and ArrowDown NOT intercepted)
+      // Keyboard navigation strictly on horizontal axis (ArrowUp and ArrowDown NOT intercepted for page scroll)
       track.addEventListener('keydown', (e: KeyboardEvent) => {
         if (stateMachine.viewMode === 'grid') return;
 
@@ -685,6 +1304,16 @@ const dockedStationId = `${id}-docked-station`;
             e.preventDefault();
             goToSlide(stateMachine.next(), true);
             break;
+          case 'ArrowDown': {
+            if (seriesDrawer && seriesDrawer.classList.contains('is-expanded')) {
+              e.preventDefault();
+              const firstDrawerBtn = seriesDrawer.querySelector<HTMLElement>(
+                '.drawer-series-content.is-active .drawer-play-btn, .drawer-series-content.is-active .drawer-episode-item'
+              );
+              firstDrawerBtn?.focus();
+            }
+            break;
+          }
           case 'Home':
             e.preventDefault();
             goToSlide(stateMachine.home(), true);
@@ -704,10 +1333,15 @@ const dockedStationId = `${id}-docked-station`;
           case 'Enter':
           case ' ': {
             const target = e.target as HTMLElement;
-            if (!target.closest('a')) {
+            if (!target.closest('a') && !target.closest('button')) {
               e.preventDefault();
-              if (slides[stateMachine.activeIndex]) {
-                dockAndPlay(slides[stateMachine.activeIndex], true);
+              const activeSlide = slides[stateMachine.activeIndex];
+              if (activeSlide) {
+                if (activeSlide.dataset.isSeries === 'true') {
+                  toggleDrawer(stateMachine.activeIndex, false);
+                } else {
+                  dockAndPlay(activeSlide, true);
+                }
               }
             }
             break;
@@ -722,7 +1356,17 @@ const dockedStationId = `${id}-docked-station`;
         if (isProgrammaticScroll || stateMachine.viewMode === 'grid') return;
         const newIndex = findCenterIndex();
         if (newIndex !== stateMachine.activeIndex) {
-          updateSlideClasses(newIndex);
+          const wasDrawerOpen = stateMachine.expandedSeriesIndex !== null;
+          const clampedIndex = stateMachine.selectItem(newIndex);
+          updateSlideClasses(clampedIndex);
+
+          if (wasDrawerOpen) {
+            if (stateMachine.expandedSeriesIndex !== null) {
+              expandDrawer(clampedIndex, false);
+            } else {
+              collapseDrawer(false);
+            }
+          }
         }
       }
 
@@ -741,34 +1385,26 @@ const dockedStationId = `${id}-docked-station`;
             docked.audio,
             document.querySelectorAll<HTMLAudioElement>('audio.custom-audio-player')
           );
-
-          if (currentPlayingSlug) {
-            const currentSlide = slides.find((s) => s.dataset.slug === currentPlayingSlug);
-            if (currentSlide) {
-              currentSlide.classList.add('is-playing');
-              updatePlayButtonUI(currentSlide, true);
+          if (!currentPlayingSlug) {
+            const activeSlide = slides[stateMachine.activeIndex];
+            if (activeSlide?.dataset.isSeries === 'true') {
+              const firstDrawerPlay = seriesDrawer?.querySelector<HTMLButtonElement>(
+                `.drawer-series-content[data-series-index="${stateMachine.activeIndex}"] .drawer-play-btn`
+              );
+              currentPlayingSlug = firstDrawerPlay?.dataset.slug || activeSlide.dataset.slug || null;
+            } else {
+              currentPlayingSlug = activeSlide?.dataset.slug || null;
             }
           }
+          syncPlaybackState(currentPlayingSlug, true);
         });
 
         docked.audio.addEventListener('pause', () => {
-          if (currentPlayingSlug) {
-            const currentSlide = slides.find((s) => s.dataset.slug === currentPlayingSlug);
-            if (currentSlide) {
-              currentSlide.classList.remove('is-playing');
-              updatePlayButtonUI(currentSlide, false);
-            }
-          }
+          syncPlaybackState(currentPlayingSlug, false);
         });
 
         docked.audio.addEventListener('ended', () => {
-          if (currentPlayingSlug) {
-            const currentSlide = slides.find((s) => s.dataset.slug === currentPlayingSlug);
-            if (currentSlide) {
-              currentSlide.classList.remove('is-playing');
-              updatePlayButtonUI(currentSlide, false);
-            }
-          }
+          syncPlaybackState(currentPlayingSlug, false);
         });
       }
 
@@ -898,7 +1534,7 @@ const dockedStationId = `${id}-docked-station`;
 
   .view-btn.is-active {
     background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
-    color: #ffffff;
+    color: var(--cream);
     box-shadow: 0 2px 8px rgba(146, 64, 14, 0.3);
   }
 
@@ -1070,7 +1706,7 @@ const dockedStationId = `${id}-docked-station`;
   }
 
   .carousel-item.is-playing {
-    border-color: #ea580c;
+    border-color: var(--accent-amber);
     box-shadow: 0 16px 40px rgba(234, 88, 12, 0.25);
   }
 
@@ -1184,8 +1820,9 @@ const dockedStationId = `${id}-docked-station`;
     letter-spacing: 0.5px;
     padding: 0.15rem 0.45rem;
     border-radius: 4px;
-    background: rgba(16, 185, 129, 0.12);
-    color: #047857;
+    background: rgba(146, 64, 14, 0.1);
+    color: var(--primary-brown);
+    border: 1px solid rgba(146, 64, 14, 0.2);
   }
 
   .carousel-card-title {
@@ -1259,7 +1896,7 @@ const dockedStationId = `${id}-docked-station`;
     align-items: center;
     gap: 0.45rem;
     background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
-    color: #ffffff;
+    color: var(--cream);
     border: none;
     border-radius: 50px;
     padding: 0.55rem 1.15rem;
@@ -1282,7 +1919,7 @@ const dockedStationId = `${id}-docked-station`;
   }
 
   .carousel-play-btn.is-playing {
-    background: linear-gradient(135deg, #ea580c, #c2410c);
+    background: linear-gradient(135deg, var(--accent-amber), var(--secondary-brown));
   }
 
   .play-btn-icon {
@@ -1301,6 +1938,381 @@ const dockedStationId = `${id}-docked-station`;
   .carousel-detail-link:hover {
     color: var(--primary-brown);
     text-decoration: underline;
+  }
+
+  /* ==========================================================================
+     Series Cards & Expandable Drawer
+     ========================================================================== */
+  .carousel-series-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--surface-button);
+    border: 1px solid var(--border-light);
+    color: var(--dark-text);
+    border-radius: 50px;
+    padding: 0.55rem 1.15rem;
+    font-size: 0.86rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 2px 8px var(--shadow-light);
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .carousel-series-toggle-btn:hover {
+    border-color: var(--accent-amber);
+    color: var(--accent-amber);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--shadow-medium);
+  }
+
+  .carousel-series-toggle-btn.is-expanded {
+    background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+    color: var(--cream);
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(146, 64, 14, 0.3);
+  }
+
+  .carousel-series-toggle-btn:focus-visible {
+    outline: 2px solid var(--accent-amber);
+    outline-offset: 3px;
+  }
+
+  .toggle-btn-icon {
+    font-size: 0.9rem;
+    line-height: 1;
+    transition: transform 0.25s ease;
+  }
+
+  .carousel-series-toggle-btn.is-expanded .toggle-btn-icon {
+    transform: rotate(180deg);
+  }
+
+  .carousel-parts-count {
+    background: rgba(234, 88, 12, 0.15);
+    color: var(--accent-amber);
+    font-weight: 800;
+  }
+
+  .carousel-series-badge {
+    background: rgba(146, 64, 14, 0.12);
+    color: var(--primary-brown);
+    font-weight: 800;
+  }
+
+  .carousel-theme-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--light-text);
+    margin-left: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .carousel-series-title {
+    color: inherit;
+  }
+
+  .series-quick-play-btn {
+    font-size: 0.82rem;
+    padding: 0.5rem 0.95rem;
+  }
+
+  /* In-Place Drawer Container */
+  .carousel-series-drawer {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    background: var(--surface-card);
+    border: 2px solid var(--accent-amber);
+    border-radius: 20px;
+    padding: 2rem 2.25rem;
+    box-shadow: 0 10px 36px var(--shadow-medium);
+    position: relative;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .carousel-series-drawer::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 10px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid var(--accent-amber);
+  }
+
+  .carousel-series-drawer.is-collapsed {
+    display: none;
+  }
+
+  .carousel-series-drawer.is-expanded {
+    display: block;
+    animation: drawerSlideDown 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes drawerSlideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .drawer-series-content {
+    display: none;
+  }
+
+  .drawer-series-content.is-active {
+    display: block;
+  }
+
+  .drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .drawer-title-group {
+    flex: 1 1 auto;
+  }
+
+  .drawer-kicker-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.4rem;
+  }
+
+  .drawer-kicker {
+    font-size: 0.76rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--accent-amber);
+  }
+
+  .drawer-parts-count {
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(234, 88, 12, 0.12);
+    color: var(--accent-amber);
+  }
+
+  .drawer-title {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin: 0 0 0.4rem;
+    line-height: 1.3;
+  }
+
+  .drawer-theme {
+    font-size: 0.92rem;
+    color: var(--light-text);
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .drawer-close-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--surface-button);
+    border: 1px solid var(--border-light);
+    color: var(--dark-text);
+    padding: 0.45rem 0.9rem;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    flex-shrink: 0;
+  }
+
+  .drawer-close-btn:hover {
+    border-color: var(--accent-amber);
+    color: var(--accent-amber);
+  }
+
+  .drawer-close-btn:focus-visible {
+    outline: 2px solid var(--accent-amber);
+    outline-offset: 2px;
+  }
+
+  .drawer-close-text {
+    font-size: 0.82rem;
+  }
+
+  .close-icon {
+    font-size: 0.85rem;
+    line-height: 1;
+  }
+
+  /* Tracklist */
+  .drawer-tracklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .drawer-episode-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    outline: none;
+  }
+
+  .drawer-episode-item:hover {
+    border-color: var(--accent-amber);
+    box-shadow: 0 4px 16px var(--shadow-light);
+  }
+
+  .drawer-episode-item:focus-visible {
+    outline: 2px solid var(--accent-amber);
+    outline-offset: 2px;
+    border-color: var(--accent-amber);
+  }
+
+  .drawer-episode-item.is-playing,
+  .drawer-episode-item.is-active {
+    border-color: var(--accent-amber);
+    box-shadow: 0 4px 18px rgba(234, 88, 12, 0.2);
+    background: linear-gradient(135deg, var(--card-bg) 0%, var(--surface-card) 100%);
+  }
+
+  .drawer-episode-part {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 58px;
+    height: 58px;
+    background: var(--surface-button);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    text-align: center;
+    padding: 0.35rem;
+    box-shadow: 0 2px 6px var(--shadow-light);
+  }
+
+  .part-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: var(--light-text);
+  }
+
+  .part-number {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--accent-amber);
+    line-height: 1.1;
+  }
+
+  .drawer-episode-main {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .drawer-episode-header {
+    margin-bottom: 0.35rem;
+  }
+
+  .drawer-episode-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  .drawer-episode-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .drawer-episode-link:hover {
+    color: var(--accent-amber);
+    text-decoration: underline;
+  }
+
+  .drawer-episode-summary {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: var(--light-text);
+    margin: 0 0 0.6rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .drawer-episode-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+  }
+
+  .drawer-format-badge {
+    background: var(--surface-button);
+    border: 1px solid var(--border-light);
+    color: var(--dark-text);
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+  }
+
+  .drawer-duration {
+    font-weight: 600;
+    color: var(--light-text);
+  }
+
+  .drawer-notes-link {
+    font-weight: 700;
+    color: var(--accent-amber);
+    text-decoration: none;
+    margin-left: auto;
+    transition: color 0.2s ease;
+  }
+
+  .drawer-notes-link:hover {
+    color: var(--primary-brown);
+    text-decoration: underline;
+  }
+
+  .drawer-episode-actions {
+    flex-shrink: 0;
+  }
+
+  .drawer-play-btn {
+    padding: 0.6rem 1.25rem;
   }
 
   /* ==========================================================================
@@ -1431,6 +2443,11 @@ const dockedStationId = `${id}-docked-station`;
       transform: none !important;
       opacity: 0.85 !important;
     }
+
+    .carousel-series-drawer {
+      animation: none !important;
+      transition: none !important;
+    }
   }
 
   /* ==========================================================================
@@ -1467,6 +2484,31 @@ const dockedStationId = `${id}-docked-station`;
       width: 40px;
       height: 40px;
       font-size: 1.4rem;
+    }
+
+    .carousel-series-drawer {
+      padding: 1.25rem 1rem;
+    }
+
+    .drawer-episode-item {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .drawer-episode-part {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+    }
+
+    .drawer-episode-actions {
+      width: 100%;
+    }
+
+    .drawer-play-btn {
+      width: 100%;
+      justify-content: center;
     }
 
     .audio-docked-section {
