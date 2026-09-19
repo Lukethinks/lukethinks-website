@@ -31,6 +31,27 @@ const episodeMetaMap: Record<string, { takeaways: string[]; companionArticle?: {
       href: '/articles/ai-partnership-accounting',
     },
   },
+  'why-ai-verification-replaced-prompt-engineering': {
+    takeaways: [
+      'Context Window Dynamics: Models do not reason uniformly; keeping context below 40% capacity preserves peak model intelligence.',
+      'The Verification Bottleneck: The scarce resource in the AI economy is specifying requirements, managing context, and verifying output.',
+      'Harness Governance: Autonomous agents without strict boundary harnesses and human verification loops compound errors exponentially.',
+    ],
+  },
+  'why-your-brain-needs-cognitive-friction': {
+    takeaways: [
+      'The Myth of Far Transfer: Second-order meta-analyses show zero far transfer from brain training; expertise is domain knowledge in disguise.',
+      'Cognitive Debt & Persistence: AI offloading produces immediate test gains but causes an 11% drop in 45-day retention and doubles skip rates.',
+      'Evaluating Requires Producing: Reviewing AI outputs requires the exact mental templates built through effortful manual production.',
+    ],
+  },
+  'the-ironies-of-automation-and-the-art-of-oversight': {
+    takeaways: [
+      'The Ironies of Automation: Automating routine tasks leaves humans with only rare, catastrophic edge cases they are deskilled from solving.',
+      'Automation Bias in High-Stakes Domains: Board-certified radiologists saw diagnostic accuracy drop from 82.3% to 45.5% when primed with faulty AI advice.',
+      'The Illusion of the Loop: Keeping a human in the loop is useless if deskilling destroys the human’s independent mental model.',
+    ],
+  },
 };
 
 const carouselItems: CarouselItem[] = sortedEpisodes.map((ep) => {

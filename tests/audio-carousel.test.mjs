@@ -1233,7 +1233,7 @@ describe('Tier 4: Real-World Scenarios', () => {
     for (const ep of episodes) {
       assert.match(
         ep.audio.src,
-        /^https:\/\/.*\.public\.blob\.vercel-storage\.com\/.*\.mp3$/,
+        /^https:\/\/.*\.public\.blob\.vercel-storage\.com\/.*\.(mp3|m4a|aac|wav)$/,
         `Audio source must point to public Vercel Blob store: ${ep.audio.src}`
       );
     }

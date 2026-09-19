@@ -1,14 +1,41 @@
 {
   "_generated": "scripts/build-index.mjs — do not edit",
   "counts": {
+    "episode": 3,
+    "tag:ai": 4,
+    "tag:frameworks": 1,
     "article": 3,
     "tag:accounting": 5,
     "tag:valuation": 5,
-    "tag:fpa": 1,
-    "episode": 2,
-    "tag:ai": 3
+    "tag:fpa": 1
   },
   "items": [
+    {
+      "slug": "why-ai-verification-replaced-prompt-engineering",
+      "type": "episode",
+      "title": "Why AI Verification Replaced Prompt Engineering",
+      "summary": "From vibe coding to context engineering: how the $300k prompt engineering hype gave way to the disciplined era of agent harnesses, context window curation, and verification.",
+      "url": "/podcast/why-ai-verification-replaced-prompt-engineering",
+      "published": "2026-09-19",
+      "updated": null,
+      "lang": "en",
+      "tags": [
+        "ai",
+        "frameworks"
+      ],
+      "category": null,
+      "confidence": "high",
+      "state": null,
+      "outcome": null,
+      "readingMinutes": null,
+      "durationSeconds": 2915,
+      "episode": 3,
+      "related": [],
+      "series": "AI Skills & The Future of Human Judgment",
+      "seriesPart": 1,
+      "hasAudio": true,
+      "file": "content\\episodes\\why-ai-verification-replaced-prompt-engineering.md"
+    },
     {
       "slug": "thames-water-crisis",
       "type": "article",

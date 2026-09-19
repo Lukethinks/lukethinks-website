@@ -79,7 +79,7 @@ export const collections = {
         src: z.string().url().startsWith('https://'),
         bytes: z.number().int().positive(),
         durationSeconds: z.number().int().positive(),
-        mimeType: z.literal('audio/mpeg').default('audio/mpeg'),
+        mimeType: z.enum(['audio/mpeg', 'audio/mp4', 'audio/x-m4a', 'audio/aac']).default('audio/mpeg'),
       }),
       production,
     }),
