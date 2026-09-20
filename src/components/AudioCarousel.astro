@@ -949,43 +949,52 @@ const hasSeries = seriesItems.length > 0;
         const duration = slide.dataset.duration || '';
 
         const docked = getDockedPlayerElements();
-        if (!docked || !docked.audio) return;
 
         if (toggleIfSame && currentPlayingSlug === slug) {
-          if (docked.audio.paused) {
-            docked.audio.play().catch(() => {});
+          if (docked?.audio) {
+            if (docked.audio.paused) {
+              docked.audio.play().catch(() => {});
+            } else {
+              docked.audio.pause();
+            }
+            return;
           } else {
-            docked.audio.pause();
+            const globalPlayPause = document.getElementById('global-play-pause-btn');
+            if (globalPlayPause) {
+              globalPlayPause.click();
+              return;
+            }
           }
-          return;
         }
 
-        // Update player contents
-        if (docked.titleEl) {
-          docked.titleEl.textContent = `Play Episode ${ep}: ${title}`;
-        }
-        if (docked.variantEl && formatLabel) {
-          docked.variantEl.textContent = formatLabel;
-        }
-        if (docked.timeEl && duration) {
-          docked.timeEl.textContent = `${duration} min`;
-        }
-        if (docked.downloadLink && audioSrc) {
-          docked.downloadLink.href = audioSrc;
-          docked.downloadLink.setAttribute('aria-label', `Download MP3 for Episode ${ep}: ${title}`);
-        }
+        if (docked && docked.audio) {
+          // Update player contents
+          if (docked.titleEl) {
+            docked.titleEl.textContent = `Play Episode ${ep}: ${title}`;
+          }
+          if (docked.variantEl && formatLabel) {
+            docked.variantEl.textContent = formatLabel;
+          }
+          if (docked.timeEl && duration) {
+            docked.timeEl.textContent = `${duration} min`;
+          }
+          if (docked.downloadLink && audioSrc) {
+            docked.downloadLink.href = audioSrc;
+            docked.downloadLink.setAttribute('aria-label', `Download MP3 for Episode ${ep}: ${title}`);
+          }
 
-        docked.audio.src = audioSrc;
-        const sourceEl = docked.audio.querySelector<HTMLSourceElement>('source');
-        if (sourceEl) {
-          sourceEl.src = audioSrc;
-        }
-        docked.audio.setAttribute('aria-label', `Play Episode ${ep}: ${title}`);
-        docked.audio.load();
+          docked.audio.src = audioSrc;
+          const sourceEl = docked.audio.querySelector<HTMLSourceElement>('source');
+          if (sourceEl) {
+            sourceEl.src = audioSrc;
+          }
+          docked.audio.setAttribute('aria-label', `Play Episode ${ep}: ${title}`);
+          docked.audio.load();
 
-        docked.audio.play().catch((err) => {
-          console.log('Audio play triggered:', err);
-        });
+          docked.audio.play().catch((err) => {
+            console.log('Audio play triggered:', err);
+          });
+        }
 
         currentPlayingSlug = slug;
         stateMachine.dockAndPlayActive();
@@ -1081,6 +1090,12 @@ const hasSeries = seriesItems.length > 0;
               docked.audio.pause();
             }
             return;
+          } else if (isThisSeriesActive && currentPlayingSlug) {
+            const globalPlayPause = document.getElementById('global-play-pause-btn');
+            if (globalPlayPause) {
+              globalPlayPause.click();
+              return;
+            }
           }
 
           expandDrawer(idx, false);
@@ -1119,37 +1134,53 @@ const hasSeries = seriesItems.length > 0;
           const epNumber = btn.dataset.episode || epItem.dataset.episode || partNum;
 
           const docked = getDockedPlayerElements();
-          if (!docked || !docked.audio) return;
 
           if (currentPlayingSlug === slug) {
-            if (docked.audio.paused) {
-              docked.audio.play().catch(() => {});
+            if (docked?.audio) {
+              if (docked.audio.paused) {
+                docked.audio.play().catch(() => {});
+              } else {
+                docked.audio.pause();
+              }
+              return;
             } else {
-              docked.audio.pause();
+              const globalPlayPause = document.getElementById('global-play-pause-btn');
+              if (globalPlayPause) {
+                globalPlayPause.click();
+                return;
+              }
             }
-            return;
           }
 
-          if (docked.titleEl) {
-            docked.titleEl.textContent = `Play Part ${partNum}: ${title}`;
-          }
-          if (docked.variantEl) {
-            docked.variantEl.textContent = formatLabel;
-          }
-          if (docked.timeEl && duration) {
-            docked.timeEl.textContent = `${duration} min`;
-          }
-          if (docked.downloadLink && audioSrc) {
-            docked.downloadLink.href = audioSrc;
-            docked.downloadLink.setAttribute('aria-label', `Download MP3 for Part ${partNum}: ${title}`);
-          }
+          if (docked && docked.audio) {
+            if (docked.titleEl) {
+              docked.titleEl.textContent = `Play Part ${partNum}: ${title}`;
+            }
+            if (docked.variantEl) {
+              docked.variantEl.textContent = formatLabel;
+            }
+            if (docked.timeEl && duration) {
+              docked.timeEl.textContent = `${duration} min`;
+            }
+            if (docked.downloadLink && audioSrc) {
+              docked.downloadLink.href = audioSrc;
+              docked.downloadLink.setAttribute('aria-label', `Download MP3 for Part ${partNum}: ${title}`);
+            }
 
-          docked.audio.src = audioSrc;
-          const sourceEl = docked.audio.querySelector<HTMLSourceElement>('source');
-          if (sourceEl) sourceEl.src = audioSrc;
-          docked.audio.setAttribute('aria-label', `Play Part ${partNum}: ${title}`);
-          docked.audio.load();
-          docked.audio.play().catch(() => {});
+            docked.audio.src = audioSrc;
+            const sourceEl = docked.audio.querySelector<HTMLSourceElement>('source');
+            if (sourceEl) sourceEl.src = audioSrc;
+            docked.audio.setAttribute('aria-label', `Play Part ${partNum}: ${title}`);
+            docked.audio.load();
+            docked.audio.play().catch(() => {});
+
+            // Scroll docked player into viewport if offscreen (respecting prefers-reduced-motion)
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            dockedSection?.scrollIntoView({
+              behavior: prefersReduced ? 'auto' : 'smooth',
+              block: 'nearest',
+            });
+          }
 
           currentPlayingSlug = slug;
           stateMachine.dockAndPlayEpisode({
@@ -1164,13 +1195,6 @@ const hasSeries = seriesItems.length > 0;
             },
           });
           syncPlaybackState(currentPlayingSlug, true);
-
-          // Scroll docked player into viewport if offscreen (respecting prefers-reduced-motion)
-          const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          dockedSection?.scrollIntoView({
-            behavior: prefersReduced ? 'auto' : 'smooth',
-            block: 'nearest',
-          });
 
           // Dispatch decoupled event
           window.dispatchEvent(
@@ -1415,6 +1439,14 @@ const hasSeries = seriesItems.length > 0;
           docked?.audio?.pause();
         }
       }, true);
+
+      // Listen for global audio player state changes
+      window.addEventListener('lukethinks:audio-state-change', (e: Event) => {
+        const customEvent = e as CustomEvent;
+        const { slug, isPlaying } = customEvent.detail || {};
+        currentPlayingSlug = isPlaying ? slug : null;
+        syncPlaybackState(slug, isPlaying);
+      });
 
       // Initial alignment
       updateSlideClasses(stateMachine.activeIndex);
