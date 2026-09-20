@@ -144,28 +144,29 @@ const seriesCards: CarouselItem[] = Array.from(seriesGroups.entries()).map(([ser
   };
 });
 
-const carouselItems: CarouselItem[] = seriesCards.length > 0
-  ? seriesCards
-  : sortedEpisodes.map((ep) => {
-      const meta = episodeMetaMap[ep.data.slug] ?? { takeaways: [] };
-      const isDebate = ep.data.title.toLowerCase().includes('debate') || ep.data.audio.src.toLowerCase().includes('debate');
-      return {
-        id: ep.id,
-        slug: ep.data.slug,
-        title: ep.data.title,
-        summary: ep.data.summary,
-        published: ep.data.published,
-        episodeNumber: ep.data.episode,
-        season: ep.data.season,
-        format: isDebate ? 'debate' : 'briefing',
-        tags: ep.data.tags,
-        confidence: ep.data.confidence,
-        audio: ep.data.audio,
-        takeaways: meta.takeaways,
-        companionArticle: meta.companionArticle,
-        production: ep.data.production,
-      };
-    });
+const standaloneEpisodes = sortedEpisodes.filter((ep) => !ep.data.series);
+const standaloneCards: CarouselItem[] = standaloneEpisodes.map((ep) => {
+  const meta = episodeMetaMap[ep.data.slug] ?? { takeaways: [] };
+  const isDebate = ep.data.title.toLowerCase().includes('debate') || ep.data.audio.src.toLowerCase().includes('debate');
+  return {
+    id: ep.id,
+    slug: ep.data.slug,
+    title: ep.data.title,
+    summary: ep.data.summary,
+    published: ep.data.published,
+    episodeNumber: ep.data.episode,
+    season: ep.data.season,
+    format: isDebate ? 'debate' : 'briefing',
+    tags: ep.data.tags,
+    confidence: ep.data.confidence,
+    audio: ep.data.audio,
+    takeaways: meta.takeaways,
+    companionArticle: meta.companionArticle,
+    production: ep.data.production,
+  };
+});
+
+const carouselItems: CarouselItem[] = [...seriesCards, ...standaloneCards];
 
 const filterCategories = [
   { id: 'all', label: 'All Episodes' },

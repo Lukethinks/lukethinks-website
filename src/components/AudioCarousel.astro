@@ -1315,6 +1315,29 @@ const hasSeries = seriesItems.length > 0;
         });
       });
 
+      // Track click delegation to navigate to flank (inert) slides when clicked
+      track.addEventListener('click', (e: MouseEvent) => {
+        if (stateMachine.viewMode === 'grid') return;
+        const target = e.target as HTMLElement;
+        if (target.closest('a') || target.closest('button')) return;
+
+        const clickX = e.clientX;
+        const clickedSlide = slides.find((slide) => {
+          const rect = slide.getBoundingClientRect();
+          return clickX >= rect.left && clickX <= rect.right;
+        });
+
+        if (clickedSlide) {
+          const idx = parseInt(clickedSlide.dataset.index || '0', 10);
+          if (idx !== stateMachine.activeIndex) {
+            goToSlide(idx, true);
+            if (clickedSlide.dataset.isSeries === 'true') {
+              expandDrawer(idx, false);
+            }
+          }
+        }
+      });
+
       // Keyboard navigation strictly on horizontal axis (ArrowUp and ArrowDown NOT intercepted for page scroll)
       track.addEventListener('keydown', (e: KeyboardEvent) => {
         if (stateMachine.viewMode === 'grid') return;
