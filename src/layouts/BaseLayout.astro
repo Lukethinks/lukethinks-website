@@ -2,6 +2,7 @@
 import '../styles/site.css';
 import site from '../../content/site.json';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import GlobalAudioPlayer from '../components/GlobalAudioPlayer.astro';
 
 interface Props {
   title?: string;
@@ -142,6 +143,7 @@ const currentYear = 2026; // ADR-0010: idempotent build, fixed copyright year
       </div>
     </footer>
 
+    <GlobalAudioPlayer />
     <script defer src="/_vercel/insights/script.js"></script>
     <script defer src="/_vercel/speed-insights/script.js"></script>
   </body>

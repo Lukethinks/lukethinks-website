@@ -1,0 +1,728 @@
+---
+// Persistent Docked Audio Player component
+// Provides a unified, bottom-docked audio playback bar with responsive transport controls.
+---
+
+<aside
+  class="global-audio-bar"
+  id="global-audio-bar"
+  role="region"
+  aria-label="Audio player"
+  aria-hidden="true"
+>
+  <div class="global-audio-bar-inner">
+    <!-- Left: Track Metadata & Artwork -->
+    <div class="global-audio-track-info">
+      <div class="global-audio-art" aria-hidden="true">
+        <span class="global-audio-art-icon" id="global-bar-art-icon">🎙️</span>
+        <span class="global-audio-art-num" id="global-bar-art-num">EP 01</span>
+      </div>
+
+      <div class="global-audio-details">
+        <div class="global-audio-title" id="global-bar-title">Select an episode to listen</div>
+        <div class="global-audio-meta">
+          <span class="global-audio-badge" id="global-bar-badge">Briefing</span>
+          <span class="global-audio-duration" id="global-bar-duration">0 min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center: Transport & Scrubber Controls -->
+    <div class="global-audio-controls">
+      <div class="global-audio-transport">
+        <button
+          type="button"
+          class="global-audio-btn skip-back-btn"
+          id="global-skip-back-btn"
+          aria-label="Skip backward 15 seconds"
+          title="Skip backward 15 seconds"
+        >
+          <span class="btn-icon" aria-hidden="true">↺</span>
+          <span class="btn-text">15s</span>
+        </button>
+
+        <button
+          type="button"
+          class="global-audio-btn play-pause-btn"
+          id="global-play-pause-btn"
+          aria-label="Play"
+          title="Play"
+        >
+          <span class="play-icon" aria-hidden="true">▶</span>
+          <span class="pause-icon sr-only" aria-hidden="true">⏸</span>
+        </button>
+
+        <button
+          type="button"
+          class="global-audio-btn skip-fwd-btn"
+          id="global-skip-fwd-btn"
+          aria-label="Skip forward 30 seconds"
+          title="Skip forward 30 seconds"
+        >
+          <span class="btn-text">30s</span>
+          <span class="btn-icon" aria-hidden="true">↻</span>
+        </button>
+      </div>
+
+      <div class="global-audio-scrubber-wrap">
+        <span class="global-audio-time time-current" id="global-time-current" aria-label="Current time">00:00</span>
+        <div class="scrubber-track-container">
+          <input
+            type="range"
+            class="global-audio-scrubber"
+            id="global-audio-scrubber"
+            min="0"
+            max="100"
+            value="0"
+            step="0.1"
+            aria-label="Audio scrubber timeline"
+          />
+          <div class="scrubber-progress-fill" id="global-scrubber-fill"></div>
+        </div>
+        <span class="global-audio-time time-duration" id="global-time-duration" aria-label="Remaining time">-00:00</span>
+      </div>
+    </div>
+
+    <!-- Right: Speed, Download & Dismiss Actions -->
+    <div class="global-audio-actions">
+      <button
+        type="button"
+        class="global-audio-btn global-audio-speed-btn"
+        id="global-speed-btn"
+        data-speed="1"
+        aria-label="Playback speed: 1x. Click to change."
+        title="Cycle playback speed"
+      >
+        <span class="speed-text" id="global-speed-text">1x</span>
+      </button>
+
+      <a
+        href="#"
+        class="global-audio-btn global-audio-download"
+        id="global-download-link"
+        download
+        aria-label="Download MP3"
+        title="Download MP3"
+      >
+        <span class="download-icon" aria-hidden="true">⬇</span>
+        <span class="sr-only">Download MP3</span>
+      </a>
+
+      <button
+        type="button"
+        class="global-audio-btn global-audio-close-btn"
+        id="global-close-btn"
+        aria-label="Close audio player"
+        title="Close audio player"
+      >
+        <span class="close-icon" aria-hidden="true">✕</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Hidden Native Audio Engine -->
+  <audio
+    class="custom-audio-player global-hidden-audio"
+    id="global-hidden-audio"
+    preload="none"
+    aria-label="Global persistent audio player"
+  >
+    <p>
+      Your browser does not support audio playback.
+      <a href="#" download id="global-fallback-download">Download the MP3</a>.
+    </p>
+  </audio>
+</aside>
+
+<script>
+  function initGlobalAudioPlayer() {
+    const bar = document.getElementById('global-audio-bar');
+    const audio = document.getElementById('global-hidden-audio') as HTMLAudioElement | null;
+    if (!bar || !audio || bar.dataset.initialized === 'true') return;
+    bar.dataset.initialized = 'true';
+
+    const playPauseBtn = document.getElementById('global-play-pause-btn');
+    const skipBackBtn = document.getElementById('global-skip-back-btn');
+    const skipFwdBtn = document.getElementById('global-skip-fwd-btn');
+    const speedBtn = document.getElementById('global-speed-btn');
+    const speedText = document.getElementById('global-speed-text');
+    const closeBtn = document.getElementById('global-close-btn');
+    const downloadLink = document.getElementById('global-download-link') as HTMLAnchorElement | null;
+    const fallbackLink = document.getElementById('global-fallback-download') as HTMLAnchorElement | null;
+
+    const titleEl = document.getElementById('global-bar-title');
+    const badgeEl = document.getElementById('global-bar-badge');
+    const durationEl = document.getElementById('global-bar-duration');
+    const artIconEl = document.getElementById('global-bar-art-icon');
+    const artNumEl = document.getElementById('global-bar-art-num');
+
+    const scrubber = document.getElementById('global-audio-scrubber') as HTMLInputElement | null;
+    const scrubberFill = document.getElementById('global-scrubber-fill');
+    const timeCurrent = document.getElementById('global-time-current');
+    const timeDuration = document.getElementById('global-time-duration');
+
+    const speeds = [1, 1.25, 1.5, 2];
+    let currentSpeedIndex = 0;
+    let isUserScrubbing = false;
+    let currentSlug = '';
+
+    function formatTime(seconds: number): string {
+      if (isNaN(seconds) || seconds < 0) return '00:00';
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function broadcastState(isPlaying: boolean) {
+      window.dispatchEvent(
+        new CustomEvent('lukethinks:audio-state-change', {
+          detail: {
+            slug: currentSlug,
+            isPlaying,
+            currentTime: audio?.currentTime || 0,
+            duration: audio?.duration || 0,
+          },
+          bubbles: true,
+        })
+      );
+    }
+
+    function setPlayingUI(playing: boolean) {
+      if (!playPauseBtn) return;
+      const playIcon = playPauseBtn.querySelector('.play-icon');
+      const pauseIcon = playPauseBtn.querySelector('.pause-icon');
+
+      if (playing) {
+        bar?.classList.add('is-playing');
+        playPauseBtn.setAttribute('aria-label', 'Pause');
+        playPauseBtn.setAttribute('title', 'Pause');
+        if (playIcon) playIcon.classList.add('sr-only');
+        if (pauseIcon) pauseIcon.classList.remove('sr-only');
+      } else {
+        bar?.classList.remove('is-playing');
+        playPauseBtn.setAttribute('aria-label', 'Play');
+        playPauseBtn.setAttribute('title', 'Play');
+        if (playIcon) playIcon.classList.remove('sr-only');
+        if (pauseIcon) pauseIcon.classList.add('sr-only');
+      }
+    }
+
+    function updateScrubber() {
+      if (!audio || isUserScrubbing || !scrubber) return;
+      const current = audio.currentTime || 0;
+      const total = audio.duration || 0;
+
+      if (timeCurrent) timeCurrent.textContent = formatTime(current);
+
+      if (total > 0) {
+        const percent = Math.min(100, Math.max(0, (current / total) * 100));
+        scrubber.value = percent.toFixed(2);
+        if (scrubberFill) scrubberFill.style.width = `${percent}%`;
+
+        const remaining = total - current;
+        if (timeDuration) timeDuration.textContent = `-${formatTime(remaining)}`;
+      } else {
+        scrubber.value = '0';
+        if (scrubberFill) scrubberFill.style.width = '0%';
+        if (timeDuration) timeDuration.textContent = '-00:00';
+      }
+    }
+
+    function loadAndPlay(payload: {
+      slug: string;
+      title: string;
+      audioSrc: string;
+      durationMinutes?: number;
+      durationSeconds?: number;
+      episodeNumber?: number | string;
+      partNumber?: number | string;
+      format?: string;
+    }) {
+      if (!audio || !payload.audioSrc) return;
+
+      currentSlug = payload.slug;
+
+      // Update metadata display
+      if (titleEl) titleEl.textContent = payload.title || 'Executive Briefing';
+      if (badgeEl) badgeEl.textContent = payload.format || 'Briefing';
+
+      const durMins = payload.durationMinutes || (payload.durationSeconds ? Math.ceil(payload.durationSeconds / 60) : 0);
+      if (durationEl) durationEl.textContent = `${durMins} min`;
+
+      const isDebate = (payload.format || '').toLowerCase().includes('debate') || (payload.title || '').toLowerCase().includes('debate');
+      if (artIconEl) artIconEl.textContent = isDebate ? '⚖️' : '🎙️';
+
+      const epNum = payload.episodeNumber ?? payload.partNumber ?? '';
+      if (artNumEl) {
+        artNumEl.textContent = epNum ? `EP ${String(epNum).padStart(2, '0')}` : 'LT';
+      }
+
+      if (downloadLink) downloadLink.href = payload.audioSrc;
+      if (fallbackLink) fallbackLink.href = payload.audioSrc;
+
+      // Update audio source
+      if (audio.src !== payload.audioSrc) {
+        audio.src = payload.audioSrc;
+        audio.load();
+      }
+
+      // Restore configured speed
+      const activeSpeed = speeds[currentSpeedIndex];
+      audio.playbackRate = activeSpeed;
+      audio.defaultPlaybackRate = activeSpeed;
+
+      // Reveal global player bar
+      bar?.classList.add('is-visible');
+      bar?.setAttribute('aria-hidden', 'false');
+
+      audio
+        .play()
+        .then(() => {
+          setPlayingUI(true);
+          broadcastState(true);
+        })
+        .catch((err) => {
+          console.warn('Playback initiation error:', err);
+        });
+    }
+
+    // Transport event handlers
+    playPauseBtn?.addEventListener('click', () => {
+      if (!audio) return;
+      if (audio.paused) {
+        audio.play().then(() => {
+          setPlayingUI(true);
+          broadcastState(true);
+        }).catch(err => console.warn(err));
+      } else {
+        audio.pause();
+        setPlayingUI(false);
+        broadcastState(false);
+      }
+    });
+
+    skipBackBtn?.addEventListener('click', () => {
+      if (!audio) return;
+      audio.currentTime = Math.max(0, audio.currentTime - 15);
+      updateScrubber();
+    });
+
+    skipFwdBtn?.addEventListener('click', () => {
+      if (!audio) return;
+      audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30);
+      updateScrubber();
+    });
+
+    // Speed button cycle (1x -> 1.25x -> 1.5x -> 2x)
+    speedBtn?.addEventListener('click', () => {
+      if (!audio) return;
+      currentSpeedIndex = (currentSpeedIndex + 1) % speeds.length;
+      const newSpeed = speeds[currentSpeedIndex];
+      audio.playbackRate = newSpeed;
+      audio.defaultPlaybackRate = newSpeed;
+      if (speedText) speedText.textContent = `${newSpeed}x`;
+      speedBtn.setAttribute('data-speed', String(newSpeed));
+      speedBtn.setAttribute('aria-label', `Playback speed: ${newSpeed}x. Click to change.`);
+    });
+
+    // Scrubber interaction
+    scrubber?.addEventListener('input', () => {
+      isUserScrubbing = true;
+      if (!audio || !audio.duration) return;
+      const percent = parseFloat(scrubber.value);
+      if (scrubberFill) scrubberFill.style.width = `${percent}%`;
+      const targetTime = (percent / 100) * audio.duration;
+      if (timeCurrent) timeCurrent.textContent = formatTime(targetTime);
+    });
+
+    scrubber?.addEventListener('change', () => {
+      if (audio && audio.duration) {
+        const percent = parseFloat(scrubber.value);
+        audio.currentTime = (percent / 100) * audio.duration;
+      }
+      isUserScrubbing = false;
+      updateScrubber();
+    });
+
+    // Audio element lifecycle events
+    audio.addEventListener('timeupdate', () => {
+      updateScrubber();
+      broadcastState(!audio.paused);
+    });
+
+    audio.addEventListener('play', () => {
+      // Pause any other custom-audio-player on page for exclusivity
+      document.querySelectorAll<HTMLAudioElement>('audio.custom-audio-player').forEach((other) => {
+        if (other !== audio && !other.paused) {
+          other.pause();
+        }
+      });
+      setPlayingUI(true);
+      broadcastState(true);
+    });
+
+    audio.addEventListener('pause', () => {
+      setPlayingUI(false);
+      broadcastState(false);
+    });
+
+    audio.addEventListener('ended', () => {
+      setPlayingUI(false);
+      broadcastState(false);
+      if (scrubber) scrubber.value = '0';
+      if (scrubberFill) scrubberFill.style.width = '0%';
+      if (timeCurrent) timeCurrent.textContent = '00:00';
+    });
+
+    // Close button dismisses player bar and pauses audio
+    closeBtn?.addEventListener('click', () => {
+      audio.pause();
+      setPlayingUI(false);
+      broadcastState(false);
+      bar.classList.remove('is-visible');
+      bar.setAttribute('aria-hidden', 'true');
+    });
+
+    // Global listener for decoupled playback triggers
+    window.addEventListener('lukethinks:dock-audio', (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail) {
+        loadAndPlay(customEvent.detail);
+      }
+    });
+
+    window.addEventListener('lukethinks:play-audio', (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail) {
+        loadAndPlay(customEvent.detail);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGlobalAudioPlayer);
+  } else {
+    initGlobalAudioPlayer();
+  }
+  document.addEventListener('astro:page-load', initGlobalAudioPlayer);
+</script>
+
+<style>
+  .global-audio-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: var(--surface-header);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border-light);
+    box-shadow: 0 -4px 24px var(--shadow-medium);
+    padding: 0.75rem 1.5rem;
+    transform: translateY(120%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .global-audio-bar.is-visible {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .global-audio-bar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  /* Left Track Info */
+  .global-audio-track-info {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 200px;
+    max-width: 320px;
+    flex: 1 1 auto;
+  }
+
+  .global-audio-art {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--card-bg) 0%, var(--surface-footer) 100%);
+    border: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 2px 8px var(--shadow-light);
+  }
+
+  .global-audio-art-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .global-audio-art-num {
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: var(--light-amber);
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  .global-audio-details {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .global-audio-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+  }
+
+  .global-audio-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--light-text);
+    margin-top: 2px;
+  }
+
+  .global-audio-badge {
+    background: rgba(234, 88, 12, 0.12);
+    color: var(--accent-amber);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  /* Center Controls */
+  .global-audio-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    flex: 2 1 auto;
+    max-width: 520px;
+  }
+
+  .global-audio-transport {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .global-audio-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--dark-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    transition: color 0.2s ease, transform 0.15s ease;
+    padding: 0.35rem;
+    border-radius: 50%;
+  }
+
+  .global-audio-btn:hover {
+    color: var(--accent-amber);
+    transform: scale(1.08);
+  }
+
+  .play-pause-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-brown);
+    color: #ffffff !important;
+    box-shadow: 0 2px 10px var(--shadow-light);
+  }
+
+  .play-pause-btn:hover {
+    background: var(--secondary-brown);
+    transform: scale(1.1);
+  }
+
+  .play-icon,
+  .pause-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+    margin-left: 2px;
+  }
+
+  .skip-back-btn,
+  .skip-fwd-btn {
+    font-size: 0.8rem;
+    font-weight: 700;
+    gap: 0.15rem;
+    color: var(--medium-text);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+  }
+
+  .skip-back-btn .btn-icon,
+  .skip-fwd-btn .btn-icon {
+    font-size: 1.1rem;
+  }
+
+  /* Scrubber Timeline */
+  .global-audio-scrubber-wrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--light-text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .global-audio-time {
+    min-width: 38px;
+    text-align: center;
+  }
+
+  .scrubber-track-container {
+    position: relative;
+    flex: 1 1 auto;
+    height: 18px;
+    display: flex;
+    align-items: center;
+  }
+
+  .global-audio-scrubber {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--border-light);
+    outline: none;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .global-audio-scrubber::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--primary-brown);
+    cursor: pointer;
+    box-shadow: 0 1px 4px var(--shadow-light);
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  .global-audio-scrubber::-webkit-slider-thumb:hover {
+    transform: scale(1.3);
+    background: var(--accent-amber);
+  }
+
+  .scrubber-progress-fill {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 5px;
+    background: var(--accent-amber);
+    border-radius: 3px;
+    pointer-events: none;
+    width: 0%;
+  }
+
+  /* Right Actions */
+  .global-audio-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 160px;
+    justify-content: flex-end;
+  }
+
+  .global-audio-speed-btn {
+    border: 1px solid var(--border-light);
+    background: var(--surface-button);
+    border-radius: 8px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--medium-text);
+  }
+
+  .global-audio-speed-btn:hover {
+    border-color: var(--accent-amber);
+    color: var(--dark-text);
+  }
+
+  .global-audio-download,
+  .global-audio-close-btn {
+    color: var(--light-text);
+    font-size: 1rem;
+    padding: 0.35rem;
+    border-radius: 6px;
+    text-decoration: none;
+  }
+
+  .global-audio-download:hover,
+  .global-audio-close-btn:hover {
+    color: var(--dark-text);
+    background: var(--surface-button);
+  }
+
+  .global-hidden-audio {
+    display: none;
+  }
+
+  /* Responsive Rules */
+  @media (max-width: 860px) {
+    .global-audio-bar-inner {
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .global-audio-track-info {
+      order: 1;
+      max-width: calc(100% - 100px);
+    }
+
+    .global-audio-actions {
+      order: 2;
+      min-width: auto;
+    }
+
+    .global-audio-controls {
+      order: 3;
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .global-audio-bar {
+      transition: none !important;
+    }
+    .global-audio-btn {
+      transition: none !important;
+    }
+    .global-audio-scrubber::-webkit-slider-thumb {
+      transition: none !important;
+    }
+  }
+</style>

@@ -16,6 +16,12 @@ Any agent that makes a structural choice adds an entry in the same change. Any a
 
 ---
 
+## ADR-0020 — Persistent bottom audio player bar and unified playback triggers
+**Date:** 2026-09-20 · **Status:** Accepted
+**Context:** Playing podcast episodes previously suffered from duplicate players across `/podcast` (the top carousel had a docked player while every individual catalog card also embedded an identical full `<audio>` player widget). This created visual clutter and stopped users from controlling playback while scrolling through takeaways or show notes.
+**Decision:** Implement a persistent bottom audio player bar (`GlobalAudioPlayer.astro`) mounted globally in `BaseLayout.astro`. The bar reveals on play with responsive transport controls (skip -15s, play/pause, skip +30s, interactive scrubber with elapsed/remaining times, multi-speed cycle `1x`/`1.25x`/`1.5x`/`2x`, download action, and dismiss button). Streamline `EpisodeCard.astro` by replacing the embedded player widget with an accessible, high-contrast play trigger button that synchronizes state with the global bar via decoupled window events (`lukethinks:dock-audio` and `lukethinks:audio-state-change`).
+**Consequences:** A clean, unified listening experience where playback persists during page scrolling; catalog cards are uncluttered and focus on takeaways; exactly one active playback engine is in DOM focus; class register is strictly maintained with zero drift.
+
 ## ADR-0019 — AudioCarousel component and removal of iPod skeuomorphism
 **Date:** 2026-09-19 · **Status:** Accepted (supersedes ADR-0018)
 **Context:** Luke requested removing the iPod click wheel on the website and all iPod branding/naming across the code.

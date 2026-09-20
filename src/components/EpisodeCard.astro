@@ -1,6 +1,4 @@
 ---
-import AudioPlayer from './AudioPlayer.astro';
-
 interface Props {
   episode: {
     data: {
@@ -41,8 +39,6 @@ const pubDateHuman = publishedDate.toLocaleDateString('en-GB', {
 });
 
 const epNumPadded = String(data.episode).padStart(2, '0');
-const playerTitle = `Play Episode ${data.episode}: ${data.title}`;
-
 const isDebate = data.title.toLowerCase().includes('debate') || data.audio.src.toLowerCase().includes('debate');
 const format = isDebate ? 'debate' : 'briefing';
 const formatLabel = isDebate ? 'Point · Counterpoint' : 'Executive Briefing';
@@ -99,19 +95,28 @@ const formatLabel = isDebate ? 'Point · Counterpoint' : 'Executive Briefing';
       </div>
     )}
 
-    <!-- Interactive Player with Speed Controls -->
-    <div class="episode-player-section">
-      <AudioPlayer
-        src={data.audio.src}
-        title={playerTitle}
-        id={`card-${data.slug}`}
-        durationSeconds={data.audio.durationSeconds}
-        variant="episode"
-        mimeType={data.audio.mimeType}
-        headingLevel="h4"
-        aiDisclosed={data.production?.aiDisclosed}
-        disclosureText="AI voices curated, directed and fact-checked by Luke."
-      />
+    <!-- Streamlined Audio Action Trigger -->
+    <div class="episode-player-action">
+      <button
+        type="button"
+        class="episode-play-trigger"
+        data-slug={data.slug}
+        data-episode={data.episode}
+        data-format={format}
+        data-format-label={formatLabel}
+        data-audio-src={data.audio.src}
+        data-duration={durationMinutes}
+        data-duration-seconds={data.audio.durationSeconds}
+        data-title={data.title}
+        aria-label={`Play Episode ${data.episode}: ${data.title}`}
+      >
+        <span class="play-trigger-icon" aria-hidden="true">▶</span>
+        <span class="play-trigger-label">Play {formatLabel} ({durationMinutes} min)</span>
+      </button>
+
+      {data.production?.aiDisclosed && (
+        <span class="ai-disclosure-badge">AI Disclosed</span>
+      )}
     </div>
 
     <div class="episode-card-footer">
@@ -125,15 +130,85 @@ const formatLabel = isDebate ? 'Point · Counterpoint' : 'Executive Briefing';
           </a>
         )}
       </div>
-
-      <div class="footer-badges">
-        {data.production?.aiDisclosed && (
-          <span class="ai-disclosure-badge">AI Disclosed</span>
-        )}
-      </div>
     </div>
   </div>
 </article>
+
+<script>
+  function initEpisodeCardTriggers() {
+    const triggers = document.querySelectorAll<HTMLButtonElement>('.episode-play-trigger');
+    triggers.forEach((btn) => {
+      if (btn.dataset.initialized === 'true') return;
+      btn.dataset.initialized = 'true';
+
+      btn.addEventListener('click', () => {
+        const slug = btn.dataset.slug;
+        const title = btn.dataset.title;
+        const audioSrc = btn.dataset.audioSrc;
+        const durationMinutes = parseInt(btn.dataset.duration || '0', 10);
+        const durationSeconds = parseInt(btn.dataset.durationSeconds || '0', 10);
+        const episodeNumber = btn.dataset.episode;
+        const formatLabel = btn.dataset.formatLabel;
+
+        const isPlaying = btn.classList.contains('is-playing');
+        if (isPlaying) {
+          const globalPlayPause = document.getElementById('global-play-pause-btn');
+          if (globalPlayPause) {
+            globalPlayPause.click();
+          }
+        } else {
+          window.dispatchEvent(
+            new CustomEvent('lukethinks:dock-audio', {
+              detail: {
+                slug,
+                title,
+                audioSrc,
+                durationMinutes,
+                durationSeconds,
+                episodeNumber,
+                format: formatLabel,
+              },
+              bubbles: true,
+            })
+          );
+        }
+      });
+    });
+
+    window.addEventListener('lukethinks:audio-state-change', (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const { slug, isPlaying } = customEvent.detail || {};
+
+      triggers.forEach((btn) => {
+        const btnSlug = btn.dataset.slug;
+        const icon = btn.querySelector('.play-trigger-icon');
+        const label = btn.querySelector('.play-trigger-label');
+        const formatLabel = btn.dataset.formatLabel || 'Briefing';
+        const duration = btn.dataset.duration || '0';
+        const card = btn.closest('.episode-card');
+
+        if (btnSlug === slug && isPlaying) {
+          btn.classList.add('is-playing');
+          card?.classList.add('is-playing');
+          if (icon) icon.textContent = '⏸';
+          if (label) label.textContent = `Pause ${formatLabel}`;
+        } else {
+          btn.classList.remove('is-playing');
+          card?.classList.remove('is-playing');
+          if (icon) icon.textContent = '▶';
+          if (label) label.textContent = `Play ${formatLabel} (${duration} min)`;
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initEpisodeCardTriggers);
+  } else {
+    initEpisodeCardTriggers();
+  }
+  document.addEventListener('astro:page-load', initEpisodeCardTriggers);
+</script>
 
 <style>
   .episode-card {
@@ -155,19 +230,24 @@ const formatLabel = isDebate ? 'Point · Counterpoint' : 'Executive Briefing';
     transform: translateY(-2px);
   }
 
-  /* 1:1 Square Artwork Badge (Construction Disruption inspired) */
+  .episode-card.is-playing {
+    border-color: var(--accent-amber);
+    box-shadow: 0 6px 24px var(--shadow-medium);
+  }
+
+  /* 1:1 Square Artwork Badge */
   .episode-card-art {
     flex: 0 0 170px;
     width: 170px;
     height: 170px;
     aspect-ratio: 1 / 1;
     border-radius: 16px;
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, var(--primary-brown) 100%);
+    background: linear-gradient(135deg, var(--card-bg) 0%, var(--surface-footer) 60%, var(--primary-brown) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid rgba(234, 88, 12, 0.4);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    border: 2px solid var(--border-light);
+    box-shadow: 0 8px 24px var(--shadow-medium);
     position: sticky;
     top: 6rem;
   }
@@ -178,7 +258,7 @@ const formatLabel = isDebate ? 'Point · Counterpoint' : 'Executive Briefing';
     align-items: center;
     text-align: center;
     padding: 1rem;
-    color: #ffffff;
+    color: var(--cream);
   }
 
   .art-icon {
@@ -191,7 +271,7 @@ const formatLabel = isDebate ? 'Point · Counterpoint' : 'Executive Briefing';
     font-size: 1.25rem;
     font-weight: 800;
     letter-spacing: 1px;
-    color: #fef7f0;
+    color: var(--cream);
   }
 
   .art-label {
@@ -311,20 +391,47 @@ const formatLabel = isDebate ? 'Point · Counterpoint' : 'Executive Briefing';
     margin-bottom: 0;
   }
 
-  .episode-player-section {
+  /* Play Action Row */
+  .episode-player-action {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
     margin-bottom: 1.25rem;
+    padding: 0.75rem 0;
   }
 
-  .episode-player-section :global(.audio-player-container) {
-    margin: 0;
-    padding: 1.15rem 1.35rem;
-    background: var(--card-bg);
-    border: 1px solid var(--border-light);
-    border-radius: 12px;
+  .episode-play-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--primary-brown);
+    color: #ffffff;
+    border: none;
+    border-radius: 30px;
+    padding: 0.65rem 1.35rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 2px 10px var(--shadow-light);
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
   }
 
-  .episode-player-section :global(.audio-title) {
-    font-size: 1.05rem;
+  .episode-play-trigger:hover {
+    background: var(--secondary-brown);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px var(--shadow-medium);
+  }
+
+  .episode-play-trigger.is-playing {
+    background: var(--accent-amber);
+    box-shadow: 0 4px 16px var(--shadow-medium);
+  }
+
+  .play-trigger-icon {
+    font-size: 1rem;
+    line-height: 1;
   }
 
   .episode-card-footer {
@@ -372,7 +479,8 @@ const formatLabel = isDebate ? 'Point · Counterpoint' : 'Executive Briefing';
   .ai-disclosure-badge {
     font-size: 0.75rem;
     color: var(--light-text);
-    background: rgba(148, 163, 184, 0.15);
+    background: var(--surface-button);
+    border: 1px solid var(--border-light);
     padding: 0.25rem 0.65rem;
     border-radius: 12px;
     font-weight: 600;
@@ -400,6 +508,14 @@ const formatLabel = isDebate ? 'Point · Counterpoint' : 'Executive Briefing';
     .art-icon {
       font-size: 1.75rem;
       margin-bottom: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .episode-card,
+    .episode-play-trigger {
+      transition: none !important;
+      transform: none !important;
     }
   }
 </style>
