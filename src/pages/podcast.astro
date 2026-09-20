@@ -144,7 +144,8 @@ const seriesCards: CarouselItem[] = Array.from(seriesGroups.entries()).map(([ser
   };
 });
 
-const allEpisodeCards: CarouselItem[] = sortedEpisodes.map((ep) => {
+const standaloneEpisodes = sortedEpisodes.filter((ep) => !ep.data.series);
+const standaloneCards: CarouselItem[] = standaloneEpisodes.map((ep) => {
   const meta = episodeMetaMap[ep.data.slug] ?? { takeaways: [] };
   const isDebate = ep.data.title.toLowerCase().includes('debate') || ep.data.audio.src.toLowerCase().includes('debate');
   return {
@@ -162,12 +163,10 @@ const allEpisodeCards: CarouselItem[] = sortedEpisodes.map((ep) => {
     takeaways: meta.takeaways,
     companionArticle: meta.companionArticle,
     production: ep.data.production,
-    series: ep.data.series,
-    seriesPart: ep.data.seriesPart,
   };
 });
 
-const carouselItems: CarouselItem[] = [...seriesCards, ...allEpisodeCards];
+const carouselItems: CarouselItem[] = [...seriesCards, ...standaloneCards];
 
 const filterCategories = [
   { id: 'all', label: 'All Episodes' },
