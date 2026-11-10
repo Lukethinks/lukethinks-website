@@ -68,7 +68,7 @@ Modifier convention: `.is-*` / `.has-*` only (`.tab-btn.is-active`, `nav a.is-cu
 
 ## Register: navigation and paths
 
-Primary nav, in this order, read from `content/site.json`: **Home** `/` · **Research** `/research` · **Experiments** `/experiments` · **Learning** `/learning` · **Podcast** `/podcast` · **About** `/about` (ADR-0007). Adding a nav item is a decision — log it.
+Primary nav, in this order, read from `content/site.json`: **Home** `/` · **Writing** `/articles` · **Experiments** `/experiments` · **Podcast** `/podcast` · **About** `/about` (ADR-0007, revised by ADR-0022). Adding or renaming a nav item is a decision — log it.
 
 Fixed public paths: `/assets/` static assets, `/assets/og/` generated OG images, `/transcripts/` VTT files, `/content-index.json`, `/podcast.xml`, `/feed.xml`, `/sitemap.xml`. Audio is on Vercel Blob, never under the site origin.
 

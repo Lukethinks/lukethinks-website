@@ -1,0 +1,84 @@
+---
+// The three working principles that used to sit at the bottom of the Research page.
+// Kept because they are the site's premise: show the thinking, not just the conclusions.
+const principles = [
+  {
+    title: 'Question everything',
+    text: 'Start from how things actually work, not how they are supposed to work. Every piece begins with "but why?" and "what if?"',
+  },
+  {
+    title: 'Data first',
+    text: 'Gather the filings and disclosures, trace the cash flows and build the model before framing an opinion.',
+  },
+  {
+    title: 'Show the work',
+    text: 'Document the thinking, the assumptions and the counter-arguments, and say how confident I am, not just what I concluded.',
+  },
+];
+---
+
+<section class="how-i-work" aria-labelledby="how-i-work-heading">
+  <h2 class="how-i-work-title" id="how-i-work-heading">How I work through a question</h2>
+  <ol class="how-i-work-list">
+    {principles.map((p) => (
+      <li class="how-i-work-item">
+        <h3 class="how-i-work-name">{p.title}</h3>
+        <p class="how-i-work-text">{p.text}</p>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .how-i-work {
+    max-width: 860px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .how-i-work-title {
+    margin: 0 0 1.25rem;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--dark-text);
+  }
+
+  .how-i-work-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: principle;
+  }
+
+  .how-i-work-item {
+    margin: 0;
+    padding: 1.25rem 1.25rem 1.4rem;
+    border-radius: 12px;
+    background: var(--surface-card-translucent);
+    border: 1px solid var(--border-light);
+    border-top: 3px solid var(--accent-amber);
+  }
+
+  .how-i-work-name {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark-text);
+  }
+
+  .how-i-work-text {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--light-text);
+  }
+
+  @media (max-width: 768px) {
+    .how-i-work-list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

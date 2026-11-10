@@ -5,6 +5,7 @@ import AudioPlayer from '../../components/AudioPlayer.astro';
 import EpisodeContext from '../../components/podcast/EpisodeContext.astro';
 import EpisodePager from '../../components/podcast/EpisodePager.astro';
 import { getPodcast } from '../../utils/episodes';
+import { readTranscript } from '../../utils/transcript';
 
 export async function getStaticPaths() {
   const episodes = await getCollection('episodes', ({ data }) => data.status === 'published');
@@ -21,6 +22,7 @@ const { Content } = await render(episode);
 const { episodes } = await getPodcast();
 const view = episodes.find((e) => e.slug === data.slug)!;
 const publishedDate = data.published;
+const transcript = data.transcript === false ? null : readTranscript(data.slug);
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -98,6 +100,15 @@ const jsonLd = {
     <section class="article-content" aria-label="Show notes and breakdown">
       <Content />
     </section>
+
+    {transcript && (
+      <details class="transcript" data-region="transcript">
+        <summary>Full transcript</summary>
+        <div>
+          {transcript.map((p) => <p>{p}</p>)}
+        </div>
+      </details>
+    )}
 
     <EpisodePager episode={view} />
   </article>

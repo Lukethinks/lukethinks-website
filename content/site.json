@@ -6,9 +6,8 @@
   "lang": "en",
   "nav": [
     { "label": "Home", "href": "/" },
-    { "label": "Research", "href": "/research" },
+    { "label": "Writing", "href": "/articles" },
     { "label": "Experiments", "href": "/experiments" },
-    { "label": "Learning", "href": "/learning" },
     { "label": "Podcast", "href": "/podcast" },
     { "label": "About", "href": "/about" }
   ],

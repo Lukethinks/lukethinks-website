@@ -71,6 +71,10 @@ audio:
 
 An array, always — the current article already carries two variants, and hardcoding "narration + debate" as named fields breaks the moment there is a third.
 
+## One home per recording
+
+If an article and an episode use the same audio, the **episode is its home** (page, GUID, feed). List the article's slug in the episode's `related` and the article page shows "Listen to this piece" with play buttons for those episodes. Embedded article players (`audio-registry.json`) are for generated companion audio that has no episode (ADR-0022).
+
 ## Where the audio files live
 
 **Not in git.** MP3s are large, binary and immutable. Committing them bloats the repository permanently (git keeps every version forever), slows every clone, and pushes toward deployment size limits as the archive grows.
@@ -119,7 +123,8 @@ Each detail is a real failure mode:
 Every episode gets one. In order of weight: accessibility (audio without a transcript is unusable for deaf visitors), search (audio is invisible to search engines; the transcript is the only indexable version), and reuse (transcripts are the raw material for LinkedIn drafts).
 
 - Store as WebVTT at `public/transcripts/<slug>.vtt` — the feed and the page both derive the URL from the slug, so they cannot disagree.
-- Render in a `<details>`/`<summary>` disclosure, not a JS accordion.
+- Render in a `<details>`/`<summary>` disclosure, not a JS accordion. The episode page does this automatically from the `.vtt` (`src/utils/transcript.ts`) when the file exists and `transcript` is not `false`: drop the file in, set `transcript: true`, done.
+- Never write or paste a transcript that was not produced from the audio itself.
 - The feed emits `<podcast:transcript>` automatically when `transcript` is not `false`.
 
 ## RSS feed requirements

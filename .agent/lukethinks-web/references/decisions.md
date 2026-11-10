@@ -16,6 +16,18 @@ Any agent that makes a structural choice adds an entry in the same change. Any a
 
 ---
 
+## ADR-0023 — Sitemap generated; root static files live in `public/`; stale root artefacts retired
+**Date:** 2026-11-10 · **Status:** Accepted
+**Context:** Astro on Vercel serves only `dist/` and `public/`. `robots.txt`, `sitemap.xml`, `BingSiteAuth.xml`, `site.webmanifest` and the Android icons sat at the repository root and were therefore never deployed; the root `sitemap.xml` was a hand-typed list of legacy URLs. The root also held a duplicate `agent/` skill folder, an unused `api/likes.js` endpoint, 24 MB of MP3s that were tracked despite `.gitignore` (breaking the audio-never-in-git rule), and legacy source files (`styles.css`, `data/`, `research/`).
+**Decision:** Generate the sitemap with `@astrojs/sitemap` (already named in `automation.md`); it writes `/sitemap-index.xml` and `/sitemap.xml` 301s to it. Move `robots.txt`, `BingSiteAuth.xml`, `site.webmanifest` and the Android icons into `public/`. Remove the duplicate `agent/`, the unused `api/likes.js`, the tracked MP3s and the duplicate root favicons. Move `styles.css`, `data/` and `research/business-cases.html` into `legacy/` as source material. The MP3s remain in git history and on Vercel Blob.
+**Consequences:** robots.txt, Bing verification and the web manifest are served for the first time since the rebuild; the sitemap can no longer drift from the pages. `ORIGINAL_REQUEST.md`, `PROJECT.md` and `TEST_READY.md` are left for Luke to keep or delete.
+
+## ADR-0022 — One Writing hub replaces the Research and Learning indexes; home leads with what is new
+**Date:** 2026-11-10 · **Status:** Accepted (supersedes ADR-0007, the primary nav list)
+**Context:** `/research` and `/learning` rendered the same three articles, and the `research/` and `learnings/` collections are empty, so two nav items led to one list. The home page showed the same articles again under a hand-written "Latest Analysis" heading and four hardcoded cards, with nothing showing what was newest across writing and audio. Article pages embedded two audio players that were the same MP3s as podcast episodes 1 and 2, giving each recording two homes.
+**Decision:** (1) Primary nav is Home · Writing (`/articles`) · Experiments · Podcast · About. `/articles` is a generated index with search, category filter and an "also as audio" marker per piece. `/research`, `/learning` and their legacy `.html` URLs 301 to `/articles`. The `research` and `learnings` collections stay in the schema; their entries join the Writing index when their `[slug]` routes exist. (2) The home page shows a generated "What's new" list (newest essays and episodes, newest first, via `src/utils/latest.ts`) and explore cards whose counts are computed. (3) An episode is the single home of its audio: an article shows "Listen to this piece" with play buttons for the episodes that list it in `related`, and embeds a player only for generated companion audio that has no matching episode. (4) Site copy follows the premise in `podcast.json`: working things out in public, including what goes wrong; "executive briefing / forensic autopsy" phrasing is retired. (5) Episode pages render `public/transcripts/<slug>.vtt` as a `<details class="transcript">` when the file exists and `transcript` is not `false`.
+**Consequences:** One place to find everything written; the home page, Writing index and article pages cannot disagree about what exists or what has audio. Research/Learning routes return when there is content for them: add the `[slug]` page and extend `getWriting()`. Transcripts still have to be produced from the audio; nothing is generated or invented.
+
 ## ADR-0021 — Podcast index reordered around "what is new, what belongs together"; episode connections are data
 **Date:** 2026-11-10 · **Status:** Accepted (supersedes the `/podcast` page layout of ADR-0017 and the use of `AudioCarousel` on `/podcast` from ADR-0019; ADR-0020's bottom player is unchanged)
 **Context:** Luke reported that on `/podcast` it was not clear which episode was the latest or what each episode was connected to. The page led with a carousel whose first card was a series (not the newest episode), then repeated every episode as a tall card. Series membership was only visible inside the carousel; the companion article was a small footer link. Takeaways, companion-article links and series summaries were hardcoded in maps inside `podcast.astro` and `podcast/[slug].astro` (contrary to ADR-0001), and each series episode carried a hand-typed "Series Road Map" that still said "Upcoming" for published parts.
@@ -106,7 +118,7 @@ Any agent that makes a structural choice adds an entry in the same change. Any a
 **Consequences:** Zero cost now, no migration later.
 
 ## ADR-0007 — Podcast inherits the site identity; Podcast is a primary nav item
-**Date:** 2026-09-07 · **Status:** Accepted
+**Date:** 2026-09-07 · **Status:** Accepted (the nav's item count and list were revised by ADR-0022; the podcast identity and Podcast's place in the nav stand)
 **Context:** Open question on a separate podcast identity.
 **Decision:** Same tokens, same type, same name ("Luke Thinks"). Cover art is the site mark at 3000×3000. **Podcast** `/podcast` is the sixth primary nav item from the first standalone episode.
 **Consequences:** No second brand to maintain. Nav order fixed: Home · Research · Experiments · Learning · Podcast · About.

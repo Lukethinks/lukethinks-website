@@ -16,7 +16,7 @@ Allow: /
 # Disallow: /_vercel/
 
 # Sitemap location - helps search engines find all your pages
-Sitemap: https://lukethinks.nl/sitemap.xml
+Sitemap: https://lukethinks.nl/sitemap-index.xml
 
 # Optional: Crawl-delay for aggressive bots (usually not needed)
 # User-agent: *

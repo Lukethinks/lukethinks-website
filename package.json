@@ -13,6 +13,7 @@
     "build": "node scripts/build-audio-registry.mjs && node scripts/build-index.mjs && node scripts/build-podcast-rss.mjs --out public/podcast.xml && node ./node_modules/astro/astro.js build && node scripts/validate-content.mjs && node scripts/check-register.mjs"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "@astrojs/vercel": "^8",
     "@upstash/redis": "^1.38.4",
     "astro": "^5",
