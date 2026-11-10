@@ -10,5 +10,17 @@
   "category": "Business",
   "subcategory": "Investing",
   "explicit": false,
-  "type": "episodic"
+  "type": "episodic",
+  "platforms": [
+    {
+      "label": "Spotify",
+      "href": "https://open.spotify.com/search/Luke%20Thinks"
+    }
+  ],
+  "series": [
+    {
+      "title": "AI Skills & The Future of Human Judgment",
+      "summary": "An investigative audio series dissecting what happens to human cognition, critical judgment, and error oversight when automated systems and agent harnesses handle routine execution."
+    }
+  ]
 }

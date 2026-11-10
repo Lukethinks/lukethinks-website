@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ReactionsBar from '../../components/ReactionsBar.astro';
 import CompanionAudioBanner from '../../components/CompanionAudioBanner.astro';
+import RelatedEpisodes from '../../components/podcast/RelatedEpisodes.astro';
 import { resolveAudioUrl } from '../../utils/audio';
 
 export async function getStaticPaths() {
@@ -112,6 +113,8 @@ const jsonLd = {
         articleTitle={article.data.title}
       />
     )}
+
+    <RelatedEpisodes slug={article.data.slug} />
 
     <div class="article-content" data-region="body">
       <Content />

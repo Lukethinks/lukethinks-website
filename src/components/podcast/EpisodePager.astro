@@ -1,0 +1,97 @@
+---
+// Episode page footer: step to the neighbouring episodes without going back to the index.
+import type { EpisodeView } from '../../utils/episodes';
+
+interface Props {
+  episode: EpisodeView;
+}
+
+const { older, newer } = Astro.props.episode;
+---
+
+<nav class="episode-pager" aria-label="More episodes">
+  {older ? (
+    <a class="episode-pager-link" href={older.href} rel="prev">
+      <span class="episode-pager-dir">← Previous · Episode {older.episode}</span>
+      <span class="episode-pager-title">{older.title}</span>
+    </a>
+  ) : (
+    <a class="episode-pager-link" href="/podcast">
+      <span class="episode-pager-dir">← Podcast</span>
+      <span class="episode-pager-title">All episodes</span>
+    </a>
+  )}
+  {newer ? (
+    <a class="episode-pager-link is-next" href={newer.href} rel="next">
+      <span class="episode-pager-dir">Next · Episode {newer.episode} →</span>
+      <span class="episode-pager-title">{newer.title}</span>
+    </a>
+  ) : (
+    <a class="episode-pager-link is-next" href="/podcast">
+      <span class="episode-pager-dir">This is the latest episode</span>
+      <span class="episode-pager-title">All episodes →</span>
+    </a>
+  )}
+</nav>
+
+<style>
+  .episode-pager {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    max-width: 860px;
+    margin: 2.5rem auto 0;
+  }
+
+  .episode-pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.1rem 1.25rem;
+    border-radius: 12px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-light);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .episode-pager-link.is-next {
+    text-align: right;
+  }
+
+  .episode-pager-link:hover {
+    border-color: var(--accent-amber);
+    transform: translateY(-2px);
+  }
+
+  .episode-pager-dir {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--light-text);
+  }
+
+  .episode-pager-title {
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--dark-text);
+  }
+
+  @media (max-width: 768px) {
+    .episode-pager {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .episode-pager-link.is-next {
+      text-align: left;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .episode-pager-link {
+      transition: none;
+    }
+    .episode-pager-link:hover {
+      transform: none;
+    }
+  }
+</style>

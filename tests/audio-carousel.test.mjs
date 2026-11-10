@@ -913,37 +913,52 @@ describe('Tier 1: Feature Coverage (F01–F18)', () => {
     });
   });
 
-  // --- F17: Podcast Page Integration ---
+  // --- F17: Podcast Page Integration (ADR-0021: latest -> series -> all episodes) ---
   describe('F17: Podcast Page Integration', () => {
-    it('F17.1: podcast.astro loads episodes collection sorted by episode number', () => {
-      const pageSrc = loadPodcastPage();
-      assert.match(pageSrc, /getCollection\(['"]episodes['"]/, 'Queries episodes collection');
-      assert.match(pageSrc, /sort\(/, 'Sorts episodes collection');
+    const read = (...parts) => readFileSync(path.join(ROOT_DIR, 'src', ...parts), 'utf8');
+
+    it('F17.1: episodes are loaded and sorted newest-first in one shared helper', () => {
+      const helperSrc = read('utils', 'episodes.ts');
+      assert.match(helperSrc, /getCollection\(['"]episodes['"]/, 'Queries episodes collection');
+      assert.match(helperSrc, /sort\(/, 'Sorts episodes collection');
+      assert.match(loadPodcastPage(), /getPodcast\(\)/, 'podcast.astro reads from the shared helper');
     });
 
-    it('F17.2: podcast.astro has exactly one visible <h1> element inside <main>', () => {
+    it('F17.2: podcast.astro has exactly one visible <h1> element', () => {
       const pageSrc = loadPodcastPage();
       const h1Matches = [...pageSrc.matchAll(/<h1[\s>]/g)];
       assert.equal(h1Matches.length, 1, 'Exactly one <h1> tag present on podcast page');
-      assert.match(pageSrc, /<h1[^>]*>[\s\S]*?Audio Library[\s\S]*?<\/h1>/, '<h1> contains expected title');
+      assert.match(pageSrc, /<h1[^>]*>[\s\S]*?Podcast[\s\S]*?<\/h1>/, '<h1> names the podcast');
     });
 
-    it('F17.3: Headings descend sequentially (h1 -> h2 -> h3) without skipping levels', () => {
+    it('F17.3: Page order is latest episode, then series, then all episodes', () => {
       const pageSrc = loadPodcastPage();
-      assert.match(pageSrc, /<h2[^>]*id=["']catalog-heading["']/, 'h2 present for Episode Catalog');
+      const latest = pageSrc.indexOf('<LatestEpisode');
+      const series = pageSrc.indexOf('<SeriesPanel');
+      const all = pageSrc.indexOf('<EpisodeList');
+      assert.ok(latest > -1 && series > latest && all > series, 'Latest -> Series -> All episodes');
+      assert.match(read('components', 'podcast', 'LatestEpisode.astro'), /<h2[^>]*id=["']latest-heading["']/, 'h2 for latest episode');
+      assert.match(read('components', 'podcast', 'PodcastSection.astro'), /<h2[\s>]/, 'h2 for each section');
     });
 
-    it('F17.4: Filter categories bar contains topic buttons (all, ai, accounting, briefing, debate)', () => {
-      const pageSrc = loadPodcastPage();
-      assert.match(pageSrc, /id=["']podcast-filters["']/, 'Podcast filter container present');
-      assert.match(pageSrc, /data-category=\{cat\.id\}/, 'Filter buttons render data-category');
+    it('F17.4: Episode list filter renders data-filter buttons found by data hooks', () => {
+      const listSrc = read('components', 'podcast', 'EpisodeList.astro');
+      assert.match(listSrc, /data-filter=\{f\.id\}/, 'Filter buttons render data-filter');
+      for (const id of ['all', 'ai', 'accounting', 'briefing', 'debate']) {
+        assert.match(listSrc, new RegExp(`id: '${id}'`), `Filter "${id}" defined`);
+      }
     });
 
-    it('F17.5: Platform subscription bar contains Spotify, Apple, and RSS links', () => {
-      const pageSrc = loadPodcastPage();
-      assert.match(pageSrc, /platform-pill spotify/, 'Spotify link present');
-      assert.match(pageSrc, /platform-pill apple/, 'Apple Podcasts link present');
-      assert.match(pageSrc, /platform-pill rss/, 'RSS feed link present');
+    it('F17.5: Subscribe links come from content/podcast.json, plus the RSS feed', () => {
+      const subSrc = read('components', 'podcast', 'PodcastSubscribe.astro');
+      assert.match(subSrc, /podcast\.platforms/, 'Platform links are data, not markup');
+      assert.match(subSrc, /podcast\.feedPath/, 'RSS feed link present');
+    });
+
+    it('F17.6: No episode metadata is hardcoded in the podcast pages', () => {
+      const slugPage = read('pages', 'podcast', '[slug].astro');
+      assert.doesNotMatch(loadPodcastPage(), /episodeMetaMap|seriesMetaMap/, 'No takeaway/series maps in podcast.astro');
+      assert.doesNotMatch(slugPage, /companionArticleMap/, 'No companion-article map in the episode page');
     });
   });
 

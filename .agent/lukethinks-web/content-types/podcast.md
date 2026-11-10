@@ -31,6 +31,11 @@ audio:
   durationSeconds: 1432    # computed by script from the file
   mimeType: "audio/mpeg"
 guid: "lukethinks-ep-007"  # permanent, never reused, never changed
+series: "Series title"         # optional — groups episodes on /podcast (ADR-0021)
+seriesPart: 2                  # optional — listening order within the series
+related: ["article-slug"]      # optional — the written piece this episode accompanies
+takeaways:                     # optional — shown on /podcast; plain strings
+  - "One sentence per takeaway."
 explicit: false
 transcript: true               # file lives at public/transcripts/<slug>.vtt (ADR-0011)
 chapters:
@@ -129,7 +134,7 @@ Going live later is then: host the artwork, submit `https://lukethinks.nl/podcas
 
 ## Pages
 
-- `/podcast` — show index: latest episodes, subscribe links, what the show is.
+- `/podcast` — show index, in this order: latest episode, series (ordered playlists), all episodes (ADR-0021). Everything is derived by `src/utils/episodes.ts`; never hardcode episode facts in a page. Series summaries and platform links live in `content/podcast.json`.
 - `/podcast/<slug>` — per episode: player, show notes, transcript, links.
 - **Podcast** is already in the primary nav (ADR-0007). It renders as "coming soon" until the first published episode exists.
 

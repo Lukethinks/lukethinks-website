@@ -2,6 +2,9 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AudioPlayer from '../../components/AudioPlayer.astro';
+import EpisodeContext from '../../components/podcast/EpisodeContext.astro';
+import EpisodePager from '../../components/podcast/EpisodePager.astro';
+import { getPodcast } from '../../utils/episodes';
 
 export async function getStaticPaths() {
   const episodes = await getCollection('episodes', ({ data }) => data.status === 'published');
@@ -15,27 +18,9 @@ const { episode } = Astro.props;
 const { data } = episode;
 const { Content } = await render(episode);
 
-const durationMinutes = Math.ceil(data.audio.durationSeconds / 60);
-const publishedDate = new Date(data.published);
-const formattedDate = publishedDate.toLocaleDateString('en-GB', {
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-});
-
-// Bi-directional link to companion articles
-const companionArticleMap: Record<string, { title: string; href: string }> = {
-  'the-50b-ai-partnership-bubble': {
-    title: 'When Billion-Dollar AI Partnerships Meet Reality: A $50B Accounting Crisis in the Making',
-    href: '/articles/ai-partnership-accounting',
-  },
-  'big-tech-ai-investments-the-great-accounting-debate': {
-    title: 'When Billion-Dollar AI Partnerships Meet Reality: A $50B Accounting Crisis in the Making',
-    href: '/articles/ai-partnership-accounting',
-  },
-};
-
-const companionArticle = companionArticleMap[data.slug];
+const { episodes } = await getPodcast();
+const view = episodes.find((e) => e.slug === data.slug)!;
+const publishedDate = data.published;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -78,9 +63,9 @@ const jsonLd = {
     <header class="article-header">
       <div class="article-meta">
         <span class="article-category">Episode {data.episode}</span>
-        {data.season && <span>Season {data.season}</span>}
-        <time datetime={publishedDate.toISOString().slice(0, 10)}>{formattedDate}</time>
-        <span>{durationMinutes} min</span>
+        <time datetime={view.publishedIso}>{view.publishedHuman}</time>
+        <span>{view.formatLabel}</span>
+        <span>{view.durationLabel}</span>
         {data.confidence && (
           <span class="confidence-badge" data-confidence={data.confidence}>
             Confidence: {data.confidence}
@@ -108,22 +93,13 @@ const jsonLd = {
       />
     </div>
 
-    <!-- Bi-directional Cross-Pollination Callout -->
-    {companionArticle && (
-      <aside class="callout companion-box" aria-labelledby="companion-title">
-        <h2 class="callout-title" id="companion-title">📖 Companion Research Essay</h2>
-        <p>
-          This episode explores the forensic accounting mechanics detailed in our full written teardown:
-          <a href={companionArticle.href} class="companion-link">
-            {companionArticle.title} →
-          </a>
-        </p>
-      </aside>
-    )}
+    <EpisodeContext episode={view} />
 
     <section class="article-content" aria-label="Show notes and breakdown">
       <Content />
     </section>
+
+    <EpisodePager episode={view} />
   </article>
 </BaseLayout>
 
@@ -131,23 +107,5 @@ const jsonLd = {
   .episode-player-wrap {
     max-width: 860px;
     margin: 2rem auto 2.5rem;
-  }
-
-  .companion-box {
-    max-width: 860px;
-    margin: 0 auto 2.5rem;
-    border-left: 4px solid var(--accent-amber);
-    background: var(--surface-card-translucent);
-  }
-
-  .companion-link {
-    font-weight: 700;
-    color: var(--accent-amber);
-    text-decoration: underline;
-    margin-left: 0.25rem;
-  }
-
-  .companion-link:hover {
-    color: var(--primary-brown);
   }
 </style>

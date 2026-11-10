@@ -7,6 +7,10 @@ published: "2026-09-19"
 status: "published"
 lang: "en"
 tags: ["ai", "frameworks", "experiments"]
+takeaways:
+  - "The Myth of Far Transfer: Second-order meta-analyses show zero far transfer from brain training; expertise is domain knowledge in disguise."
+  - "Cognitive Debt & Persistence: AI offloading produces immediate test gains but causes an 11% drop in 45-day retention and doubles skip rates."
+  - "Evaluating Requires Producing: Reviewing AI outputs requires the exact mental templates built through effortful manual production."
 episode: 4
 season: 1
 series: "AI Skills & The Future of Human Judgment"
@@ -49,12 +53,6 @@ Adriaan de Groot’s landmark chess studies revealed that grandmasters reconstru
 1. **Evaluating Requires Producing:** Evaluating an AI’s answer requires the exact same domain knowledge built by producing answers yourself.
 2. **Cognitive Debt Accumulation:** Skipping the cognitive friction of manual work deprives the brain of the mental templates needed for oversight.
 3. **Persistence Degradation:** Relying on frictionless AI answers rapidly erodes persistence on difficult unassisted problems.
-
-## Series Road Map
-
-- **Episode 1:** *Why AI Verification Replaced Prompt Engineering* (Context engineering, dumb zones, and agent harnesses)
-- **Episode 2 (Current):** *Why Your Brain Needs Cognitive Friction* (Transfer science, domain knowledge in disguise, and cognitive debt)
-- **Episode 3 (Upcoming):** *The Ironies of Automation & The Art of Oversight* (Cockpit crashes, medical bias, and the high-stakes reality of human-in-the-loop)
 
 ## References & Cited Research
 

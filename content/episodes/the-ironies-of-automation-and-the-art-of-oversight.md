@@ -7,6 +7,10 @@ published: "2026-09-19"
 status: "published"
 lang: "en"
 tags: ["ai", "frameworks", "experiments"]
+takeaways:
+  - "The Ironies of Automation: Automating routine tasks leaves humans with only rare, catastrophic edge cases they are deskilled from solving."
+  - "Automation Bias in High-Stakes Domains: Board-certified radiologists saw diagnostic accuracy drop from 82.3% to 45.5% when primed with faulty AI advice."
+  - "The Illusion of the Loop: Keeping a human in the loop is useless if deskilling destroys the human’s independent mental model."
 episode: 5
 season: 1
 series: "AI Skills & The Future of Human Judgment"
@@ -46,12 +50,6 @@ Bainbridge established that automating routine tasks leaves human operators with
 1. **The Human-in-the-Loop Illusion:** Simply keeping a human in the loop is a dangerous illusion if automation bias suppresses skepticism and deskilling destroys the human's independent mental model.
 2. **You Cannot Audit What You Cannot Build:** Sustained oversight in any domain requires periodic, mandatory unassisted practice.
 3. **Deskilling is the Primary Risk:** The greatest hazard of generative execution is not that it fails, but that its routine success destroys our ability to notice when it fails.
-
-## Series Road Map
-
-- **Episode 1:** *Why AI Verification Replaced Prompt Engineering* (Context engineering, dumb zones, and agent harnesses)
-- **Episode 2:** *Why Your Brain Needs Cognitive Friction* (Transfer science, domain knowledge in disguise, and cognitive debt)
-- **Episode 3 (Current):** *The Ironies of Automation & The Art of Oversight* (Cockpit crashes, medical bias, and the high-stakes reality of human-in-the-loop)
 
 ## References & Cited Research
 

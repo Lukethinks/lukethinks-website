@@ -7,6 +7,11 @@ published: "2025-10-12"
 status: "published"
 lang: "en"
 tags: ["ai", "accounting", "valuation"]
+related: ["ai-partnership-accounting"]
+takeaways:
+  - "Governance Nuance: Equity stakes structured at 49% or non-voting rights circumvent mandatory consolidation under ASC 810."
+  - "Round-Tripping Concerns: Multi-billion capital deployed as equity loops back into Azure cloud hosting revenue within quarters."
+  - "Impairment Horizon: Rapid advances in model efficiency risk sudden multi-billion impairment write-downs on proprietary infrastructure."
 episode: 1
 season: 1
 guid: "lukethinks-ep-001"

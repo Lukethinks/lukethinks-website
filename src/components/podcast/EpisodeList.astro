@@ -1,0 +1,293 @@
+---
+// The full back-catalogue as a scannable list, newest first, with a simple filter.
+import type { EpisodeView } from '../../utils/episodes';
+import PlayButton from './PlayButton.astro';
+import EpisodeConnections from './EpisodeConnections.astro';
+
+interface Props {
+  episodes: EpisodeView[];
+}
+
+const { episodes } = Astro.props;
+
+// Only offer filters that match at least one episode.
+const filters = [
+  { id: 'all', label: 'All' },
+  { id: 'ai', label: 'AI & Big Tech' },
+  { id: 'accounting', label: 'Accounting & Valuation' },
+  { id: 'briefing', label: 'Briefings' },
+  { id: 'debate', label: 'Debates' },
+].filter((f) => f.id === 'all' || episodes.some((e) => e.format === f.id || e.tags.includes(f.id)));
+---
+
+<div class="episode-list-wrap" data-episode-list>
+  <div class="episode-filters" role="group" aria-label="Filter episodes">
+    {filters.map((f, i) => (
+      <button
+        type="button"
+        class={`episode-filter ${i === 0 ? 'is-active' : ''}`}
+        data-filter={f.id}
+        aria-pressed={i === 0 ? 'true' : 'false'}
+      >
+        {f.label}
+      </button>
+    ))}
+  </div>
+
+  <ol class="episode-list" reversed>
+    {episodes.map((ep, i) => (
+      <li
+        class="episode-row"
+        data-episode-surface
+        data-episode-row
+        data-slug={ep.slug}
+        data-format={ep.format}
+        data-tags={ep.tags.join(' ')}
+      >
+        <PlayButton episode={ep} compact />
+        <div class="episode-row-body">
+          <p class="episode-row-meta">
+            <span class="episode-row-number">Episode {ep.episode}</span>
+            {i === 0 && <span class="episode-row-latest">Latest</span>}
+            <span aria-hidden="true">·</span>
+            <time datetime={ep.publishedIso}>{ep.publishedHuman}</time>
+            <span aria-hidden="true">·</span>
+            <span>{ep.formatLabel}</span>
+            <span aria-hidden="true">·</span>
+            <span>{ep.durationLabel}</span>
+          </p>
+          <h3 class="episode-row-title"><a href={ep.href}>{ep.title}</a></h3>
+          <p class="episode-row-summary">{ep.summary}</p>
+          <EpisodeConnections episode={ep} />
+          {ep.takeaways.length > 0 && (
+            <details class="episode-row-details">
+              <summary>Key takeaways</summary>
+              <ul>
+                {ep.takeaways.map((t) => <li>{t}</li>)}
+              </ul>
+            </details>
+          )}
+        </div>
+      </li>
+    ))}
+  </ol>
+
+  <p class="episode-list-empty" data-episode-empty hidden>No episodes match this filter yet.</p>
+</div>
+
+<script>
+  function initEpisodeFilters() {
+    document.querySelectorAll<HTMLElement>('[data-episode-list]').forEach((root) => {
+      if (root.dataset.ready) return;
+      root.dataset.ready = 'true';
+
+      const buttons = root.querySelectorAll<HTMLButtonElement>('[data-filter]');
+      const rows = root.querySelectorAll<HTMLElement>('[data-episode-row]');
+      const empty = root.querySelector<HTMLElement>('[data-episode-empty]');
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.filter || 'all';
+          buttons.forEach((b) => {
+            b.classList.toggle('is-active', b === btn);
+            b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+          });
+
+          let shown = 0;
+          rows.forEach((row) => {
+            const match =
+              id === 'all' || row.dataset.format === id || (row.dataset.tags || '').split(' ').includes(id);
+            row.hidden = !match;
+            if (match) shown++;
+          });
+          if (empty) empty.hidden = shown > 0;
+        });
+      });
+    });
+  }
+
+  initEpisodeFilters();
+  document.addEventListener('astro:page-load', initEpisodeFilters);
+</script>
+
+<style>
+  .episode-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .episode-filter {
+    padding: 0.45rem 1rem;
+    border-radius: 50px;
+    border: 1px solid var(--border-light);
+    background: var(--surface-button);
+    color: var(--light-text);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .episode-filter:hover {
+    color: var(--dark-text);
+    border-color: var(--accent-amber);
+  }
+
+  .episode-filter:focus-visible {
+    outline: 2px solid var(--accent-amber);
+    outline-offset: 2px;
+  }
+
+  .episode-filter.is-active {
+    background: var(--dark-text);
+    border-color: var(--dark-text);
+    color: var(--light-cream);
+  }
+
+  .episode-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 1.75rem;
+    border-radius: 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 16px var(--shadow-light);
+  }
+
+  .episode-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 1.6rem 0;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .episode-row:first-child {
+    border-top: 0;
+  }
+
+  .episode-row[hidden] {
+    display: none;
+  }
+
+  .episode-row-body {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .episode-row-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 0.3rem;
+    font-size: 0.82rem;
+    color: var(--light-text);
+  }
+
+  .episode-row-number {
+    font-weight: 700;
+    color: var(--primary-brown);
+  }
+
+  .episode-row-latest {
+    padding: 0.05rem 0.5rem;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .episode-row-title {
+    margin: 0 0 0.35rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .episode-row-title a {
+    color: var(--dark-text);
+    text-decoration: none;
+  }
+
+  .episode-row-title a:hover,
+  .episode-row.is-playing .episode-row-title a {
+    color: var(--accent-amber);
+  }
+
+  .episode-row-summary {
+    margin: 0 0 0.85rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--light-text);
+  }
+
+  .episode-row-details {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--medium-text);
+  }
+
+  .episode-row-details summary {
+    display: inline-block;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent-amber);
+  }
+
+  .episode-row-details summary::before {
+    content: '+ ';
+  }
+
+  .episode-row-details[open] summary::before {
+    content: '− ';
+  }
+
+  .episode-row-details summary:focus-visible {
+    outline: 2px solid var(--accent-amber);
+    outline-offset: 2px;
+  }
+
+  .episode-row-details ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin: 0.6rem 0 0;
+    padding-left: 1.1rem;
+    line-height: 1.5;
+  }
+
+  .episode-row-details li {
+    margin: 0;
+  }
+
+  .episode-list-empty {
+    margin: 1.5rem 0 0;
+    text-align: center;
+    color: var(--light-text);
+  }
+
+  @media (max-width: 768px) {
+    .episode-list {
+      padding: 0 1.1rem;
+    }
+
+    .episode-row {
+      gap: 0.9rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .episode-filter {
+      transition: none;
+    }
+  }
+</style>

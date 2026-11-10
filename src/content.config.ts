@@ -74,6 +74,7 @@ export const collections = {
       guid: z.string().regex(/^lukethinks-ep-\d{3}$/),
       explicit: z.boolean().default(false),
       transcript: z.boolean().default(true), // file at public/transcripts/<slug>.vtt
+      takeaways: z.array(z.string().min(1)).default([]), // shown on /podcast and the episode page
       chapters: z.array(z.object({ start: z.number().int().min(0), title: z.string() })).default([]),
       audio: z.object({
         src: z.string().url().startsWith('https://'),

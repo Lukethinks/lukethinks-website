@@ -1,0 +1,133 @@
+---
+// Play trigger for the persistent bottom player (ADR-0020). One button per episode per
+// surface; state is synced by slug, so every button for the playing episode shows "Pause".
+import type { EpisodeView } from '../../utils/episodes';
+
+interface Props {
+  episode: EpisodeView;
+  compact?: boolean;
+  label?: string;
+}
+
+const { episode, compact = false, label } = Astro.props;
+const idleLabel = label ?? `Play · ${episode.durationLabel}`;
+---
+
+<button
+  type="button"
+  class={`play-btn ${compact ? 'is-compact' : ''}`}
+  data-play-episode
+  data-slug={episode.slug}
+  data-title={episode.title}
+  data-audio-src={episode.audioSrc}
+  data-episode={episode.episode}
+  data-format-label={episode.formatLabel}
+  data-duration-seconds={episode.durationSeconds}
+  data-idle-label={idleLabel}
+  aria-label={`Play episode ${episode.episode}: ${episode.title} (${episode.durationLabel})`}
+>
+  <span class="play-btn-icon" data-play-icon aria-hidden="true">▶</span>
+  {!compact && <span class="play-btn-label" data-play-label>{idleLabel}</span>}
+</button>
+
+<script>
+  declare global {
+    interface Window { __ltPlayButtons?: boolean }
+  }
+
+  if (!window.__ltPlayButtons) {
+    window.__ltPlayButtons = true;
+
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement | null)?.closest<HTMLButtonElement>('[data-play-episode]');
+      if (!btn) return;
+
+      if (btn.classList.contains('is-playing')) {
+        document.getElementById('global-play-pause-btn')?.click();
+        return;
+      }
+
+      const durationSeconds = parseInt(btn.dataset.durationSeconds || '0', 10);
+      window.dispatchEvent(
+        new CustomEvent('lukethinks:dock-audio', {
+          detail: {
+            slug: btn.dataset.slug,
+            title: btn.dataset.title,
+            audioSrc: btn.dataset.audioSrc,
+            durationMinutes: Math.round(durationSeconds / 60),
+            durationSeconds,
+            episodeNumber: btn.dataset.episode,
+            format: btn.dataset.formatLabel,
+          },
+        }),
+      );
+    });
+
+    window.addEventListener('lukethinks:audio-state-change', (e) => {
+      const { slug, isPlaying } = (e as CustomEvent).detail || {};
+      document.querySelectorAll<HTMLButtonElement>('[data-play-episode]').forEach((btn) => {
+        const active = btn.dataset.slug === slug && !!isPlaying;
+        btn.classList.toggle('is-playing', active);
+        const icon = btn.querySelector('[data-play-icon]');
+        const text = btn.querySelector('[data-play-label]');
+        if (icon) icon.textContent = active ? '⏸' : '▶';
+        if (text) text.textContent = active ? 'Pause' : btn.dataset.idleLabel || 'Play';
+        const base = `episode ${btn.dataset.episode}: ${btn.dataset.title}`;
+        btn.setAttribute('aria-label', active ? `Pause ${base}` : `Play ${base}`);
+        btn.closest('[data-episode-surface]')?.classList.toggle('is-playing', active);
+      });
+    });
+  }
+</script>
+
+<style>
+  .play-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1.5rem;
+    border: 0;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+    color: #ffffff;
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(146, 64, 14, 0.25);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .play-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(146, 64, 14, 0.35);
+  }
+
+  .play-btn:focus-visible {
+    outline: 2px solid var(--accent-amber);
+    outline-offset: 2px;
+  }
+
+  .play-btn-icon {
+    font-size: 0.8rem;
+    line-height: 1;
+  }
+
+  .play-btn.is-compact {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    flex: 0 0 44px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .play-btn {
+      transition: none;
+    }
+    .play-btn:hover {
+      transform: none;
+    }
+  }
+</style>

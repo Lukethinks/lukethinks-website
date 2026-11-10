@@ -1,0 +1,126 @@
+---
+// A multi-part series shown as what it is: an ordered playlist.
+import { formatDuration, type SeriesView } from '../../utils/episodes';
+import PlayButton from './PlayButton.astro';
+
+interface Props {
+  series: SeriesView;
+}
+
+const { series } = Astro.props;
+---
+
+<article class="series-panel" id={series.anchor} aria-labelledby={`${series.anchor}-title`}>
+  <header class="series-head">
+    <p class="series-meta">
+      {series.parts.length}-part series · {formatDuration(series.totalSeconds)} in total
+    </p>
+    <h3 class="series-title" id={`${series.anchor}-title`}>{series.title}</h3>
+    {series.summary && <p class="series-summary">{series.summary}</p>}
+  </header>
+
+  <ol class="series-parts">
+    {series.parts.map((ep, i) => (
+      <li class="series-part" data-episode-surface data-slug={ep.slug}>
+        <PlayButton episode={ep} compact />
+        <div class="series-part-body">
+          <p class="series-part-meta">
+            Part {i + 1} <span aria-hidden="true">·</span> Episode {ep.episode}
+            <span aria-hidden="true">·</span> {ep.durationLabel}
+          </p>
+          <a class="series-part-title" href={ep.href}>{ep.title}</a>
+        </div>
+      </li>
+    ))}
+  </ol>
+</article>
+
+<style>
+  .series-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: 1.5rem 2.5rem;
+    padding: 2rem;
+    border-radius: 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 16px var(--shadow-light);
+    scroll-margin-top: 6rem;
+  }
+
+  .series-meta {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--primary-brown);
+  }
+
+  .series-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    color: var(--dark-text);
+  }
+
+  .series-summary {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--light-text);
+  }
+
+  .series-parts {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .series-part {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+    padding: 0.85rem 0;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .series-part:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .series-part-body {
+    min-width: 0;
+  }
+
+  .series-part-meta {
+    margin: 0 0 0.15rem;
+    font-size: 0.8rem;
+    color: var(--light-text);
+  }
+
+  .series-part-title {
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--dark-text);
+    text-decoration: none;
+  }
+
+  .series-part-title:hover,
+  .series-part.is-playing .series-part-title {
+    color: var(--accent-amber);
+  }
+
+  @media (max-width: 768px) {
+    .series-panel {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 1.5rem 1.25rem;
+    }
+  }
+</style>

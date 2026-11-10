@@ -1,0 +1,53 @@
+---
+// Where to follow the show. Platform links come from content/podcast.json — a platform
+// only appears here once it has a real URL there.
+import podcast from '../../../content/podcast.json';
+
+const platforms = podcast.platforms ?? [];
+---
+
+<nav class="podcast-subscribe" aria-label="Follow the podcast">
+  <span class="podcast-subscribe-label">Follow on</span>
+  {platforms.map((p) => (
+    <a class="podcast-subscribe-link" href={p.href} target="_blank" rel="noopener noreferrer">{p.label}</a>
+  ))}
+  <a class="podcast-subscribe-link" href={podcast.feedPath}>RSS feed</a>
+</nav>
+
+<style>
+  .podcast-subscribe {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+
+  .podcast-subscribe-label {
+    font-size: 0.9rem;
+    color: var(--light-text);
+  }
+
+  .podcast-subscribe-link {
+    padding: 0.45rem 1.1rem;
+    border-radius: 50px;
+    border: 1px solid var(--border-light);
+    background: var(--surface-button);
+    color: var(--dark-text);
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 2px 8px var(--shadow-light);
+    transition: all 0.3s ease;
+  }
+
+  .podcast-subscribe-link:hover {
+    border-color: var(--accent-amber);
+    color: var(--accent-amber);
+  }
+
+  .podcast-subscribe-link:focus-visible {
+    outline: 2px solid var(--accent-amber);
+    outline-offset: 2px;
+  }
+</style>
