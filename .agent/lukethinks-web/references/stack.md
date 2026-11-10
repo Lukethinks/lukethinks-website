@@ -45,7 +45,7 @@ All choices here are **Accepted** (see `decisions.md`). Do not propose alternati
 │   ├── content.config.ts         ← Zod schema = content contract
 │   ├── layouts/BaseLayout.astro  ← head, header, nav, footer, skip link
 │   ├── components/               ← AudioPlayer, Callout, StatsBox, Toc, StateBadge …
-│   ├── pages/                    ← index, research, experiments, learning, podcast, about, [type]/[slug]
+│   ├── pages/                    ← index, articles (Writing), experiments, podcast, about, [type]/[slug]
 │   └── styles/site.css
 ├── scripts/
 └── legacy/                       ← old HTML, read-only source material, excluded from validation

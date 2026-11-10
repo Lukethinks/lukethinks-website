@@ -1,22 +1,30 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import LatestFeed from '../components/home/LatestFeed.astro';
 import site from '../../content/site.json';
+import { getLatest } from '../utils/latest';
+import { getPodcast } from '../utils/episodes';
+import { getWriting } from '../utils/writing';
 
-const articles = await getCollection('articles', ({ data }) => data.status === 'published');
-const sortedArticles = articles.sort((a, b) => new Date(b.data.published).getTime() - new Date(a.data.published).getTime());
+const [latest, writing, { episodes, series }] = await Promise.all([getLatest(5), getWriting(), getPodcast()]);
+
+const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
+const writingCount = plural(writing.length, 'piece');
+const podcastCount =
+  series.length > 0
+    ? `${plural(episodes.length, 'episode')} · ${plural(series.length, 'series', 'series')}`
+    : plural(episodes.length, 'episode');
 ---
 
 <BaseLayout
   title={`${site.name} · ${site.tagline}`}
-  description="Personal learning lab: where finance & FP&A analytical thinking meets hands-on exploration. Breaking down complex problems through data-driven insights."
+  description="A finance professional in the Netherlands working through accounting, AI and thinking frameworks in public: essays, a podcast and small experiments, with the thinking shown."
 >
-  <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
       <div class="hero-badge">
         <span aria-hidden="true">📊</span>
-        <span>Finance Professional • Personal Learning Lab</span>
+        <span>Finance professional • Personal learning lab</span>
       </div>
 
       <h1>
@@ -26,74 +34,55 @@ const sortedArticles = articles.sort((a, b) => new Date(b.data.published).getTim
       </h1>
 
       <p class="hero-tagline">
-        Finance & FP&A analytical thinking meets hands-on exploration. I break down complex problems,
-        test hypotheses, and share the learning journey through data-driven insights.
+        I work in finance and FP&A in the Netherlands. This is where I work through accounting, AI and
+        thinking frameworks in public, and publish the thinking, including the parts I get wrong.
       </p>
 
       <div class="hero-actions">
-        <a href="/research" class="action-btn">Explore Research</a>
-        <a href="/learning" class="action-btn secondary">Browse Learning</a>
-      </div>
-
-      <!-- Navigation Topic Cards -->
-      <div class="topic-cards">
-        <a href="/articles/ai-partnership-accounting" class="topic-card">
-          <span class="topic-icon" aria-hidden="true">🤖</span>
-          <h2 class="topic-title">AI Partnership Crisis</h2>
-          <p class="topic-description">$50B accounting challenges when tech moves faster than standards</p>
-          <span class="topic-count">Featured Analysis</span>
-        </a>
-
-        <a href="/podcast" class="topic-card">
-          <span class="topic-icon" aria-hidden="true">🎙️</span>
-          <h2 class="topic-title">Audio & Podcasts</h2>
-          <p class="topic-description">Executive briefings, debates & financial autopsies (Spotify & Web)</p>
-          <span class="topic-count">Podcast Hub</span>
-        </a>
-
-        <a href="/experiments" class="topic-card">
-          <span class="topic-icon" aria-hidden="true">🚴</span>
-          <h2 class="topic-title">Clothing Guides</h2>
-          <p class="topic-description">Interactive tools: What to wear cycling and running in any weather</p>
-          <span class="topic-count">Interactive Tool</span>
-        </a>
-
-        <a href="/about" class="topic-card">
-          <span class="topic-icon" aria-hidden="true">👤</span>
-          <h2 class="topic-title">About Luke</h2>
-          <p class="topic-description">Finance professional in the Netherlands, analytical thinker, continuous learner.</p>
-          <span class="topic-count">About Luke</span>
-        </a>
+        <a href="/articles" class="action-btn">Read the writing</a>
+        <a href="/podcast" class="action-btn secondary">Listen to the podcast</a>
       </div>
     </div>
   </section>
 
-  <!-- Latest Analysis Section -->
-  <section class="section-header">
-    <h2 class="section-title">Latest Analysis</h2>
-    <p class="section-subtitle">
-      Recent financial models, business case studies, and data-driven insights from my learning lab
-    </p>
+  <section class="section-header" aria-labelledby="latest-heading">
+    <h2 class="section-title" id="latest-heading">What's new</h2>
+    <p class="section-subtitle">The newest essays and podcast episodes, newest first</p>
   </section>
 
-  <div class="topic-grid">
-    {sortedArticles.map((article) => (
-      <a href={`/articles/${article.data.slug}`} class="topic-card">
-        <div class="article-meta">
-          <span class="article-category">{article.data.category}</span>
-          <time datetime={new Date(article.data.published).toISOString().slice(0, 10)}>
-            {new Date(article.data.published).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-          </time>
-          {article.data.confidence && (
-            <span class="confidence-badge" data-confidence={article.data.confidence}>
-              {article.data.confidence}
-            </span>
-          )}
-        </div>
-        <h3 class="topic-title">{article.data.title}</h3>
-        <p class="topic-description">{article.data.summary}</p>
-        <span class="topic-count">Read Analysis →</span>
-      </a>
-    ))}
+  <LatestFeed items={latest} />
+
+  <section class="section-header" aria-labelledby="explore-heading">
+    <h2 class="section-title" id="explore-heading">Explore</h2>
+  </section>
+
+  <div class="topic-cards">
+    <a href="/articles" class="topic-card">
+      <span class="topic-icon" aria-hidden="true">✍️</span>
+      <h3 class="topic-title">Writing</h3>
+      <p class="topic-description">Essays and analysis, each with its confidence level and sources.</p>
+      <span class="topic-count">{writingCount}</span>
+    </a>
+
+    <a href="/podcast" class="topic-card">
+      <span class="topic-icon" aria-hidden="true">🎙️</span>
+      <h3 class="topic-title">Podcast</h3>
+      <p class="topic-description">The same questions in audio: briefings, debates and a multi-part series.</p>
+      <span class="topic-count">{podcastCount}</span>
+    </a>
+
+    <a href="/experiments" class="topic-card">
+      <span class="topic-icon" aria-hidden="true">🧪</span>
+      <h3 class="topic-title">Experiments</h3>
+      <p class="topic-description">Interactive tools you can open and test: cycling and running kit guides, a Fed board explorer.</p>
+      <span class="topic-count">Interactive tools</span>
+    </a>
+
+    <a href="/about" class="topic-card">
+      <span class="topic-icon" aria-hidden="true">👤</span>
+      <h3 class="topic-title">About</h3>
+      <p class="topic-description">Who is writing this, and why.</p>
+      <span class="topic-count">About Luke</span>
+    </a>
   </div>
 </BaseLayout>

@@ -36,7 +36,7 @@
       "series": "AI Skills & The Future of Human Judgment",
       "seriesPart": 3,
       "hasAudio": true,
-      "file": "content\\episodes\\the-ironies-of-automation-and-the-art-of-oversight.md"
+      "file": "content/episodes/the-ironies-of-automation-and-the-art-of-oversight.md"
     },
     {
       "slug": "why-ai-verification-replaced-prompt-engineering",
@@ -62,7 +62,7 @@
       "series": "AI Skills & The Future of Human Judgment",
       "seriesPart": 1,
       "hasAudio": true,
-      "file": "content\\episodes\\why-ai-verification-replaced-prompt-engineering.md"
+      "file": "content/episodes/why-ai-verification-replaced-prompt-engineering.md"
     },
     {
       "slug": "why-your-brain-needs-cognitive-friction",
@@ -89,7 +89,7 @@
       "series": "AI Skills & The Future of Human Judgment",
       "seriesPart": 2,
       "hasAudio": true,
-      "file": "content\\episodes\\why-your-brain-needs-cognitive-friction.md"
+      "file": "content/episodes/why-your-brain-needs-cognitive-friction.md"
     },
     {
       "slug": "thames-water-crisis",
@@ -119,7 +119,7 @@
       "series": null,
       "seriesPart": null,
       "hasAudio": false,
-      "file": "content\\articles\\thames-water-crisis.md"
+      "file": "content/articles/thames-water-crisis.md"
     },
     {
       "slug": "big-tech-ai-investments-the-great-accounting-debate",
@@ -142,11 +142,13 @@
       "readingMinutes": null,
       "durationSeconds": 920,
       "episode": 2,
-      "related": [],
+      "related": [
+        "ai-partnership-accounting"
+      ],
       "series": null,
       "seriesPart": null,
       "hasAudio": true,
-      "file": "content\\episodes\\big-tech-ai-investments-the-great-accounting-debate.md"
+      "file": "content/episodes/big-tech-ai-investments-the-great-accounting-debate.md"
     },
     {
       "slug": "the-50b-ai-partnership-bubble",
@@ -169,11 +171,13 @@
       "readingMinutes": null,
       "durationSeconds": 255,
       "episode": 1,
-      "related": [],
+      "related": [
+        "ai-partnership-accounting"
+      ],
       "series": null,
       "seriesPart": null,
       "hasAudio": true,
-      "file": "content\\episodes\\the-50b-ai-partnership-bubble.md"
+      "file": "content/episodes/the-50b-ai-partnership-bubble.md"
     },
     {
       "slug": "ai-partnership-accounting",
@@ -200,7 +204,7 @@
       "series": null,
       "seriesPart": null,
       "hasAudio": false,
-      "file": "content\\articles\\ai-partnership-accounting.md"
+      "file": "content/articles/ai-partnership-accounting.md"
     },
     {
       "slug": "asc-323-equity-method",
@@ -228,7 +232,7 @@
       "series": null,
       "seriesPart": null,
       "hasAudio": false,
-      "file": "content\\articles\\asc-323-equity-method.md"
+      "file": "content/articles/asc-323-equity-method.md"
     }
   ]
 }

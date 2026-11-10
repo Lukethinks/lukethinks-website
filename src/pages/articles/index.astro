@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WritingList from '../../components/writing/WritingList.astro';
+import HowIWork from '../../components/writing/HowIWork.astro';
+import { getWriting } from '../../utils/writing';
+
+const items = await getWriting();
+---
+
+<BaseLayout
+  title="Writing"
+  description="Essays and analysis from a finance professional in the Netherlands: accounting, AI economics and thinking frameworks, with the working shown and the confidence stated."
+>
+  <section class="hero">
+    <div class="hero-content">
+      <h1><span class="hero-highlight">Writing</span></h1>
+      <p class="hero-tagline">
+        Writing is how I verify understanding. Each piece works one question through on the page,
+        states how confident I am, and links the sources. Some also exist as podcast episodes.
+      </p>
+    </div>
+  </section>
+
+  <WritingList items={items} />
+  <HowIWork />
+</BaseLayout>

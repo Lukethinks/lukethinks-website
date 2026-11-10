@@ -53,12 +53,6 @@ Bainbridge established that automating routine tasks leaves human operators with
 2. You Cannot Audit What You Cannot Build: Sustained oversight in any domain requires periodic, mandatory unassisted practice.
 3. Deskilling is the Primary Risk: The greatest hazard of generative execution is not that it fails, but that its routine success destroys our ability to notice when it fails.
 
- Series Road Map
-
-- Episode 1: Why AI Verification Replaced Prompt Engineering (Context engineering, dumb zones, and agent harnesses)
-- Episode 2: Why Your Brain Needs Cognitive Friction (Transfer science, domain knowledge in disguise, and cognitive debt)
-- Episode 3 (Current): The Ironies of Automation & The Art of Oversight (Cockpit crashes, medical bias, and the high-stakes reality of human-in-the-loop)
-
  References & Cited Research
 
 - Bainbridge, L. (1983). Ironies of Automation. Automatica.
@@ -111,12 +105,6 @@ Connecting agents to external databases without strict harnesses led to critical
 2. The Verification Bottleneck: The scarce resource in the AI economy is no longer generating code or text—it is specifying requirements, managing context, and verifying output.
 3. Harness Governance: Autonomous agents without strict boundary harnesses and human verification loops compound errors exponentially.
 
- Series Road Map
-
-- Episode 1 (Current): Why AI Verification Replaced Prompt Engineering (Context engineering, dumb zones, and agent harnesses)
-- Episode 2 (Upcoming): Why Your Brain Needs Cognitive Friction (Transfer science, domain knowledge in disguise, and cognitive debt)
-- Episode 3 (Upcoming): The Ironies of Automation & The Art of Oversight (Cockpit crashes, medical bias, and the high-stakes reality of human-in-the-loop)
-
  References & Cited Research
 
 - Peng, S., & Kalliamvakou, E. (2023). The Impact of AI on Developer Productivity. Microsoft Research / GitHub.
@@ -160,12 +148,6 @@ Adriaan de Groot’s landmark chess studies revealed that grandmasters reconstru
 1. Evaluating Requires Producing: Evaluating an AI’s answer requires the exact same domain knowledge built by producing answers yourself.
 2. Cognitive Debt Accumulation: Skipping the cognitive friction of manual work deprives the brain of the mental templates needed for oversight.
 3. Persistence Degradation: Relying on frictionless AI answers rapidly erodes persistence on difficult unassisted problems.
-
- Series Road Map
-
-- Episode 1: Why AI Verification Replaced Prompt Engineering (Context engineering, dumb zones, and agent harnesses)
-- Episode 2 (Current): Why Your Brain Needs Cognitive Friction (Transfer science, domain knowledge in disguise, and cognitive debt)
-- Episode 3 (Upcoming): The Ironies of Automation & The Art of Oversight (Cockpit crashes, medical bias, and the high-stakes reality of human-in-the-loop)
 
  References & Cited Research
 

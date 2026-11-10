@@ -1,0 +1,109 @@
+---
+// Article page: "listen to this piece". The episodes that accompany it (reverse of an
+// episode's `related` field), playable in the bottom player. The episode is the one home
+// of the audio, so the article links to it rather than embedding a second copy.
+import type { EpisodeView } from '../../utils/episodes';
+import PlayButton from './PlayButton.astro';
+
+interface Props {
+  episodes: EpisodeView[];
+}
+
+const { episodes } = Astro.props;
+---
+
+{episodes.length > 0 && (
+  <aside class="related-episodes" id="listen" aria-labelledby="related-episodes-heading">
+    <h2 class="related-episodes-heading" id="related-episodes-heading">Listen to this piece</h2>
+    <ul class="related-episodes-list">
+      {episodes.map((ep) => (
+        <li class="related-episode" data-episode-surface data-slug={ep.slug}>
+          <PlayButton episode={ep} compact />
+          <div class="related-episode-body">
+            <a class="related-episode-link" href={ep.href}>{ep.title}</a>
+            <span class="related-episode-meta">
+              Episode {ep.episode} · {ep.formatLabel} · {ep.durationLabel}
+              {ep.aiDisclosed && ' · AI-voiced audio'}
+            </span>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <p class="related-episodes-note">
+      Every episode has its own page with show notes. <a href="/podcast">All episodes →</a>
+    </p>
+  </aside>
+)}
+
+<style>
+  .related-episodes {
+    margin: 0 0 2.5rem;
+    padding: 1.5rem 1.75rem;
+    border-radius: 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-light);
+    border-left: 4px solid var(--accent-amber);
+    box-shadow: 0 4px 16px var(--shadow-light);
+    scroll-margin-top: 6rem;
+  }
+
+  .related-episodes-heading {
+    margin: 0 0 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--light-text);
+  }
+
+  .related-episodes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .related-episode {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .related-episode-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .related-episode-link {
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--dark-text);
+    text-decoration: none;
+  }
+
+  .related-episode-link:hover,
+  .related-episode.is-playing .related-episode-link {
+    color: var(--accent-amber);
+  }
+
+  .related-episode-meta {
+    font-size: 0.82rem;
+    color: var(--light-text);
+  }
+
+  .related-episodes-note {
+    margin: 1.1rem 0 0;
+    font-size: 0.85rem;
+    color: var(--light-text);
+  }
+
+  .related-episodes-note a {
+    font-weight: 700;
+    color: var(--accent-amber);
+  }
+</style>

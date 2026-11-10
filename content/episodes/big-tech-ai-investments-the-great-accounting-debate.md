@@ -7,6 +7,11 @@ published: "2025-10-26"
 status: "published"
 lang: "en"
 tags: ["ai", "accounting", "valuation"]
+related: ["ai-partnership-accounting"]
+takeaways:
+  - "Capex vs. Opex Depreciation: Hyperscalers extending server useful lives from 3 to 6 years to temporarily lower annual depreciation charges."
+  - "Circular Velocity: Compute credits deployed as equity versus direct cash distributions obscuring genuine customer economics."
+  - "Open vs. Closed Models: Open-source model parity compressing inference margins across all hyperscalers."
 episode: 2
 season: 1
 guid: "lukethinks-ep-002"

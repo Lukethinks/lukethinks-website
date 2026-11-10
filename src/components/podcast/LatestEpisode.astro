@@ -1,0 +1,193 @@
+---
+// The single "start here" block at the top of /podcast: the newest episode, what it is,
+// and what it is connected to.
+import type { EpisodeView } from '../../utils/episodes';
+import PlayButton from './PlayButton.astro';
+import EpisodeConnections from './EpisodeConnections.astro';
+
+interface Props {
+  episode: EpisodeView;
+}
+
+const { episode } = Astro.props;
+---
+
+<section class="latest-episode" aria-labelledby="latest-heading" data-episode-surface data-slug={episode.slug}>
+  <div class="latest-main">
+    <div class="latest-eyebrow">
+      <h2 class="latest-flag" id="latest-heading">Latest episode</h2>
+      <p class="latest-meta">
+        <time datetime={episode.publishedIso}>{episode.publishedHuman}</time>
+        <span aria-hidden="true">·</span>
+        <span>Episode {episode.episode}</span>
+        <span aria-hidden="true">·</span>
+        <span>{episode.formatLabel}</span>
+        <span aria-hidden="true">·</span>
+        <span>{episode.durationLabel}</span>
+      </p>
+    </div>
+
+    <h3 class="latest-title"><a href={episode.href}>{episode.title}</a></h3>
+    <p class="latest-summary">{episode.summary}</p>
+
+    <div class="latest-actions">
+      <PlayButton episode={episode} label={`Play episode · ${episode.durationLabel}`} />
+      <a class="latest-notes" href={episode.href}>Show notes →</a>
+    </div>
+  </div>
+
+  {episode.takeaways.length > 0 && (
+    <div class="latest-takeaways">
+      <h4 class="latest-takeaways-title">In this episode</h4>
+      <ul class="latest-takeaways-list">
+        {episode.takeaways.map((t) => <li>{t}</li>)}
+      </ul>
+    </div>
+  )}
+
+  {(episode.series || episode.reading.length > 0) && (
+    <div class="latest-connections">
+      <EpisodeConnections episode={episode} />
+    </div>
+  )}
+</section>
+
+<style>
+  .latest-episode {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 2rem 2.5rem;
+    max-width: 960px;
+    margin: 0 auto 3.5rem;
+    padding: 2.25rem;
+    border-radius: 20px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-light);
+    border-top: 4px solid var(--accent-amber);
+    box-shadow: 0 8px 28px var(--shadow-light);
+  }
+
+  .latest-eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .latest-flag {
+    margin: 0;
+    padding: 0.3rem 0.8rem;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--primary-brown), var(--accent-amber));
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .latest-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--light-text);
+  }
+
+  .latest-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.85rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .latest-title a {
+    color: var(--dark-text);
+    text-decoration: none;
+  }
+
+  .latest-title a:hover {
+    color: var(--accent-amber);
+  }
+
+  .latest-summary {
+    margin: 0 0 1.5rem;
+    font-size: 1.05rem;
+    color: var(--medium-text);
+    line-height: 1.6;
+  }
+
+  .latest-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+  }
+
+  .latest-notes {
+    font-weight: 700;
+    color: var(--accent-amber);
+    text-decoration: none;
+  }
+
+  .latest-notes:hover {
+    text-decoration: underline;
+  }
+
+  .latest-takeaways {
+    padding-left: 2rem;
+    border-left: 1px solid var(--border-light);
+  }
+
+  .latest-takeaways-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--light-text);
+  }
+
+  .latest-takeaways-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--medium-text);
+  }
+
+  .latest-takeaways-list li {
+    margin: 0;
+  }
+
+  .latest-connections {
+    grid-column: 1 / -1;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  @media (max-width: 768px) {
+    .latest-episode {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 1.5rem 1.25rem;
+      gap: 1.5rem;
+    }
+
+    .latest-title {
+      font-size: 1.5rem;
+    }
+
+    .latest-takeaways {
+      padding-left: 0;
+      padding-top: 1.5rem;
+      border-left: 0;
+      border-top: 1px solid var(--border-light);
+    }
+  }
+</style>

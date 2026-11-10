@@ -1,0 +1,162 @@
+---
+// Episode page: where this episode sits. The series it is part of (as an ordered list
+// with the current part marked) and the written piece it accompanies. Generated from
+// `series` / `seriesPart` / `related`, so it never goes stale when a new part ships.
+import { formatDuration, type EpisodeView } from '../../utils/episodes';
+
+interface Props {
+  episode: EpisodeView;
+}
+
+const { episode } = Astro.props;
+const { series, reading } = episode;
+---
+
+{(series || reading.length > 0) && (
+  <aside class="episode-context" aria-labelledby="episode-context-heading">
+    <h2 class="episode-context-heading" id="episode-context-heading">Connected to</h2>
+
+    {series && (
+      <div class="episode-context-block">
+        <p class="episode-context-kind">
+          Series · Part {series.part} of {series.total} · {formatDuration(series.totalSeconds)} in total
+        </p>
+        <h3 class="episode-context-title">
+          <a href={`/podcast#${series.anchor}`}>{series.title}</a>
+        </h3>
+        <ol class="episode-context-parts">
+          {series.parts.map((p) => (
+            <li class={`episode-context-part ${p.isCurrent ? 'is-current' : ''}`}>
+              <span class="episode-context-part-num">Part {p.part}</span>
+              {p.isCurrent ? (
+                <span class="episode-context-part-title" aria-current="page">
+                  {p.title} <span class="episode-context-here">You are here</span>
+                </span>
+              ) : (
+                <a class="episode-context-part-title" href={p.href}>{p.title}</a>
+              )}
+              <span class="episode-context-part-time">{formatDuration(p.durationSeconds)}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )}
+
+    {reading.map((r) => (
+      <div class="episode-context-block">
+        <p class="episode-context-kind">Companion {r.kind.toLowerCase()} · the written version</p>
+        <h3 class="episode-context-title">
+          <a href={r.href}>{r.title} →</a>
+        </h3>
+      </div>
+    ))}
+  </aside>
+)}
+
+<style>
+  .episode-context {
+    max-width: 860px;
+    margin: 0 auto 2.5rem;
+    padding: 1.5rem 1.75rem;
+    border-radius: 16px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-light);
+    border-left: 4px solid var(--accent-amber);
+    box-shadow: 0 4px 16px var(--shadow-light);
+  }
+
+  .episode-context-heading {
+    margin: 0 0 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--light-text);
+  }
+
+  .episode-context-block + .episode-context-block {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .episode-context-kind {
+    margin: 0 0 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary-brown);
+  }
+
+  .episode-context-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .episode-context-title a {
+    color: var(--dark-text);
+    text-decoration: none;
+  }
+
+  .episode-context-title a:hover {
+    color: var(--accent-amber);
+  }
+
+  .episode-context-parts {
+    list-style: none;
+    margin: 0.85rem 0 0;
+    padding: 0;
+  }
+
+  .episode-context-part {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+
+  .episode-context-part.is-current {
+    background: rgba(146, 64, 14, 0.1);
+  }
+
+  .episode-context-part-num,
+  .episode-context-part-time {
+    font-size: 0.8rem;
+    color: var(--light-text);
+    white-space: nowrap;
+  }
+
+  .episode-context-part-title {
+    font-weight: 600;
+    color: var(--dark-text);
+  }
+
+  .episode-context-here {
+    margin-left: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--primary-brown);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .episode-context {
+      padding: 1.25rem 1rem;
+    }
+
+    .episode-context-part {
+      grid-template-columns: 3.25rem minmax(0, 1fr);
+    }
+
+    .episode-context-part-time {
+      display: none;
+    }
+  }
+</style>

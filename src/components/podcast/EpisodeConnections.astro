@@ -1,0 +1,99 @@
+---
+// "What is this episode connected to?" — the series it belongs to and the written piece
+// it accompanies. Renders nothing for a standalone episode.
+import type { EpisodeView } from '../../utils/episodes';
+
+interface Props {
+  episode: EpisodeView;
+}
+
+const { episode } = Astro.props;
+const { series, reading } = episode;
+const hasAny = !!series || reading.length > 0;
+---
+
+{hasAny && (
+  <div class="connections">
+    <p class="connections-label">Connected to</p>
+    <ul class="connections-list">
+      {series && (
+        <li class="connection">
+          <span class="connection-kind">Series</span>
+          <a class="connection-link" href={`/podcast#${series.anchor}`}>
+            Part {series.part} of {series.total} · {series.title}
+          </a>
+        </li>
+      )}
+      {reading.map((r) => (
+        <li class="connection">
+          <span class="connection-kind">{r.kind}</span>
+          <a class="connection-link" href={r.href}>{r.title}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+<style>
+  .connections {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+  }
+
+  .connections-label {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--light-text);
+    white-space: nowrap;
+  }
+
+  .connections-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+    flex: 1 1 260px;
+  }
+
+  .connection {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.4;
+  }
+
+  .connection-kind {
+    flex: 0 0 auto;
+    padding: 0.1rem 0.55rem;
+    border-radius: 8px;
+    background: rgba(146, 64, 14, 0.1);
+    color: var(--primary-brown);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .connection-link {
+    color: var(--dark-text);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--very-light-text);
+    text-underline-offset: 3px;
+  }
+
+  .connection-link:hover {
+    color: var(--accent-amber);
+    text-decoration-color: currentColor;
+  }
+</style>

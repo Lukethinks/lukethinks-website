@@ -7,6 +7,10 @@ published: "2026-09-19"
 status: "published"
 lang: "en"
 tags: ["ai", "frameworks"]
+takeaways:
+  - "Context Window Dynamics: Models do not reason uniformly; keeping context below 40% capacity preserves peak model intelligence."
+  - "The Verification Bottleneck: The scarce resource in the AI economy is specifying requirements, managing context, and verifying output."
+  - "Harness Governance: Autonomous agents without strict boundary harnesses and human verification loops compound errors exponentially."
 episode: 3
 season: 1
 series: "AI Skills & The Future of Human Judgment"
@@ -57,12 +61,6 @@ Connecting agents to external databases without strict harnesses led to critical
 1. **Context Window Dynamics:** Models do not reason uniformly across their token limit; keeping context below 40% capacity preserves peak model intelligence.
 2. **The Verification Bottleneck:** The scarce resource in the AI economy is no longer generating code or text—it is specifying requirements, managing context, and verifying output.
 3. **Harness Governance:** Autonomous agents without strict boundary harnesses and human verification loops compound errors exponentially.
-
-## Series Road Map
-
-- **Episode 1 (Current):** *Why AI Verification Replaced Prompt Engineering* (Context engineering, dumb zones, and agent harnesses)
-- **Episode 2 (Upcoming):** *Why Your Brain Needs Cognitive Friction* (Transfer science, domain knowledge in disguise, and cognitive debt)
-- **Episode 3 (Upcoming):** *The Ironies of Automation & The Art of Oversight* (Cockpit crashes, medical bias, and the high-stakes reality of human-in-the-loop)
 
 ## References & Cited Research
 

@@ -1,0 +1,48 @@
+---
+// Left-aligned section wrapper for the podcast index: heading, optional one-line note, content.
+interface Props {
+  id: string;
+  title: string;
+  note?: string;
+}
+
+const { id, title, note } = Astro.props;
+---
+
+<section class="podcast-section" aria-labelledby={`${id}-heading`}>
+  <div class="podcast-section-head">
+    <h2 class="podcast-section-title" id={`${id}-heading`}>{title}</h2>
+    {note && <p class="podcast-section-note">{note}</p>}
+  </div>
+  <slot />
+</section>
+
+<style>
+  .podcast-section {
+    max-width: 960px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .podcast-section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .podcast-section-title {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--dark-text);
+  }
+
+  .podcast-section-note {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--light-text);
+  }
+</style>
